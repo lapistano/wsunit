@@ -60,12 +60,27 @@ class Extensions_Webservice_TestCaseTest extends PHPUnit_Framework_TestCase
      */
     public function testAssertJsonStringEqualsJsonString()
     {
-        $expected = '{}';
-        $actual   = '{}';
+        $expected = '{"Mascott" : "Tux"}';
+        $actual   = '{"Mascott" : "Tux"}';
         $message  = 'Given Json strings do not match';
 
-        $this->assertTrue(
-            PHPUnit_Extensions_Webservice_TestCase::assertJsonStringEqualsJsonString($expected, $actual, $message)
-        );
+        PHPUnit_Extensions_Webservice_TestCase::assertJsonStringEqualsJsonString($expected, $actual, $message);
+    }
+
+    /**
+     * @covers PHPUnit_Extensions_Webservice_TestCase::assertJsonStringEqualsJsonString
+     */
+    public function testAssertJsonStringEqualsJsonStringExpectingException()
+    {
+        $expected = '{"Mascott" : "Tx"}';
+        $actual   = '{"Mascott" : "Tux"}';
+        $message  = 'Given Json strings do not match';
+
+        try {
+            PHPUnit_Extensions_Webservice_TestCase::assertJsonStringEqualsJsonString($expected, $actual, $message);
+        } catch (PHPUnit_Framework_AssertionFailedError $e) {
+            return;
+        }
+        $this->fail('Expected exception not thrown.');
     }
 }

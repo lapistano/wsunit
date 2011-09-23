@@ -75,7 +75,7 @@ abstract class PHPUnit_Extensions_Webservice_TestCase extends PHPUnit_Framework_
         if ($jsonError = json_last_error()) {
             $message .= self::determineJsonError($jsonError, 'actual');
         }
-        parent::assertEquals($expected, $actual, $message);
+        return parent::assertEquals($expected, $actual, $message);
     }
 
     /**
