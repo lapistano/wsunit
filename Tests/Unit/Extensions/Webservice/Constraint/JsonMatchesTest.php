@@ -56,23 +56,37 @@ class Extensions_Webservice_Constraint_JsonMatchesTest extends PHPUnit_Framework
 {
 
     /**
+     * @dataProvider evaluateDataprovider
      * @covers Extensions_Webservice_Constraint_JsonMatches::evaluate
      * @covers Extensions_Webservice_Constraint_JsonMatches::__construct
+     * @covers Extensions_Webservice_Constraint_JsonMatches::determineJsonError
      */
-    public function testEvaluate()
+    public function testEvaluate($expected, $jsonOther)
     {
         $jsonValue = json_encode(array('Mascott' => 'Tux'));
-        $jsonOther = json_encode(array('Mascott' => 'Tux'));
         $constraint = new Extensions_Webservice_Constraint_JsonMatches($jsonValue);
 
-        $this->assertEquals(true, $constraint->evaluate($jsonOther));
+        $this->assertEquals($expected, $constraint->evaluate($jsonOther));
     }
 
+    /**
+     * @covers Extensions_Webservice_Constraint_JsonMatches::toString
+     */
     public function testToString()
     {
         $jsonValue = json_encode(array('Mascott' => 'Tux'));
         $constraint = new Extensions_Webservice_Constraint_JsonMatches($jsonValue);
 
         $this->assertEquals('matches JSON string "' . $jsonValue . '"', $constraint->toString());
+    }
+
+
+    public static function evaluateDataprovider()
+    {
+        return array(
+            'valid JSON' => array(true, json_encode(array('Mascott' => 'Tux'))),
+            'error syntax' => array(false, '{"Mascott"::}'),
+            'error UTF-8' => array(false, json_encode('\xB1\x31')),
+        );
     }
 }

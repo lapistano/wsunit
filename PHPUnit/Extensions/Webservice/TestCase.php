@@ -66,7 +66,7 @@ abstract class PHPUnit_Extensions_Webservice_TestCase extends PHPUnit_Framework_
      */
     public static function assertJsonStringEqualsJsonString($expectedJson, $actualJson, $message = '')
     {
-    $expected = json_decode($expectedJson);
+        $expected = json_decode($expectedJson);
         if ($jsonError = json_last_error()) {
             $message .= self::determineJsonError($jsonError, 'expected');
         }
@@ -146,6 +146,57 @@ abstract class PHPUnit_Extensions_Webservice_TestCase extends PHPUnit_Framework_
         self::assertThat($actualJson, new PHPUnit_Framework_Constraint_Not($constraint), $message);
     }
 
+    /**
+     * Asserts that two JSON files are not equal.
+     *
+     * @param  string $expectedFile
+     * @param  string $actualFile
+     * @param  string $message
+     */
+    public static function assertJsonFileNotEqualsJsonFile($expectedFile, $actualFile, $message = '')
+    {
+        self::assertFileExists($expectedFile, $message);
+        self::assertFileExists($actualFile, $message);
+
+        $actualJson = file_get_contents($actualFile);
+        $expectedJson = file_get_contents($expectedFile);
+
+        // call constraint
+        $constraintExpected = new Extensions_Webservice_Constraint_JsonMatches(
+            file_get_contents($expectedFile)
+        );
+
+        $constraintActual = new Extensions_Webservice_Constraint_JsonMatches($actualJson);
+
+        self::assertThat($expectedJson, new PHPUnit_Framework_Constraint_Not($constraintActual), $message);
+        self::assertThat($actualJson, new PHPUnit_Framework_Constraint_Not($constraintExpected), $message);
+    }
+
+    /**
+     * Asserts that two JSON files are equal.
+     *
+     * @param  string $expectedFile
+     * @param  string $actualFile
+     * @param  string $message
+     */
+    public static function assertJsonFileEqualsJsonFile($expectedFile, $actualFile, $message = '')
+    {
+        self::assertFileExists($expectedFile, $message);
+        self::assertFileExists($actualFile, $message);
+
+        $actualJson = file_get_contents($actualFile);
+        $expectedJson = file_get_contents($expectedFile);
+
+        // call constraint
+        $constraintExpected = new Extensions_Webservice_Constraint_JsonMatches(
+            file_get_contents($expectedFile)
+        );
+
+        $constraintActual = new Extensions_Webservice_Constraint_JsonMatches($actualJson);
+
+        self::assertThat($expectedJson, $constraintActual, $message);
+        self::assertThat($actualJson, $constraintExpected, $message);
+    }
 
     /*************************************************************************/
     /* helpers                                                               */
