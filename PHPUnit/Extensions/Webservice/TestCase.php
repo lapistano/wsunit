@@ -109,20 +109,41 @@ abstract class PHPUnit_Extensions_Webservice_TestCase extends PHPUnit_Framework_
      */
     public static function assertJsonStringEqualsJsonFile($expectedFile, $actualJson, $message = '')
     {
-        /*
         self::assertFileExists($expectedFile, $message);
 
-        if (!is_string($string)) {
+        if (!is_string($actualJson)) {
             throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'string');
         }
 
         // call constraint
-        $constraint = new PHPUnit_Framework_Constraint_StringMatches(
-          file_get_contents($expectedFile)
+        $constraint = new Extensions_Webservice_Constraint_JsonMatches(
+            file_get_contents($expectedFile)
         );
 
-        self::assertThat($string, $constraint, $message);
-        */
+        self::assertThat($actualJson, $constraint, $message);
+    }
+
+    /**
+     * Asserts that the generated JSON encoded object and the content of the given file are not equal.
+     *
+     * @param string $expectedFile
+     * @param string $actualJson
+     * @param string $message
+     */
+    public static function assertJsonStringNotEqualsJsonFile($expectedFile, $actualJson, $message = '')
+    {
+        self::assertFileExists($expectedFile, $message);
+
+        if (!is_string($actualJson)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(2, 'string');
+        }
+
+        // call constraint
+        $constraint = new Extensions_Webservice_Constraint_JsonMatches(
+            file_get_contents($expectedFile)
+        );
+
+        self::assertThat($actualJson, new PHPUnit_Framework_Constraint_Not($constraint), $message);
     }
 
 

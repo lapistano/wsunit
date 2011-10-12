@@ -39,14 +39,14 @@
  * @copyright  2002-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.phpunit.de/
- * @since      File available since Release 1.3.6
+ * @since      File available since Release 3.6.0
  */
 
 require_once 'PHPUnit/Framework/TestCase.php';
-require_once 'PHPUnit/Extensions/Database/TestCase.php';
+require_once __DIR__ . '/../../../../PHPUnit/Extensions/Webservice/Constraint/JsonMatches.php';
 
 /**
- * @package    DbUnit
+ * @package    WsUnit
  * @author     Bastian Feder <lapis@php.net>
  * @copyright  2011 Bastian Feder <lapis@php.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -74,7 +74,7 @@ class Extensions_Webservice_TestCaseTest extends PHPUnit_Framework_TestCase
     {
         $expected = '{"Mascott" : "Tx"}';
         $actual   = '{"Mascott" : "Tux"}';
-        $message  = 'Given Json strings do not match';
+        $message  = 'Given Json strings do not match. ';
 
         try {
             PHPUnit_Extensions_Webservice_TestCase::assertJsonStringEqualsJsonString($expected, $actual, $message);
@@ -82,5 +82,76 @@ class Extensions_Webservice_TestCaseTest extends PHPUnit_Framework_TestCase
             return;
         }
         $this->fail('Expected exception not thrown.');
+    }
+
+    /**
+     * @covers PHPUnit_Extensions_Webservice_TestCase::assertJsonStringNotEqualsJsonString
+     */
+    public function testAssertJsonStringNotEqualsJsonString()
+    {
+        $expected = '{"Mascott" : "Beastie"}';
+        $actual   = '{"Mascott" : "Tux"}';
+        $message  = 'Given Json strings do match';
+
+        PHPUnit_Extensions_Webservice_TestCase::assertJsonStringNotEqualsJsonString($expected, $actual, $message);
+    }
+
+    /**
+     * @covers PHPUnit_Extensions_Webservice_TestCase::assertJsonStringNotEqualsJsonString
+     */
+    public function testAssertJsonStringNotEqualsJsonStringExpectingException()
+    {
+        $expected = '{"Mascott" : "Tux"}';
+        $actual   = '{"Mascott" : "Tux"}';
+        $message  = 'Given Json strings do match';
+
+        try {
+            PHPUnit_Extensions_Webservice_TestCase::assertJsonStringNotEqualsJsonString($expected, $actual, $message);
+        } catch (PHPUnit_Framework_AssertionFailedError $e) {
+            return;
+        }
+        $this->fail('Expected exception not thrown.');
+    }
+
+    /**
+     * @covers PHPUnit_Extensions_Webservice_TestCase::assertJsonStringEqualsJsonFile
+     */
+    public function testAssertJsonStringEqualsJsonFile()
+    {
+        $file = __DIR__ . '/../../../_files/JsonData/simpleObject.js';
+        $actual = json_encode(array("Mascott" => "Tux"));
+        $message = '';
+        PHPUnit_Extensions_Webservice_TestCase::assertJsonStringEqualsJsonFile($file, $actual, $message);
+    }
+
+    /**
+     * @covers PHPUnit_Extensions_Webservice_TestCase::assertJsonStringEqualsJsonFile
+     */
+    public function testAssertJsonStringEqualsJsonFileExpectingException()
+    {
+        $file = __DIR__ . '/../../../_files/JsonData/simpleObject.js';
+        $actual = json_encode(array("Mascott" => "Beastie"));
+        $message = '';
+        try {
+            PHPUnit_Extensions_Webservice_TestCase::assertJsonStringEqualsJsonFile($file, $actual, $message);
+        } catch (PHPUnit_Framework_AssertionFailedError $e) {
+            $this->assertEquals(
+                'Failed asserting that <string:{"Mascott":"Beastie"}> matches JSON string "{"Mascott":"Tux"}".',
+                $e->getMessage()
+            );
+            return;
+        }
+        $this->fail('Expected Exception not thrown.');
+    }
+
+    /**
+     * @covers PHPUnit_Extensions_Webservice_TestCase::assertJsonStringNotEqualsJsonFile
+     */
+    public function testAssertJsonStringNotEqualsJsonFile()
+    {
+        $file = __DIR__ . '/../../../_files/JsonData/simpleObject.js';
+        $actual = json_encode(array("Mascott" => "Beastie"));
+        $message = '';
+        PHPUnit_Extensions_Webservice_TestCase::assertJsonStringNotEqualsJsonFile($file, $actual, $message);
     }
 }
