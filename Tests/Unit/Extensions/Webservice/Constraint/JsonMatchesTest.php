@@ -61,11 +61,9 @@ class Extensions_Webservice_Constraint_JsonMatchesTest extends PHPUnit_Framework
      * @covers Extensions_Webservice_Constraint_JsonMatches::__construct
      * @covers Extensions_Webservice_Constraint_JsonMatches::determineJsonError
      */
-    public function testEvaluate($expected, $jsonOther)
+    public function testEvaluate($expected, $jsonOther, $jsonValue)
     {
-        $jsonValue = json_encode(array('Mascott' => 'Tux'));
         $constraint = new Extensions_Webservice_Constraint_JsonMatches($jsonValue);
-
         $this->assertEquals($expected, $constraint->evaluate($jsonOther));
     }
 
@@ -84,9 +82,10 @@ class Extensions_Webservice_Constraint_JsonMatchesTest extends PHPUnit_Framework
     public static function evaluateDataprovider()
     {
         return array(
-            'valid JSON' => array(true, json_encode(array('Mascott' => 'Tux'))),
-            'error syntax' => array(false, '{"Mascott"::}'),
-            'error UTF-8' => array(false, json_encode('\xB1\x31')),
+            'valid JSON' => array(true, json_encode(array('Mascott' => 'Tux')), json_encode(array('Mascott' => 'Tux'))),
+            'error syntax' => array(false, '{"Mascott"::}', json_encode(array('Mascott' => 'Tux'))),
+            'error UTF-8' => array(false, json_encode('\xB1\x31'), json_encode(array('Mascott' => 'Tux'))),
+            'invalid JSON in class instantiation' => array(false, json_encode(array('Mascott' => 'Tux')), '{"Mascott"::}'),
         );
     }
 }
