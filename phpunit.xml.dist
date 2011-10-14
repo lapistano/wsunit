@@ -3,6 +3,7 @@
 <phpunit backupGlobals="false"
          strict="true"
          verbose="true"
+         bootstrap="bootstrap.php"
 >
 
   <testsuites>

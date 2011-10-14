@@ -42,8 +42,6 @@
  * @since      File available since Release 3.6.0
  */
 
-require_once 'PHPUnit/Framework/TestCase.php';
-
 /**
  * @package    WsUnit
  * @author     Bastian Feder <lapis@php.net>

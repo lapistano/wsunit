@@ -42,9 +42,6 @@
  * @since      File available since Release 3.6.0
  */
 
-require_once 'PHPUnit/Framework/TestCase.php';
-require_once __DIR__ . '/../../../../PHPUnit/Extensions/Webservice/Constraint/JsonMatches.php';
-
 /**
  * @package    WsUnit
  * @author     Bastian Feder <lapis@php.net>
@@ -136,7 +133,7 @@ class Extensions_Webservice_TestCaseTest extends PHPUnit_Framework_TestCase
     /**
      * @covers PHPUnit_Extensions_Webservice_TestCase::assertJsonStringEqualsJsonFile
      */
-    public function testAssertJsonStringEqualsJsonFileExpectingInvalidArgumentHelperException()
+    public function testAssertJsonStringEqualsJsonFileExpectingInvalidArgumentException()
     {
         $file = __DIR__ . '/../../../_files/JsonData/simpleObject.js';
         try {
@@ -197,6 +194,7 @@ class Extensions_Webservice_TestCaseTest extends PHPUnit_Framework_TestCase
 /*************************************************************************/
 /* Dataprovider                                                          */
 /*************************************************************************/
+
     public static function validInvalidJsonDataprovider()
     {
         return array(
