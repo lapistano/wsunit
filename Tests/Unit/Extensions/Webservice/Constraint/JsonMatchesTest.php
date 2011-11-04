@@ -35,7 +35,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    WsUnit
- * @author     Bastian Feder <lapis@bastian-feder.de>
+ * @author     Bastian Feder <php@bastian-feder.de>
  * @copyright  2002-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.phpunit.de/
@@ -44,8 +44,8 @@
 
 /**
  * @package    WsUnit
- * @author     Bastian Feder <lapis@bastian-feder.de>
- * @copyright  2011 Bastian Feder <lapis@bastian-feder.de>
+ * @author     Bastian Feder <php@bastian-feder.de>
+ * @copyright  2011 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
