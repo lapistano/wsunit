@@ -69,18 +69,18 @@ abstract class PHPUnit_Extensions_Webservice_TestCase extends PHPUnit_Framework_
         $expected = json_decode($expectedJson);
         if ($jsonError = json_last_error()) {
             $message .=
-                Extensions_Webservice_Constraint_JsonErrorProvider::determineJsonError(
+                Extensions_Webservice_Constraint_JsonErrorMessageProvider::determineJsonError(
                     $jsonError,
-                    Extensions_Webservice_Constraint_JsonErrorProvider::translateTypeToPrefix('expected')
+                    Extensions_Webservice_Constraint_JsonErrorMessageProvider::translateTypeToPrefix('expected')
                 );
         }
 
         $actual   = json_decode($actualJson);
         if ($jsonError = json_last_error()) {
             $message .=
-                Extensions_Webservice_Constraint_JsonErrorProvider::determineJsonError(
+                Extensions_Webservice_Constraint_JsonErrorMessageProvider::determineJsonError(
                     $jsonError,
-                    Extensions_Webservice_Constraint_JsonErrorProvider::translateTypeToPrefix('actual')
+                    Extensions_Webservice_Constraint_JsonErrorMessageProvider::translateTypeToPrefix('actual')
                 );
         }
         return parent::assertEquals($expected, $actual, $message);
@@ -98,18 +98,18 @@ abstract class PHPUnit_Extensions_Webservice_TestCase extends PHPUnit_Framework_
         $expected = json_decode($expectedJson);
         if ($jsonError = json_last_error()) {
             $message .=
-                Extensions_Webservice_Constraint_JsonErrorProvider::determineJsonError(
+                Extensions_Webservice_Constraint_JsonErrorMessageProvider::determineJsonError(
                     $jsonError,
-                    Extensions_Webservice_Constraint_JsonErrorProvider::translateTypeToPrefix('expected')
+                    Extensions_Webservice_Constraint_JsonErrorMessageProvider::translateTypeToPrefix('expected')
                 );
         }
 
         $actual   = json_decode($actualJson);
         if ($jsonError = json_last_error()) {
             $message .=
-                Extensions_Webservice_Constraint_JsonErrorProvider::determineJsonError(
+                Extensions_Webservice_Constraint_JsonErrorMessageProvider::determineJsonError(
                     $jsonError,
-                    Extensions_Webservice_Constraint_JsonErrorProvider::translateTypeToPrefix('actual')
+                    Extensions_Webservice_Constraint_JsonErrorMessageProvider::translateTypeToPrefix('actual')
                 );
         }
 

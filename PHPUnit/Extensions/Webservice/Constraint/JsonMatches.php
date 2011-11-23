@@ -86,14 +86,14 @@ class Extensions_Webservice_Constraint_JsonMatches extends PHPUnit_Framework_Con
         $decodedOther = json_decode($other);
         if (!is_object($decodedOther)) {
             $this->failure_reason =
-                Extensions_Webservice_Constraint_JsonErrorProvider::determineJsonError(json_last_error(), 'Json error!');
+                Extensions_Webservice_Constraint_JsonErrorMessageProvider::determineJsonError(json_last_error(), 'Json error!');
             return FALSE;
         }
 
         $decodedValue = json_decode($this->value);
         if (!is_object($decodedValue)) {
             $this->failure_reason =
-                Extensions_Webservice_Constraint_JsonErrorProvider::determineJsonError(json_last_error(), 'Json error!');
+                Extensions_Webservice_Constraint_JsonErrorMessageProvider::determineJsonError(json_last_error(), 'Json error!');
             return FALSE;
         }
 
