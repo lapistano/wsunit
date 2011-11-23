@@ -76,10 +76,12 @@ class Extensions_Webservice_Constraint_JsonMatches extends PHPUnit_Framework_Con
      * Evaluates the constraint for parameter $other. Returns TRUE if the
      * constraint is met, FALSE otherwise.
      *
+     * This method can be overridden to implement the evaluation algorithm.
+     *
      * @param mixed $other Value or object to evaluate.
      * @return bool
      */
-    public function evaluate($other)
+    protected function matches($other)
     {
         $decodedOther = json_decode($other);
         if (!is_object($decodedOther)) {

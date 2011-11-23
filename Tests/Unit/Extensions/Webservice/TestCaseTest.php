@@ -113,20 +113,21 @@ class Extensions_Webservice_TestCaseTest extends PHPUnit_Framework_TestCase
     /**
      * @covers PHPUnit_Extensions_Webservice_TestCase::assertJsonStringEqualsJsonFile
      */
-    public function testAssertJsonStringEqualsJsonFileExpectingAssertionFailedError()
+    public function testAssertJsonStringEqualsJsonFileExpectingExpectationFailedException()
     {
         $file = __DIR__ . '/../../../_files/JsonData/simpleObject.js';
         $actual = json_encode(array("Mascott" => "Beastie"));
         $message = '';
         try {
             PHPUnit_Extensions_Webservice_TestCase::assertJsonStringEqualsJsonFile($file, $actual, $message);
-        } catch (PHPUnit_Framework_AssertionFailedError $e) {
+        } catch (PHPUnit_Framework_ExpectationFailedException $e) {
             $this->assertEquals(
-                'Failed asserting that <string:{"Mascott":"Beastie"}> matches JSON string "{"Mascott":"Tux"}".',
+                'Failed asserting that \'{"Mascott":"Beastie"}\' matches JSON string "{"Mascott":"Tux"}".',
                 $e->getMessage()
             );
             return;
         }
+
         $this->fail('Expected Exception not thrown.');
     }
 
