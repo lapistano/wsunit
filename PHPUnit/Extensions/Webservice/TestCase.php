@@ -68,12 +68,20 @@ abstract class PHPUnit_Extensions_Webservice_TestCase extends PHPUnit_Framework_
     {
         $expected = json_decode($expectedJson);
         if ($jsonError = json_last_error()) {
-            $message .= self::determineJsonError($jsonError, 'expected');
+            $message .=
+                Extensions_Webservice_Constraint_JsonErrorProvider::determineJsonError(
+                    $jsonError,
+                    Extensions_Webservice_Constraint_JsonErrorProvider::translateTypeToPrefix('expected')
+                );
         }
 
         $actual   = json_decode($actualJson);
         if ($jsonError = json_last_error()) {
-            $message .= self::determineJsonError($jsonError, 'actual');
+            $message .=
+                Extensions_Webservice_Constraint_JsonErrorProvider::determineJsonError(
+                    $jsonError,
+                    Extensions_Webservice_Constraint_JsonErrorProvider::translateTypeToPrefix('actual')
+                );
         }
         return parent::assertEquals($expected, $actual, $message);
     }
@@ -89,12 +97,20 @@ abstract class PHPUnit_Extensions_Webservice_TestCase extends PHPUnit_Framework_
     {
         $expected = json_decode($expectedJson);
         if ($jsonError = json_last_error()) {
-            $message .= self::determineJsonError($jsonError, 'expected');
+            $message .=
+                Extensions_Webservice_Constraint_JsonErrorProvider::determineJsonError(
+                    $jsonError,
+                    Extensions_Webservice_Constraint_JsonErrorProvider::translateTypeToPrefix('expected')
+                );
         }
 
         $actual   = json_decode($actualJson);
         if ($jsonError = json_last_error()) {
-            $message .= self::determineJsonError($jsonError, 'actual');
+            $message .=
+                Extensions_Webservice_Constraint_JsonErrorProvider::determineJsonError(
+                    $jsonError,
+                    Extensions_Webservice_Constraint_JsonErrorProvider::translateTypeToPrefix('actual')
+                );
         }
 
         parent::assertNotEquals($expected, $actual, $message);
@@ -198,39 +214,4 @@ abstract class PHPUnit_Extensions_Webservice_TestCase extends PHPUnit_Framework_
         self::assertThat($actualJson, $constraintExpected, $message);
     }
 
-    /*************************************************************************/
-    /* helpers                                                               */
-    /*************************************************************************/
-
-    private static function determineJsonError($error, $type = '')
-    {
-        switch (strtolower($type)) {
-        case 'expected':
-            $prefix = 'Expected value JSON decode error - ';
-            break;
-        case 'actual':
-            $prefix = 'Actual value JSON decode error - ';
-            break;
-        default:
-            $prefix = '';
-            break;
-        }
-
-        switch (strtoupper($error)) {
-        case JSON_ERROR_NONE:
-            return;
-        case JSON_ERROR_DEPTH:
-            return $prefix . 'Maximum stack depth exceeded';
-        case JSON_ERROR_STATE_MISMATCH:
-            return $prefix . 'Underflow or the modes mismatch';
-        case JSON_ERROR_CTRL_CHAR:
-            return $prefix . 'Unexpected control character found';
-        case JSON_ERROR_SYNTAX:
-            return $prefix . 'Syntax error, malformed JSON';
-        case JSON_ERROR_UTF8:
-            return $prefix . 'Malformed UTF-8 characters, possibly incorrectly encoded';
-        default:
-            return $prefix . 'Unknown error';
-        }
-    }
 }

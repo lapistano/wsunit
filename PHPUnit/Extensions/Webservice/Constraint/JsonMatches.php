@@ -85,13 +85,15 @@ class Extensions_Webservice_Constraint_JsonMatches extends PHPUnit_Framework_Con
     {
         $decodedOther = json_decode($other);
         if (!is_object($decodedOther)) {
-            $this->failure_reason = $this->determineJsonError(json_last_error(), 'Json error!');
+            $this->failure_reason =
+                Extensions_Webservice_Constraint_JsonErrorProvider::determineJsonError(json_last_error(), 'Json error!');
             return FALSE;
         }
 
         $decodedValue = json_decode($this->value);
         if (!is_object($decodedValue)) {
-            $this->failure_reason = $this->determineJsonError(json_last_error(), 'Json error!');
+            $this->failure_reason =
+                Extensions_Webservice_Constraint_JsonErrorProvider::determineJsonError(json_last_error(), 'Json error!');
             return FALSE;
         }
 
@@ -111,29 +113,4 @@ class Extensions_Webservice_Constraint_JsonMatches extends PHPUnit_Framework_Con
         );
     }
 
-    /**
-     * Translatets accourd JSON error to a human readable string.
-     *
-     * @param string $error
-     * @return void|string
-     */
-    private function determineJsonError($error, $prefix = '')
-    {
-        switch (strtoupper($error)) {
-        case JSON_ERROR_NONE:
-            return;
-        case JSON_ERROR_DEPTH:
-            return $prefix . 'Maximum stack depth exceeded';
-        case JSON_ERROR_STATE_MISMATCH:
-            return $prefix . 'Underflow or the modes mismatch';
-        case JSON_ERROR_CTRL_CHAR:
-            return $prefix . 'Unexpected control character found';
-        case JSON_ERROR_SYNTAX:
-            return $prefix . 'Syntax error, malformed JSON';
-        case JSON_ERROR_UTF8:
-            return $prefix . 'Malformed UTF-8 characters, possibly incorrectly encoded';
-        default:
-            return $prefix . 'Unknown error';
-        }
-    }
 }

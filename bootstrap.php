@@ -10,6 +10,7 @@ require_once TEST_DIR . '/libs/lapistano/proxy-object/bootstrap.php';
 
 // load source to be tested
 require_once PROJECT_DIR . '/Constraint/JsonMatches.php';
+require_once PROJECT_DIR . '/Constraint/JsonErrorMessageProvider.php';
 require_once PROJECT_DIR . '/TestCase.php';
 
 // listener files
