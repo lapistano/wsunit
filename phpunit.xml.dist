@@ -12,6 +12,7 @@
     </testsuite>
   </testsuites>
 
+<!-- no coverage atm
   <logging>
     <log type="coverage-html" target="build/coverage" title="WsUnit"
          charset="UTF-8" yui="true" highlight="true"
@@ -19,10 +20,32 @@
     <log type="coverage-clover" target="build/logs/clover.xml"/>
     <log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false"/>
   </logging>
+-->
 
   <filter>
     <whitelist addUncoveredFilesFromWhitelist="true">
       <directory suffix=".php">PHPUnit</directory>
     </whitelist>
   </filter>
+
+<!--
+  // listener configuration
+  // You have to require the used libraries in the bootstrap file.
+  <listener class="WebServiceListener">
+    <arguments>
+        <object class="Factory"/>
+        <object class="ConfigurationLoader"/>
+        <array>
+          <element key="httpClient">
+            <string>Buzz</string>
+          </element>
+          <element key="logger">
+            <string>MonoLog</string>
+          </element>
+        </array>
+      </arguments>
+    </listener>
+  </listeners>
+-->
+  
 </phpunit>
