@@ -3,3 +3,4 @@ build/
 .settings/
 .project
 .buildpath
+*.swp
