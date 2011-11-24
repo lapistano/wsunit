@@ -46,6 +46,17 @@
 class Extensions_Webservice_TestCase extends PHPUnit_Framework_TestCase
 {
     /**
+     * Provides an instance of PHPUnit_Framework_TestSuite.
+     *
+     * @return PHPUnit_Framework_TestSuite
+     */
+    protected function getTestSuiteStub()
+    {
+        return $this->getMockBuilder('PHPUnit_Framework_TestSuite')
+            ->getMock();
+    }
+
+    /**
      * Provides a configuration array accourding to the mandatory information provided by the phpunit xml configuration.
      *
      * @return array
