@@ -58,16 +58,22 @@
 class WebServiceListener implements PHPUnit_Framework_TestListener
 {
     /**
+     * Instance of the Extensions_Webservice_Listener_Factory
+     * @var Extensions_Webservice_Listener_Factory
+     */
+    private $factory;
+
+    /**
      * Instance of the logger observing the http client to capture the response and its header.
      * @var Extensions_Webservice_Listener_Logger_Interface
      */
-    private $logger = '';
+    private $logger;
 
     /**
      * Instance of the http client used to send a request to the defined webservice.
      * @var Extensions_Webservice_Listener_HttpClient_Interface
      */
-    private $httpClient = '';
+    private $httpClient;
 
     /**
      * Provides information about the configuration details of the listener.
@@ -88,6 +94,7 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
         array $configuration)
     {
         $this->configuration = $loader->load($configuration);
+        $this->factory = $factory;
     }
 
     /**
@@ -171,10 +178,11 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
      */
     public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
-        $factory->register('httpClient', $this->configuration['httpClient']);
-        $this->httpClient    = $factory->getInstanceOf('httpClient');
-        $factory->register('logger', $configuration['logger']);
-        $this->logger        = $factory->getInstanceOf('logger');
+        $this->factory->register('logger', $this->configuration['logger']);
+        $this->factory->register('httpClient', $this->configuration['httpClient']);
+
+        $this->httpClient = $this->factory->getInstanceOf('httpClient');
+        $this->logger     = $this->factory->getInstanceOf('logger');
     }
 
     /**
