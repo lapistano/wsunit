@@ -58,7 +58,6 @@ class Extensions_Webservice_Constraint_JsonMatchesTest extends Extensions_Webser
      * @covers Extensions_Webservice_Constraint_JsonMatches::evaluate
      * @covers Extensions_Webservice_Constraint_JsonMatches::matches
      * @covers Extensions_Webservice_Constraint_JsonMatches::__construct
-     * @covers Extensions_Webservice_Constraint_JsonMatches::determineJsonError
      */
     public function testEvaluate($expected, $jsonOther, $jsonValue)
     {

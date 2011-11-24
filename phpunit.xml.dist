@@ -12,7 +12,6 @@
     </testsuite>
   </testsuites>
 
-<!-- no coverage atm
   <logging>
     <log type="coverage-html" target="build/coverage" title="WsUnit"
          charset="UTF-8" yui="true" highlight="true"
@@ -20,7 +19,6 @@
     <log type="coverage-clover" target="build/logs/clover.xml"/>
     <log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false"/>
   </logging>
--->
 
   <filter>
     <whitelist addUncoveredFilesFromWhitelist="true">
