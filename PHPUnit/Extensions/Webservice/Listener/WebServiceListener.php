@@ -55,7 +55,7 @@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.6.0
  */
-class WebServiceLog implements PHPUnit_Framework_TestListener
+class WebServiceListener implements PHPUnit_Framework_TestListener
 {
     /**
      * Instance of the logger observing the http client to capture the response and its header.
@@ -84,12 +84,10 @@ class WebServiceLog implements PHPUnit_Framework_TestListener
      */
     public function __construct(
         Extensions_Webservice_Listener_Factory $factory,
-        Extensions_Webservice_Listener_Loader $loader,
+        Extensions_Webservice_Listener_Loader_Interface $loader,
         array $configuration)
     {
         $this->configuration = $loader->load($configuration);
-        $this->httpClient    = $factory($this->configuration['clients']['httpClient']);
-        $this->logger        = $factory($this->configuration['clients']['logger']);
     }
 
     /**
@@ -173,7 +171,10 @@ class WebServiceLog implements PHPUnit_Framework_TestListener
      */
     public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
-        // instantiate http client and logger objects
+        $factory->register('httpClient', $this->configuration['httpClient']);
+        $this->httpClient    = $factory->getInstanceOf('httpClient');
+        $factory->register('logger', $configuration['logger']);
+        $this->logger        = $factory->getInstanceOf('logger');
     }
 
     /**
