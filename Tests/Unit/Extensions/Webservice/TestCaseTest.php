@@ -50,7 +50,7 @@
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
-class Extensions_Webservice_TestCaseTest extends PHPUnit_Framework_TestCase
+class Extensions_Webservice_TestCaseTest extends Extensions_Webservice_TestCase
 {
     /**
      * @covers PHPUnit_Extensions_Webservice_TestCase::assertJsonStringEqualsJsonString

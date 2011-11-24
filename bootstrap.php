@@ -4,6 +4,9 @@
 define("PROJECT_DIR", __DIR__ . '/PHPUnit/Extensions/Webservice');
 define("TEST_DIR", __DIR__ . '/Tests');
 
+// losd fixture file
+require_once TEST_DIR . '/ExtensionsWebservicesTestCase.php';
+
 // load necessary libraries
 require_once 'PHPUnit/Framework/TestCase.php';
 require_once TEST_DIR . '/libs/lapistano/proxy-object/bootstrap.php';

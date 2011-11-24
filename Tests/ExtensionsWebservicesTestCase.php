@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,46 +34,54 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    WsUnit
+ * @package    PHPUnit
+ * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2002-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
 
-/**
- * @package    WsUnit
- * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2011 Bastian Feder <php@bastian-feder.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://www.phpunit.de/
- * @since      File available since Release 3.6.0
- */
-class Extensions_Webservice_Constraint_JsonErrorMessageProviderTest extends Extensions_Webservice_TestCase
+class Extensions_Webservice_TestCase extends PHPUnit_Framework_TestCase
 {
     /**
-     * @dataProvider translateTypeToPrefixDataprovider
-     * @covers Extensions_Webservice_Constraint_JsonErrorMessageProvider::translateTypeToPrefix
+     * Provides a faked instance of the Extensions_Webservice_Listener_Loader_Interface.
+     *
+     * @param array $methods
+     * @return Extensions_Webservice_Listener_Loader_Interface
      */
-    public function testTranslatTypeToPrefix($expected, $type)
+    protected function getLoader(array $methods = array())
     {
-        $this->assertEquals(
-            $expected,
-            Extensions_Webservice_Constraint_JsonErrorMessageProvider::translateTypeToPrefix($type)
-        );
+        $loader = $this->getMockBuilder('Extensions_Webservice_Listener_Loader_Interface')
+            ->setMethods(array($methods))
+            ->getMockForAbstractClass();
+        return $loader;
     }
 
-    /*************************************************************************/
-    /* Dataprovider & Callbacks                                              */
-    /*************************************************************************/
-
-    public static function translateTypeToPrefixDataprovider()
+    /**
+     * Provides a fake of the Extensions_Webservice_Listener_Logger_Interface
+     *
+     * @return Extensions_Webservice_Listener_Logger_Interface
+     */
+    public static function getLoggerMock($callCount)
     {
-        return array(
-            'expected' => array('Expected value JSON decode error - ', 'expected'),
-            'actual' => array('Actual value JSON decode error - ', 'actual'),
-            'default' => array('', ''),
-        );
+        $logger = $this->getMockBuilder('Extensions_Webservice_Listener_Logger_Interface')
+            ->setMethods(array('log'))
+            ->getMockForAbstractClass();
+        $logger
+            ->expects($this->exactly($callCount))
+            ->with($this->isType('string'));
+        return $logger;
+    }
+
+    /**
+     * Provides a fake of the Extensions_Webservice_Listener_HttpClient_Interface
+     *
+     * @return Extensions_Webservice_Listener_HttpClient_Interface
+     */
+    public static function getHttpClientMock()
+    {
+        return;
     }
 }

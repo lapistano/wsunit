@@ -52,57 +52,8 @@
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
-class Extensions_Webservice_Listener_FactoryTest extends PHPUnit_Framework_TestCase
+class Extensions_Webservice_Listener_FactoryTest extends Extensions_Webservice_TestCase
 {
-    /*************************************************************************/
-    /* Fixtures                                                              */
-    /*************************************************************************/
-
-    /**
-     * Provides a faked instance of the Extensions_Webservice_Listener_Loader_Interface.
-     *
-     * @param array $methods
-     * @return Extensions_Webservice_Listener_Loader_Interface
-     */
-    protected function getLoader(array $methods = array())
-    {
-        $loader = $this->getMockBuilder('Extensions_Webservice_Listener_Loader_Interface')
-            ->setMethods(array($methods))
-            ->getMockForAbstractClass();
-        return $loader;
-    }
-
-    /**
-     * Provides a fake of the Extensions_Webservice_Listener_Logger_Interface
-     *
-     * @return Extensions_Webservice_Listener_Logger_Interface
-     */
-    public function getLoggerMock($callCount)
-    {
-        $logger = $this->getMockBuilder('Extensions_Webservice_Listener_Logger_Interface')
-            ->setMethods(array('log'))
-            ->getMockForAbstractClass();
-        $logger
-            ->expects($this->exactly($callCount))
-            ->with($this->isType('string'));
-        return $logger;
-    }
-
-    /**
-     * Provides a fake of the Extensions_Webservice_Listener_HttpClient_Interface
-     *
-     * @return Extensions_Webservice_Listener_HttpClient_Interface
-     */
-    public function getHttpClientMock()
-    {
-        return;
-    }
-
-
-    /*************************************************************************/
-    /* Tests                                                                 */
-    /*************************************************************************/
-
     /**
      * @covers Extensions_Webservice_Listener_Factory::register
      */
