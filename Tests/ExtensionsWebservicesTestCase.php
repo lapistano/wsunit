@@ -46,17 +46,40 @@
 class Extensions_Webservice_TestCase extends PHPUnit_Framework_TestCase
 {
     /**
+     * Provides a configuration array accourding to the mandatory information provided by the phpunit xml configuration.
+     *
+     * @return array
+     */
+    protected function getConfiguration()
+    {
+        return array(
+            'httpClient' => 'MyHttpClient',
+            'logger'     => 'MyLogger',
+        );
+    }
+
+    /**
+     * Provides a stubbed instance of the Extensions_Webservice_Listener_Factory.
+     *
+     * @param array $methods
+     * @return Extensions_Webservice_Listener_Factory
+     */
+    protected function getFactoryStub(array $methods = array())
+    {
+        return $this->getMockBuilder('Extensions_Webservice_Listener_Factory')
+            ->setMethods(array($methods))
+            ->getMock();
+    }
+
+    /**
      * Provides a faked instance of the Extensions_Webservice_Listener_Loader_Interface.
      *
      * @param array $methods
      * @return Extensions_Webservice_Listener_Loader_Interface
      */
-    protected function getLoader(array $methods = array())
+    protected function getLoaderFake(array $methods = array())
     {
-        $loader = $this->getMockBuilder('Extensions_Webservice_Listener_Loader_Interface')
-            ->setMethods(array($methods))
-            ->getMockForAbstractClass();
-        return $loader;
+        return $this->getFakeForAbstractClass('Extensions_Webservice_Listener_Loader_Interface', $methods);
     }
 
     /**
@@ -64,15 +87,9 @@ class Extensions_Webservice_TestCase extends PHPUnit_Framework_TestCase
      *
      * @return Extensions_Webservice_Listener_Logger_Interface
      */
-    public static function getLoggerMock($callCount)
+    public static function getLoggerFake()
     {
-        $logger = $this->getMockBuilder('Extensions_Webservice_Listener_Logger_Interface')
-            ->setMethods(array('log'))
-            ->getMockForAbstractClass();
-        $logger
-            ->expects($this->exactly($callCount))
-            ->with($this->isType('string'));
-        return $logger;
+        return $this->getFakeForAbstractClass('Extensions_Webservice_Listener_Logger_Interface', $methods);
     }
 
     /**
@@ -80,8 +97,21 @@ class Extensions_Webservice_TestCase extends PHPUnit_Framework_TestCase
      *
      * @return Extensions_Webservice_Listener_HttpClient_Interface
      */
-    public static function getHttpClientMock()
+    public static function getHttpClientFake()
     {
-        return;
+        return $this->getFakeForAbstractClass('Extensions_Webservice_Listener_HttpClient_Interface', $methods);
+    }
+
+    /**
+     * Provides a faked instance of the Extensions_Webservice_Listener_Loader_Interface.
+     *
+     * @param array $methods
+     * @return Extensions_Webservice_Listener_Loader_Interface
+     */
+    protected function getFakeForAbstractClass($className, array $methods = array())
+    {
+        return $this->getMockBuilder($className)
+            ->setMethods(array($methods))
+            ->getMockForAbstractClass();
     }
 }
