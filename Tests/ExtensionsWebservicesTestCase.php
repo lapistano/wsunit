@@ -67,7 +67,7 @@ class Extensions_Webservice_TestCase extends PHPUnit_Framework_TestCase
     protected function getFactoryStub(array $methods = array())
     {
         return $this->getMockBuilder('Extensions_Webservice_Listener_Factory')
-            ->setMethods(array($methods))
+            ->setMethods($methods)
             ->getMock();
     }
 
@@ -87,7 +87,7 @@ class Extensions_Webservice_TestCase extends PHPUnit_Framework_TestCase
      *
      * @return Extensions_Webservice_Listener_Logger_Interface
      */
-    public static function getLoggerFake()
+    public function getLoggerFake(array $methods = array())
     {
         return $this->getFakeForAbstractClass('Extensions_Webservice_Listener_Logger_Interface', $methods);
     }
@@ -97,7 +97,7 @@ class Extensions_Webservice_TestCase extends PHPUnit_Framework_TestCase
      *
      * @return Extensions_Webservice_Listener_HttpClient_Interface
      */
-    public static function getHttpClientFake()
+    public function getHttpClientFake(array $methods = array())
     {
         return $this->getFakeForAbstractClass('Extensions_Webservice_Listener_HttpClient_Interface', $methods);
     }
