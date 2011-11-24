@@ -60,7 +60,7 @@ class Extensions_Webservice_Listener_FactoryTest extends Extensions_Webservice_T
     public function testRegister()
     {
         $factory = new Extensions_Webservice_Listener_Factory();
-        $factory->register('loader', $this->getLoader());
+        $factory->register('loader', $this->getLoaderFake());
         $instances = $this->readAttribute($factory, 'instances');
         $this->assertArrayhasKey('loader' , $instances);
     }
