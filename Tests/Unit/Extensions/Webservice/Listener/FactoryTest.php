@@ -66,10 +66,10 @@ class Extensions_Webservice_Listener_FactoryTest extends Extensions_Webservice_T
     }
 
     /**
-     * @expectedException ReflectionException
+     * @expectedException FactoryException
      * @covers Extensions_Webservice_Listener_Factory::register
      */
-    public function testRegisterExpectingReflectionException()
+    public function testRegisterExpectingFactoryException()
     {
         $factory = new Extensions_Webservice_Listener_Factory();
         $factory->register('logger', '');

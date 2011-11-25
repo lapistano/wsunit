@@ -97,6 +97,9 @@ class Extensions_Webservice_Listener_Factory
         if (!isset($this->register[$type])) {
             throw new FactoryException('Unknown type (' . $type .')!', FactoryException::UnknownType);
         }
+
+        var_dump($this->instances, $type);
+
         if (empty($this->instances[$type])) {
             $params = func_get_args();
             // remove $type
@@ -140,11 +143,15 @@ class Extensions_Webservice_Listener_Factory
      */
     protected function implementsMandatoryInterfaces($class)
     {
-        $reflection = new ReflectionClass($class);
-        foreach ($this->interfaces as $interface) {
-            if ($reflection->implementsInterface($interface)) {
-                return true;
+        try {
+            $reflection = new ReflectionClass($class);
+            foreach ($this->interfaces as $interface) {
+                if ($reflection->implementsInterface($interface)) {
+                    return true;
+                }
             }
+        } catch (ReflectionException $re) {
+            return false;
         }
         return false;
     }
