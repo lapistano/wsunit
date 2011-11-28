@@ -62,15 +62,9 @@ class Extensions_Webservice_ListenerTest extends Extensions_Webservice_TestCase
      */
     protected function getListener()
     {
-        $loader = $this->getLoaderFake(array('load'));
-        $loader
-            ->expects($this->once())
-            ->method('load')
-            ->will($this->returnArgument(0));
-
-        return  new WebServiceListener(
+        return new WebServiceListener(
             $this->getFactoryStub(),
-            $loader, 
+            $this->getLoaderFake(),
             $this->getConfiguration()
         );
     }
@@ -81,23 +75,9 @@ class Extensions_Webservice_ListenerTest extends Extensions_Webservice_TestCase
     public function testConstruct()
     {
         $this->assertAttributeInternalType(
-            'array', 
-            'configuration', 
+            'array',
+            'configuration',
             $this->getListener()
-        );
-    }
-
-    /**
-     * @covers WebServiceListener::startTestSuite
-     */
-    public function testStartTestSuite()
-    {
-        $listener = $this->getListener();
-        $listener->startTestSuite($this->getTestSuiteStub());
-        $this->assertAttributeInstanceOf(
-            'Extensions_Webservice_Listener_HttpClient_Interface',
-            'httpClient',
-            $listener
         );
     }
 

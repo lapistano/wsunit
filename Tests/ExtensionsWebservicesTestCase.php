@@ -64,8 +64,8 @@ class Extensions_Webservice_TestCase extends PHPUnit_Framework_TestCase
     protected function getConfiguration()
     {
         return array(
-            'httpClient' => 'MyHttpClient',
-            'logger'     => 'MyLogger',
+            'httpClient' => 'Extensions_Webservice_Listener_HttpClient',
+            'logger'     => 'Extensions_Webservice_Listener_Logger',
         );
     }
 

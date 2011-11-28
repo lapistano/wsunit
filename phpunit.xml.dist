@@ -8,7 +8,8 @@
 
   <testsuites>
     <testsuite name="WsUnit">
-        <directory>Tests/Unit/Extensions/Webservice</directory>
+        <directory>Tests/Unit</directory>
+        <directory>Tests/Integration</directory>
     </testsuite>
   </testsuites>
 
@@ -35,10 +36,9 @@
   <listener class="WebServiceListener">
     <arguments>
         <object class="Factory"/>
-        <object class="ConfigurationLoader"/>
         <array>
           <element key="httpClient">
-            <string>Buzz</string>
+            <string>Extensions_Webservice_Listener_HttpClient</string>
           </element>
           <element key="logger">
             <string>MonoLog</string>

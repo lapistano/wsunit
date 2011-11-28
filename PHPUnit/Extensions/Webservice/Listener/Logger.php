@@ -56,15 +56,17 @@
  * @since      Class available since Release 3.6.0
  */
 
-interface Extensions_Webservice_Listener_HttpClient_Interface
+class Extensions_Webservice_Listener_Logger implements Extensions_Webservice_Listener_Logger_Interface
 {
     /**
-     * Sends a request to the given url.
+     * Persists the given message.
      *
-     * @param string $url
-     * @param string $query
-     * @return string The http response with the response header included.
+     * @param string $message
+     * @param string $level
      */
-    public function get($url, array $query = array());
+    public function log($message, $level = '')
+    {
+
+    }
 
 }

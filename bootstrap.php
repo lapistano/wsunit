@@ -16,11 +16,14 @@ require_once PROJECT_DIR . '/Constraint/JsonMatches.php';
 require_once PROJECT_DIR . '/Constraint/JsonErrorMessageProvider.php';
 require_once PROJECT_DIR . '/TestCase.php';
 
-// listener files
-require_once PROJECT_DIR . '/Listener/WebServiceListener.php';
-require_once PROJECT_DIR . '/Listener/Factory.php';
-
 // interface files
 require_once PROJECT_DIR . '/Listener/Loader/Interface.php';
 require_once PROJECT_DIR . '/Listener/Logger/Interface.php';
 require_once PROJECT_DIR . '/Listener/HttpClient/Interface.php';
+
+// listener files
+require_once PROJECT_DIR . '/Listener/WebServiceListener.php';
+require_once PROJECT_DIR . '/Listener/Factory.php';
+require_once PROJECT_DIR . '/Listener/HttpClient.php';
+require_once PROJECT_DIR . '/Listener/Loader.php';
+require_once PROJECT_DIR . '/Listener/Logger.php';

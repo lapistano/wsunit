@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+    <header>
+        <code>200</code>
+        <date>Sat, 12 Apr 2008 17:30:38 GMT</date>
+        <server>Apache/2.2.3 (CentOS)</server>
+        <last-modified>Tue, 15 Nov 2005 13:24:10 GMT</last-modified>
+        <content-type charset="UTF-8"> text/plain</content-type>
+    </header>
+    <body>
+        Freilebende Gummibärchen gibt es nicht!
+    </body>
+</response>

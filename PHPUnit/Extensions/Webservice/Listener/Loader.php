@@ -44,7 +44,7 @@
  */
 
 /**
- *
+ * Basic http client to request information from an url via GET method.
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
@@ -56,15 +56,14 @@
  * @since      Class available since Release 3.6.0
  */
 
-interface Extensions_Webservice_Listener_HttpClient_Interface
+class Extensions_Webservice_Listener_Loader implements Extensions_Webservice_Listener_Loader_Interface
 {
     /**
-     * Sends a request to the given url.
-     *
-     * @param string $url
-     * @param string $query
-     * @return string The http response with the response header included.
+     * (non-PHPdoc)
+     * @see Extensions_Webservice_Listener_Loader_Interface::load()
      */
-    public function get($url, array $query = array());
+    public function load(array $configuration)
+    {
 
+    }
 }

@@ -64,6 +64,12 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
     private $factory;
 
     /**
+     * Instance of the Extensions_Webservice_Listener_Loader
+     * @var Extensions_Webservice_Listener_Loader
+     */
+    private $loader;
+
+    /**
      * Instance of the logger observing the http client to capture the response and its header.
      * @var Extensions_Webservice_Listener_Logger_Interface
      */
@@ -84,6 +90,14 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
     /**
      * Constructor of the class.
      *
+     * Structure of the configuration array:
+     * <code>
+     * Array(
+     *     'httpClient' => 'MyHttpClient',
+     *     'logger' => 'MyLogger',
+     * )
+     * </code>
+     *
      * @param Extensions_Webservice_Listener_Factory  $factory
      * @param Extensions_Webservice_Listener_Loader   $loader
      * @param array                                   $configuration
@@ -93,8 +107,9 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
         Extensions_Webservice_Listener_Loader_Interface $loader,
         array $configuration)
     {
-        $this->configuration = $loader->load($configuration);
-        $this->factory = $factory;
+        $this->factory       = $factory;
+        $this->loader        = $loader;
+        $this->configuration = $configuration;
     }
 
     /**

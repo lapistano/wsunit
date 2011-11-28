@@ -98,15 +98,18 @@ class Extensions_Webservice_Listener_Factory
             throw new FactoryException('Unknown type (' . $type .')!', FactoryException::UnknownType);
         }
 
-        var_dump($this->instances, $type);
-
         if (empty($this->instances[$type])) {
             $params = func_get_args();
             // remove $type
             array_shift($params);
 
             $class = new ReflectionClass($this->register[$type]);
-            $this->instances[$type] = $class->newInstanceArgs($params);
+
+            if (empty($params)) {
+                $this->instances[$type] = $class->newInstance();
+            } else {
+                $this->instances[$type] = $class->newInstanceArgs($params);
+            }
         }
 
         return $this->instances[$type];
@@ -132,7 +135,7 @@ class Extensions_Webservice_Listener_Factory
                 FactoryException::NotAllowedtoRegister
             );
         }
-        $this->instances[$type] = $class;
+        $this->register[$type] = $class;
     }
 
     /**

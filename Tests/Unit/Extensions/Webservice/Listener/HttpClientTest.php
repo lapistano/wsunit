@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2002-2011, Sebastian Bergmann <sb@sebastian-bergmann.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,10 +34,10 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    PHPUnit
+ * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
+ * @copyright  2002-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
@@ -51,20 +51,20 @@
  * @author     Bastian Feder <php@bastian-feder.de>
  * @copyright  2011 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
- * @since      Class available since Release 3.6.0
+ * @since      File available since Release 3.6.0
  */
 
-interface Extensions_Webservice_Listener_HttpClient_Interface
+class Extensions_Webservice_Listener_HttpClientTest extends Extensions_Webservice_TestCase
 {
-    /**
-     * Sends a request to the given url.
-     *
-     * @param string $url
-     * @param string $query
-     * @return string The http response with the response header included.
-     */
-    public function get($url, array $query = array());
-
+    public function testGet()
+    {
+        $fixtureFile = TEST_DIR . '/_files/HttpClient/response.txt';
+        $expected = array(
+            'body'   => 'Freilebende Gummibärchen gibt es nicht!',
+            'header' => array(),
+        );
+        $client = new Extensions_Webservice_Listener_HttpClient();
+        $this->assertEquals($expected, $client->get($fixtureFile));
+    }
 }

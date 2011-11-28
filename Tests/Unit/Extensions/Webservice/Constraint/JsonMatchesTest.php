@@ -55,11 +55,10 @@ class Extensions_Webservice_Constraint_JsonMatchesTest extends Extensions_Webser
 
     /**
      * @dataProvider evaluateDataprovider
-     * @covers Extensions_Webservice_Constraint_JsonMatches::evaluate
      * @covers Extensions_Webservice_Constraint_JsonMatches::matches
      * @covers Extensions_Webservice_Constraint_JsonMatches::__construct
      */
-    public function testEvaluate($expected, $jsonOther, $jsonValue)
+    public function testMatches($expected, $jsonOther, $jsonValue)
     {
         $constraint = new Extensions_Webservice_Constraint_JsonMatches($jsonValue);
         $this->assertEquals($expected, $constraint->evaluate($jsonOther, '', true));

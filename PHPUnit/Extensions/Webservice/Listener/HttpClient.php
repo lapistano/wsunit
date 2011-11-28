@@ -44,7 +44,7 @@
  */
 
 /**
- *
+ * Basic http client to request information from an url via GET method.
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
@@ -56,15 +56,34 @@
  * @since      Class available since Release 3.6.0
  */
 
-interface Extensions_Webservice_Listener_HttpClient_Interface
+class Extensions_Webservice_Listener_HttpClient implements Extensions_Webservice_Listener_HttpClient_Interface
 {
     /**
      * Sends a request to the given url.
      *
      * @param string $url
-     * @param string $query
+     * @param array $query
      * @return string The http response with the response header included.
      */
-    public function get($url, array $query = array());
+    public function get($url, array $query = array())
+    {
+        $opts = array(
+            'http' => array(
+                'method'        => "GET",
+                'query'         => http_build_query($query, '', '&'),
+                'max_redirects' => 5,
+                'timeout'       => 1.0,
+            )
+        );
 
+        $context = stream_context_create($opts);
+
+        // Open the file using the HTTP headers set above
+        $response = file_get_contents($url, false, $context);
+        $responseHeader = isset($http_response_header)? $http_response_header : array();
+        return array(
+            'body'   => $response,
+            'header' => $responseHeader
+        );
+    }
 }
