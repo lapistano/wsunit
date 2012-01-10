@@ -58,5 +58,5 @@
 
 interface Extensions_Webservice_Listener_Loader_Interface
 {
-    public function load(array $configuration);
+    public function load($data);
 }

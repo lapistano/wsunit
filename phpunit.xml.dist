@@ -35,13 +35,17 @@
   // You have to require the used libraries in the bootstrap file.
   <listener class="WebServiceListener">
     <arguments>
-        <object class="Factory"/>
+        <object class="Extensions_Webservice_Listener_Factory"/>
+        <object class="Extensions_Webservice_Listener_Loader_Configuration"/>
         <array>
           <element key="httpClient">
             <string>Extensions_Webservice_Listener_HttpClient</string>
           </element>
           <element key="logger">
             <string>MonoLog</string>
+          </element>
+          <element key="configuration">
+            <string>config.xml</string>
           </element>
         </array>
       </arguments>

@@ -55,42 +55,9 @@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.6.0
  */
-
-class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_Webservice_Listener_Loader_Interface
+class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions_Webservice_TestCase
 {
-
-    protected $dom;
-
-    /**
-     * Loads the configuration from the given file.
-     *
-     * @param string $configFile
-     *
-     * @see Extensions_Webservice_Listener_Loader_Interface::load()
-     */
-    public function load($configFile)
-    {
-        if (!file_exists($configFile)) {
-            throw new InvalidArgumentException('Unable to open file ( '. $configFile.' )');
-        }
-        $this->dom = $this->convert($configFile);
-        return $this->transcode('dom', 'array', $dom);
-    }
-
-    /**
-     * Converts the content of the given file to a DOM object
-     *
-     * @param string $file
-     * @return DOMDocument
-     */
-    protected function convert($file)
-    {
-        $dom = $this->getDom();
-        return $dom->load($file);
-    }
-
-
-    protected function transcode($start, $destination, $data)
+    public function testLoad()
     {
     }
 }

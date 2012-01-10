@@ -25,5 +25,5 @@ require_once PROJECT_DIR . '/Listener/HttpClient/Interface.php';
 require_once PROJECT_DIR . '/Listener/WebServiceListener.php';
 require_once PROJECT_DIR . '/Listener/Factory.php';
 require_once PROJECT_DIR . '/Listener/HttpClient.php';
-require_once PROJECT_DIR . '/Listener/Loader.php';
+require_once PROJECT_DIR . '/Listener/Loader/Configuration.php';
 require_once PROJECT_DIR . '/Listener/Logger.php';
