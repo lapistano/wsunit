@@ -94,7 +94,7 @@ class Extensions_Webservice_Listener_Factory
      */
     public function getInstanceOf($type)
     {
-        if (!isset($this->register[$type])) {
+        if (!isset($this->register[$type]) || 1 === $this->register[$type]) {
             throw new FactoryException('Unknown type (' . $type .')!', FactoryException::UnknownType);
         }
 

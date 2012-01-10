@@ -56,6 +56,7 @@ class Extensions_Webservice_Listener_FactoryTest extends Extensions_Webservice_T
 {
     /**
      * @covers Extensions_Webservice_Listener_Factory::register
+     * @covers Extensions_Webservice_Listener_Factory::implementsMandatoryInterfaces
      */
     public function testRegister()
     {
@@ -68,12 +69,56 @@ class Extensions_Webservice_Listener_FactoryTest extends Extensions_Webservice_T
     }
 
     /**
+     * @dataProvider registerExpectingFactoryException
      * @expectedException FactoryException
      * @covers Extensions_Webservice_Listener_Factory::register
+     * @covers Extensions_Webservice_Listener_Factory::implementsMandatoryInterfaces
      */
-    public function testRegisterExpectingFactoryException()
+    public function testRegisterExpectingFactoryException($type, $classname)
     {
         $factory = new Extensions_Webservice_Listener_Factory();
-        $factory->register('logger', '');
+        $factory->register($type, $classname);
+    }
+
+    /**
+     * @dataProvider getInstanceOfExpectingFactoryException
+     * @expectedException FactoryException
+     * @covers Extensions_Webservice_Listener_Factory::getInstanceOf
+     */
+    public function testGetInstanceOfExpectingFactoryException($type)
+    {
+        $factory = new Extensions_Webservice_Listener_Factory();
+        $factory->getInstanceOf($type);
+    }
+
+    /**
+     * @covers Extensions_Webservice_Listener_Factory::getInstanceOf
+     */
+    public function testGetInstanceOf()
+    {
+        $factory = new Extensions_Webservice_Listener_Factory();
+        $factory->register('loader', 'Extensions_Webservice_Listener_Loader_Configuration');
+        $this->assertInstanceOf('Extensions_Webservice_Listener_Loader_Interface', $factory->getInstanceOf('loader'));
+    }
+
+
+    /*************************************************************************/
+    /* Dataprovider                                                          */
+    /*************************************************************************/
+
+    public static function registerExpectingFactoryException()
+    {
+        return array(
+            'unregistered type' => array('loader', ''),
+            'unknown type' => array('Tux', ''),
+        );
+    }
+
+    public static function getInstanceOfExpectingFactoryException()
+    {
+        return array(
+            'unregistered type' => array('loader'),
+            'unknown type' => array('Tux'),
+        );
     }
 }
