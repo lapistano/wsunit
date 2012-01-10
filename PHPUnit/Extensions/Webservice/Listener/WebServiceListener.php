@@ -88,6 +88,12 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
     private $configuration = array();
 
     /**
+     * Contains the mapping information of which urls a test has to call
+     * @var array
+     */
+    private $mapping = array();
+
+    /**
      * Constructor of the class.
      *
      * Structure of the configuration array:
@@ -164,10 +170,24 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
      */
     public function startTest(PHPUnit_Framework_Test $test)
     {
-        print_r(get_class_methods(get_class($test)));
+        //print_r(get_class_methods(get_class($test)));die;
 
         if ($test instanceof PHPUnit_Framework_Warning) {
             return;
+        }
+
+        $name = $test->getName();
+        if (!isset($this->mapping[$name])) {
+            // log that there is no url set for this test
+            return;
+        }
+
+        $testMap = $this->mapping[$name];
+        foreach ($testMap as $data) {
+            $response = $this->httpClient->get($data['url'], $data['params']);
+            var_dump($response);
+
+            // TODO: log to file!!
         }
     }
 
@@ -198,6 +218,9 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
 
         $this->httpClient = $this->factory->getInstanceOf('httpClient');
         $this->logger     = $this->factory->getInstanceOf('logger');
+
+        $this->loadMapping();
+
     }
 
     /**
@@ -208,5 +231,15 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
      */
     public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
+    }
+
+
+
+    protected function loadMapping()
+    {
+        if (empty($this->mapping)) {
+            $this->mapping = $this->loader->load($this->configuration['mappingFile']);
+        }
+        return $this->mapping;
     }
 }
