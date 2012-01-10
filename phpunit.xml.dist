@@ -33,6 +33,8 @@
 <!--
   // listener configuration
   // You have to require the used libraries in the bootstrap file.
+-->
+  <listeners>
   <listener class="WebServiceListener">
     <arguments>
         <object class="Extensions_Webservice_Listener_Factory"/>
@@ -42,15 +44,15 @@
             <string>Extensions_Webservice_Listener_HttpClient</string>
           </element>
           <element key="logger">
-            <string>MonoLog</string>
+            <string>Extensions_Webservice_Listener_Logger</string>
           </element>
-          <element key="configuration">
-            <string>config.xml</string>
+          <element key="mappingFile">
+            <string>../../../../../Tests/_files/configuration.xml</string>
           </element>
         </array>
       </arguments>
     </listener>
   </listeners>
--->
+
   
 </phpunit>
