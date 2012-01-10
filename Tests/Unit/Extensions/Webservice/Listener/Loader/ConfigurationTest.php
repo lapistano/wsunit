@@ -76,16 +76,40 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
     {
         $expected = array(
             'testGetData' => array(
-                'http://example.org/data.json',
-                'http://example.org/data.xml',
-                'http://example.org/data.txt',
+                array(
+                    'url' => 'http://example.org/data.json',
+                    'params' => array(),
+                ),
+                array(
+                    'url' => 'http://example.org/data.xml',
+                    'params' => array(),
+                ),
+                array(
+                    'url' => 'http://example.org/data.txt',
+                    'params' => array(),
+                ),
             ),
             'testReadData' => array(
-                'http://example.org/data.json',
+                array(
+                    'url' => 'http://example.org/data.json',
+                    'params' => array(),
+                ),
+            ),
+            'testTranslatTypeToPrefix with data set "expected"' => array(
+                array(
+                    'url' => 'http://example.org/data.json',
+                    'params' => array(
+                        'mascott' => array(
+                            'tux',
+                            'RedHat' => 'beastie',
+                         ),
+                        'os' => 'Linux',
+                    ),
+                ),
             ),
         );
 
         $loader = new Extensions_Webservice_Listener_Loader_Configuration();
-        $this->assertEquals($expected, $loader->load(TEST_DIR . '/_files/configuration.xml'));
+        $this->assertEquals($expected, $loader->load('../../../../../Tests/_files/configuration.xml'));
     }
 }

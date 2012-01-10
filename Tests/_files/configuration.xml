@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <listener>
     <test name="testGetData">
-        <location>http://example.org/data.json</location>
-        <location>http://example.org/data.xml</location>
-        <location>http://example.org/data.txt</location>
+        <location href="http://example.org/data.json" />
+        <location href="http://example.org/data.xml" />
+        <location href="http://example.org/data.txt" />
     </test>
     <test name="testReadData">
-        <location>http://example.org/data.json</location>
+        <location href="http://example.org/data.json" />
+    </test>
+    <test name='testTranslatTypeToPrefix with data set "expected"'>
+        <location href="http://example.org/data.json">
+            <query>
+              <param name="mascott[]">tux</param>
+              <param name="mascott[RedHat]">beastie</param>
+              <param name="os">Linux</param>
+            </query>
+        </location>
     </test>
 </listener>

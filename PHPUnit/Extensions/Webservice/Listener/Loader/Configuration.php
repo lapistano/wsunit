@@ -67,8 +67,10 @@ class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_
      */
     public function load($configFile)
     {
-        if (!file_exists($configFile)) {
-            throw new InvalidArgumentException('Unable to open file ( '. $configFile.' )');
+        $configFile = __DIR__ . '/' . $configFile;
+
+        if (!is_readable($configFile)) {
+            throw new InvalidArgumentException('File not found ( '. $configFile.' ).');
         }
         return $this->transcode($this->getDomFromFile($configFile));
     }
@@ -100,15 +102,36 @@ class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_
 
         if (!is_null($elements)) {
             foreach ($elements as $test) {
-                $name = $test->getAttribute('name');
+                $testName = $test->getAttribute('name');
 
-                if (!isset($transcoded[$name])) {
-                    $transcoded[$name] = array();
+                if (!isset($transcoded[$testName])) {
+                    $transcoded[$testName] = array();
                 }
 
-                $locations = $xpath->query('location/text()', $test);
+                $locations = $xpath->query('location', $test);
                 foreach ($locations as $location) {
-                    $transcoded[$name][] = $location->nodeValue;
+                    $testData = array();
+                    $testData['url'] = $location->getAttribute('href');
+                    $testData['params'] = array();
+
+                    $params = $xpath->query('query/param', $location);
+                    foreach ($params as $param) {
+                        $paramName = $param->getAttribute('name');
+
+                        $pos = strpos($paramName, '[');
+                        if ($pos > 0) {
+                            preg_match("(^([^\[]+)\[([^\[]*)\]$)", $paramName, $matches);
+
+                            if (!empty($matches[2])) {
+                                $testData['params'][$matches[1]][$matches[2]] = $param->nodeValue;
+                            } else {
+                                $testData['params'][$matches[1]][] = $param->nodeValue;
+                            }
+                        } else {
+                            $testData['params'][$paramName] = $param->nodeValue;
+                        }
+                    }
+                    $transcoded[$testName][] = $testData;
                 }
             }
         }
