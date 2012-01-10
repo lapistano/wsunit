@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listener>
+    <test name="testGetData">
+        <location>http://example.org/data.json</location>
+        <location>http://example.org/data.xml</location>
+        <location>http://example.org/data.txt</location>
+    </test>
+    <test name="testReadData">
+        <location>http://example.org/data.json</location>
+    </test>
+</listener>

@@ -58,9 +58,6 @@
 
 class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_Webservice_Listener_Loader_Interface
 {
-
-    protected $dom;
-
     /**
      * Loads the configuration from the given file.
      *
@@ -73,8 +70,7 @@ class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_
         if (!file_exists($configFile)) {
             throw new InvalidArgumentException('Unable to open file ( '. $configFile.' )');
         }
-        $this->dom = $this->convert($configFile);
-        return $this->transcode('dom', 'array', $dom);
+        return $this->transcode($this->getDomFromFile($configFile));
     }
 
     /**
@@ -83,14 +79,39 @@ class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_
      * @param string $file
      * @return DOMDocument
      */
-    protected function convert($file)
+    protected function getDomFromFile($file)
     {
-        $dom = $this->getDom();
-        return $dom->load($file);
+        $dom = new DomDocument();
+        $dom->load($file);
+        return $dom;
     }
 
-
-    protected function transcode($start, $destination, $data)
+    /**
+     * Transcodes the given DOMDocument to an array
+     *
+     * @param DOMDocument $data
+     * @return array
+     */
+    protected function transcode(DOMDocument $data)
     {
+        $transcoded = array();
+        $xpath = new DOMXpath($data);
+        $elements = $xpath->query("//listener/test");
+
+        if (!is_null($elements)) {
+            foreach ($elements as $test) {
+                $name = $test->getAttribute('name');
+
+                if (!isset($transcoded[$name])) {
+                    $transcoded[$name] = array();
+                }
+
+                $locations = $xpath->query('location/text()', $test);
+                foreach ($locations as $location) {
+                    $transcoded[$name][] = $location->nodeValue;
+                }
+            }
+        }
+        return $transcoded;
     }
 }

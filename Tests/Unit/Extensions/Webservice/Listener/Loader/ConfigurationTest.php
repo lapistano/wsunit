@@ -57,7 +57,35 @@
  */
 class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions_Webservice_TestCase
 {
+    /**
+     * @expectedException InvalidArgumentException
+     * @covers Extensions_Webservice_Listener_Loader_Configuration::load
+     */
+    public function testLoadExpectingInvalidArgumentException()
+    {
+        $loader = new Extensions_Webservice_Listener_Loader_Configuration();
+        $loader->load('Tux');
+    }
+
+    /**
+     * @covers Extensions_Webservice_Listener_Loader_Configuration::load
+     * @covers Extensions_Webservice_Listener_Loader_Configuration::getDomFromFile
+     * @covers Extensions_Webservice_Listener_Loader_Configuration::transcode
+     */
     public function testLoad()
     {
+        $expected = array(
+            'testGetData' => array(
+                'http://example.org/data.json',
+                'http://example.org/data.xml',
+                'http://example.org/data.txt',
+            ),
+            'testReadData' => array(
+                'http://example.org/data.json',
+            ),
+        );
+
+        $loader = new Extensions_Webservice_Listener_Loader_Configuration();
+        $this->assertEquals($expected, $loader->load(TEST_DIR . '/_files/configuration.xml'));
     }
 }
