@@ -130,7 +130,7 @@ class Extensions_Webservice_Listener_Factory
 
         if (! $this->implementsMandatoryInterfaces($class)) {
             throw new FactoryException(
-                'The given class does neither implement "Extensions_Webservice_Listener_Logger_Interface" '.
+                'The given class (' . $class . ') does neither implement "Extensions_Webservice_Listener_Logger_Interface" '.
                 'nor "Extensions_Webservice_Listener_HttpClient_Interface"!',
                 FactoryException::NotAllowedtoRegister
             );
