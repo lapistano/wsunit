@@ -66,6 +66,7 @@ class Extensions_Webservice_TestCase extends PHPUnit_Framework_TestCase
         return array(
             'httpClient' => 'Extensions_Webservice_Listener_HttpClient',
             'logger'     => 'Extensions_Webservice_Listener_Logger',
+            'mappingFile' => '../../../../../Tests/_files/configuration.xml',
         );
     }
 
