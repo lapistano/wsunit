@@ -185,9 +185,10 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
         $testMap = $this->mapping[$name];
         foreach ($testMap as $data) {
             $response = $this->httpClient->get($data['url'], $data['params']);
-            var_dump($response);
+//            var_dump(__METHOD__, $response);
 
-            // TODO: log to file!!
+            //$this->logger->persist($response);
+
         }
     }
 

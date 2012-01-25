@@ -43,6 +43,8 @@
  * @since      File available since Release 3.6.0
  */
 
+use lapistano\ProxyObject\ProxyBuilder;
+
 /**
  *
  *
@@ -55,16 +57,18 @@
  * @since      File available since Release 3.6.0
  */
 
-class Extensions_Webservice_Listener_HttpClientTest extends Extensions_Webservice_TestCase
+class Extensions_Webservice_Listener_HttpClientIntegrationTest extends Extensions_Webservice_TestCase
 {
-    public function testGet()
+
+    /**
+     * @covers Extensions_Webservice_Listener_HttpClient::getResponseObject
+     */
+    public function testGetResponseObject()
     {
-        $fixtureFile = TEST_DIR . '/_files/HttpClient/response.txt';
-        $expected = array(
-            'body'   => 'Freilebende Gummibärchen gibt es nicht!',
-            'header' => array(),
-        );
-        $client = new Extensions_Webservice_Listener_HttpClient();
-        $this->assertEquals($expected, $client->get($fixtureFile));
+        $pb = new ProxyBuilder('Extensions_Webservice_Listener_HttpClient');
+        $client = $pb
+            ->setMethods(array('getResponseObject'))
+            ->getProxy();
+        $this->assertInstanceOf('Extensions_Webservice_Listener_HttpResponse', $client->getResponseObject());
     }
 }
