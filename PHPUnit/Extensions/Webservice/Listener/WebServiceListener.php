@@ -77,7 +77,7 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
 
     /**
      * Instance of the http client used to send a request to the defined webservice.
-     * @var Extensions_Webservice_Listener_HttpClient_Interface
+     * @var Extensions_Webservice_Listener_Http_Client_Interface
      */
     private $httpClient;
 
@@ -185,10 +185,8 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
         $testMap = $this->mapping[$name];
         foreach ($testMap as $data) {
             $response = $this->httpClient->get($data['url'], $data['params']);
-//            var_dump(__METHOD__, $response);
-
-            //$this->logger->persist($response);
-
+            $this->logger->setFilename($test->getName());
+            $this->logger->log($response);
         }
     }
 

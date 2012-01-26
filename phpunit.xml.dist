@@ -41,7 +41,7 @@
         <object class="Extensions_Webservice_Listener_Loader_Configuration"/>
         <array>
           <element key="httpClient">
-            <string>Extensions_Webservice_Listener_HttpClient</string>
+            <string>Extensions_Webservice_Listener_Http_Client</string>
           </element>
           <element key="logger">
             <string>Extensions_Webservice_Listener_Logger</string>

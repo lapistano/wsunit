@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,55 +34,69 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    WsUnit
+ * @package    PHPUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2002-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
 
 /**
- *
+ * Basic http client to request information from an url via GET method.
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
  * @copyright  2011 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
- * @since      File available since Release 3.6.0
+ * @since      Class available since Release 3.6.0
  */
 
-class Extensions_Webservice_ListenerIntegrationTest extends Extensions_Webservice_TestCase
+class Extensions_Webservice_Listener_Http_Response 
 {
     /**
-     * Provides an instance of the WebServiceListener.
-     *
-     * @return WebServiceListener
+     * Contains registered Http header information
+     * @var array
      */
-    protected function getListener()
+    protected $header = array();
+
+    /**
+     * Contains registered Http body string.
+     * @var string
+     */
+    protected $body = '';
+
+    /**
+     * Registers the given string as the response body.
+     *
+     * @param string $content
+     */
+    public function setBody($content)
     {
-        return  new WebServiceListener(
-            new Extensions_Webservice_Listener_Factory(),
-            $this->getLoaderFake(),
-            $this->getConfiguration()
-        );
+        $this->body = $content;
     }
 
     /**
-     * @covers WebServiceListener::startTestSuite
+     * Registers the given array as the response header.
+     *
+     * @param array $header
      */
-    public function testStartTestSuite()
+    public function setHeader(array $header)
     {
-        $listener = $this->getListener();
-        $listener->startTestSuite($this->getTestSuiteStub());
+        $this->header = $header;
+    }
 
-        $this->assertAttributeInstanceOf(
-            'Extensions_Webservice_Listener_Http_Client_Interface',
-            'httpClient',
-            $listener
-        );
+    /**
+     * Creates the string representation of the Extensions_Webservice_Listener_Http_Response.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->body;
     }
 }

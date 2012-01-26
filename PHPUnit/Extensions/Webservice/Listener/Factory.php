@@ -79,7 +79,7 @@ class Extensions_Webservice_Listener_Factory
      * @var array
      */
     protected $interfaces = array(
-        'httpClient' => 'Extensions_Webservice_Listener_HttpClient_Interface',
+        'httpClient' => 'Extensions_Webservice_Listener_Http_Client_Interface',
         'logger'     => 'Extensions_Webservice_Listener_Logger_Interface',
         'loader'     => 'Extensions_Webservice_Listener_Loader_Interface',
     );
@@ -131,7 +131,7 @@ class Extensions_Webservice_Listener_Factory
         if (! $this->implementsMandatoryInterfaces($class)) {
             throw new FactoryException(
                 'The given class (' . $class . ') does neither implement "Extensions_Webservice_Listener_Logger_Interface" '.
-                'nor "Extensions_Webservice_Listener_HttpClient_Interface"!',
+                'nor "Extensions_Webservice_Listener_Http_Client_Interface"!',
                 FactoryException::NotAllowedtoRegister
             );
         }

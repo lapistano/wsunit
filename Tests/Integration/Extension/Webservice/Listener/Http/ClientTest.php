@@ -57,18 +57,18 @@ use lapistano\ProxyObject\ProxyBuilder;
  * @since      File available since Release 3.6.0
  */
 
-class Extensions_Webservice_Listener_HttpClientIntegrationTest extends Extensions_Webservice_TestCase
+class Extensions_Webservice_Listener_Http_ClientIntegrationTest extends Extensions_Webservice_TestCase
 {
 
     /**
-     * @covers Extensions_Webservice_Listener_HttpClient::getResponseObject
+     * @covers Extensions_Webservice_Listener_Http_Client::getResponseObject
      */
     public function testGetResponseObject()
     {
-        $pb = new ProxyBuilder('Extensions_Webservice_Listener_HttpClient');
+        $pb = new ProxyBuilder('Extensions_Webservice_Listener_Http_Client');
         $client = $pb
             ->setMethods(array('getResponseObject'))
             ->getProxy();
-        $this->assertInstanceOf('Extensions_Webservice_Listener_HttpResponse', $client->getResponseObject());
+        $this->assertInstanceOf('Extensions_Webservice_Listener_Http_Response', $client->getResponseObject());
     }
 }

@@ -56,7 +56,7 @@
  * @since      Class available since Release 3.6.0
  */
 
-interface Extensions_Webservice_Listener_HttpClient_Interface
+interface Extensions_Webservice_Listener_Http_Client_Interface
 {
     /**
      * Sends a request to the given url.

@@ -56,7 +56,7 @@
  * @since      Class available since Release 3.6.0
  */
 
-class Extensions_Webservice_Listener_HttpClient implements Extensions_Webservice_Listener_HttpClient_Interface
+class Extensions_Webservice_Listener_Http_Client implements Extensions_Webservice_Listener_Http_Client_Interface
 {
     /**
      * Contains the object representation of a server response
@@ -86,10 +86,10 @@ class Extensions_Webservice_Listener_HttpClient implements Extensions_Webservice
 
         // Open the file using the HTTP headers set above
         $response = $this->getResponseObject();
-        $response->addBody(file_get_contents($url, false, $context));
+        $response->setBody(file_get_contents($url, false, $context));
 
         $responseHeader = isset($http_response_header)? $http_response_header : array();
-        $response->addHeader($responseHeader);
+        $response->setHeader($responseHeader);
 
         return $response;
     }
@@ -101,7 +101,7 @@ class Extensions_Webservice_Listener_HttpClient implements Extensions_Webservice
     protected function getResponseObject()
     {
         if (empty($this->response)) {
-            $this->response = new Extensions_Webservice_Listener_HttpResponse();
+            $this->response = new Extensions_Webservice_Listener_Http_Response();
         }
         return $this->response;
     }

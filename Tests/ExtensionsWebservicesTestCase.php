@@ -64,7 +64,7 @@ class Extensions_Webservice_TestCase extends PHPUnit_Framework_TestCase
     protected function getConfiguration()
     {
         return array(
-            'httpClient' => 'Extensions_Webservice_Listener_HttpClient',
+            'httpClient' => 'Extensions_Webservice_Listener_Http_Client',
             'logger'     => 'Extensions_Webservice_Listener_Logger',
             'mappingFile' => '../../../../../Tests/_files/configuration.xml',
         );
@@ -105,13 +105,13 @@ class Extensions_Webservice_TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Provides a fake of the Extensions_Webservice_Listener_HttpClient_Interface
+     * Provides a fake of the Extensions_Webservice_Listener_Http_Client_Interface
      *
-     * @return Extensions_Webservice_Listener_HttpClient_Interface
+     * @return Extensions_Webservice_Listener_Http_Client_Interface
      */
     public function getHttpClientFake(array $methods = array())
     {
-        return $this->getFakeForAbstractClass('Extensions_Webservice_Listener_HttpClient_Interface', $methods);
+        return $this->getFakeForAbstractClass('Extensions_Webservice_Listener_Http_Client_Interface', $methods);
     }
 
     /**
