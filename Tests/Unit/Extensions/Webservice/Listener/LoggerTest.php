@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2002-2011, Sebastian Bergmann <sb@sebastian-bergmann.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,82 +34,51 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    PHPUnit
+ * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
+ * @copyright  2002-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
 
+use lapistano\ProxyObject\ProxyBuilder;
+
 /**
- *
- *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
  * @copyright  2011 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
  * @link       http://www.phpunit.de/
- * @since      Class available since Release 3.6.0
+ * @since      File available since Release 3.6.0
  */
-
-class Extensions_Webservice_Listener_Logger implements Extensions_Webservice_Listener_Logger_Interface
+class Extensions_Webservice_Listener_LoggerTest extends Extensions_Webservice_TestCase
 {
     /**
-     * Contains the name of the file to be logged to.
-     * @var string
+     * @covers Extensions_Webservice_Listener_Logger::setFilename
      */
-    protected $filename = '';
-
-    /**
-     * Persists the given message.
-     *
-     * @param string $message
-     * @param string $level
-     */
-    public function log($message, $level = '')
+    public function testSetFilename()
     {
-
+        $po = new ProxyBuilder('Extensions_Webservice_Listener_Logger');
+        $logger = $po->setProperties(array('filename'))->getProxy();
+        $logger->setFilename('testTranslatTypeToPrefix with data set "expected"');
+        $this->assertEquals('TestTranslatTypeToPrefixWithDataSetExpected.txt', $logger->filename);
     }
 
-    /**
-     * Registers the given string as name for the log file.
-     *
-     * To prevent an invalid filename will be generated using the passed string.
-     * It will be sanitized first.
-     *
-     * @param string $name
-     */
-    public function setFilename($name, $ext = 'txt') 
-    {
-        // sanitize $name
-        $name = $this->sanitizeString($name);
-        $this->filename = $name . '.' . $ext;
-    }
 
     /**
-     * Removes a number of not allowed chars from the passed string to be a valid filename.
-     *
-     * @param string $string
-     * @return string
+     * @covers Extensions_Webservice_Listener_Logger::sanitizeString
      */
-    protected function sanitizeString($string)
+    public function testSanitizeString()
     {
-        $sanitizedItems = array();
-        $array = explode(' ', $string);
+        $po = new ProxyBuilder('Extensions_Webservice_Listener_Logger');
+        $logger = $po->setMethods(array('sanitizeString'))->getProxy();
+        $this->assertEquals(
+            'TestTranslatTypeToPrefixWithDataSetExpected', 
+            $logger->sanitizeString('testTranslatTypeToPrefix with data set "expected"')
+        );
 
-        foreach ($array as $item) {
-            if ('"' == $item) continue;
-            if (0 <= strpos('"', $item)) {
-                $item = str_replace('"', '', $item);
-            }
-            $sanitizedItems[] = ucfirst(trim($item));
-        }
-
-        return join('', $sanitizedItems);
     }
-
 }
