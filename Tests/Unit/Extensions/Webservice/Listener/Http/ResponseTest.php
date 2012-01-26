@@ -57,43 +57,39 @@ use lapistano\ProxyObject\ProxyBuilder;
  * @since      File available since Release 3.6.0
  */
 
-class Extensions_Webservice_Listener_Http_ClientTest extends Extensions_Webservice_TestCase
+class Extensions_Webservice_Listener_Http_ResponseTest extends Extensions_Webservice_TestCase
 {
-
     /**
-     * @covers Extensions_Webservice_Listener_Http_Client::get
+     * @covers Extensions_Webservice_Listener_Http_Response::setHeader
      */
-    public function testGet()
+    public function testSetHeader()
     {
-        $fixtureFile = TEST_DIR . '/_files/HttpClient/response.txt';
-        $expected = array(
-            'body'   => 'Freilebende Gummibärchen gibt es nicht!',
-            'header' => array(),
-        );
-
-        $response = $this->getMockBuilder('Extensions_Webservice_Listener_Http_Response')
-            ->setMethods(array('__toString', 'setBody', 'setHeader'))
-            ->getMock();
-
-        $pb = new ProxyBuilder('Extensions_Webservice_Listener_Http_Client');
-        $client = $pb
-            ->setProperties(array('response'))
-            ->getProxy();
-        $client->response = $response;
-
-        $this->assertInstanceOf('Extensions_Webservice_Listener_Http_Response', $client->get($fixtureFile));
+        $pb = new ProxyBuilder('Extensions_Webservice_Listener_Http_Response');
+        $response = $pb->setProperties(array('header'))->getProxy();
+        $response->setHeader(array());
+        $this->assertInternalType('array', $response->header);
     }
 
     /**
-     * @covers Extensions_Webservice_Listener_Http_Client::getResponseObject
+     * @covers Extensions_Webservice_Listener_Http_Response::setBody
      */
-    public function testGetResponseObjectFromCache()
+    public function testSetBody()
     {
-        $pb = new ProxyBuilder('Extensions_Webservice_Listener_Http_Client');
-        $client = $pb
-            ->setProperties(array('response'))
-            ->getProxy();
-        $client->response = new stdClass();
-        $this->assertInternalType('object', $client->getResponseObject());
+        $pb = new ProxyBuilder('Extensions_Webservice_Listener_Http_Response');
+        $response = $pb->setProperties(array('body'))->getProxy();
+        $response->setBody('');
+        $this->assertInternalType('string', $response->body);
+    }
+
+    /**
+     * @covers Extensions_Webservice_Listener_Http_Response::__toString
+     */
+    public function testMagicToSting()
+    {
+        $expected = "Gummibärchen in freier Wildbahn sind ausgestorben.";
+
+        $response = new Extensions_Webservice_Listener_Http_Response();
+        $response->setBody("Gummibärchen in freier Wildbahn sind ausgestorben.");
+        $this->assertEquals($expected, strval($response));
     }
 }
