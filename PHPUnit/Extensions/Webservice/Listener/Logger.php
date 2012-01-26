@@ -55,7 +55,6 @@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.6.0
  */
-
 class Extensions_Webservice_Listener_Logger implements Extensions_Webservice_Listener_Logger_Interface
 {
     /**
@@ -72,7 +71,10 @@ class Extensions_Webservice_Listener_Logger implements Extensions_Webservice_Lis
      */
     public function log($message, $level = '')
     {
-
+       // due to time issues just a bad hack .. to be refactored asap
+       $path = TEST_DIR . '/_files/responses';
+       $file = $path . '/' . $this->filename;
+       file_put_contents($file, $message);
     }
 
     /**

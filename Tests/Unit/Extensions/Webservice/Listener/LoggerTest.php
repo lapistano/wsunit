@@ -63,8 +63,8 @@ class Extensions_Webservice_Listener_LoggerTest extends Extensions_Webservice_Te
     {
         $po = new ProxyBuilder('Extensions_Webservice_Listener_Logger');
         $logger = $po->setProperties(array('filename'))->getProxy();
-        $logger->setFilename('testTranslatTypeToPrefix with data set "expected"');
-        $this->assertEquals('TestTranslatTypeToPrefixWithDataSetExpected.txt', $logger->filename);
+        $logger->setFilename('testLogger with data set "expected"');
+        $this->assertEquals('TestLoggerWithDataSetExpected.txt', $logger->filename);
     }
 
 
