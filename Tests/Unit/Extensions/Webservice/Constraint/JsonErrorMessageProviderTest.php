@@ -56,7 +56,7 @@ class Extensions_Webservice_Constraint_JsonErrorMessageProviderTest extends Exte
      * @dataProvider translateTypeToPrefixDataprovider
      * @covers Extensions_Webservice_Constraint_JsonErrorMessageProvider::translateTypeToPrefix
      */
-    public function testTranslatTypeToPrefix($expected, $type)
+    public function testTranslateTypeToPrefix($expected, $type)
     {
         $this->assertEquals(
             $expected,

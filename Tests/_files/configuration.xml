@@ -8,7 +8,7 @@
     <test name="testReadData">
         <location href="http://example.org/data.json" />
     </test>
-    <test name='testTranslatTypeToPrefix with data set "expected"'>
+    <test name='testTranslateTypeToPrefix with data set "expected"'>
         <location href="http://example.org/data.json">
             <query>
               <param name="mascott[]">tux</param>

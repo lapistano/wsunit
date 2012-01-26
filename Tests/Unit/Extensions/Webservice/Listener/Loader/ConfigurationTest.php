@@ -95,7 +95,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                     'params' => array(),
                 ),
             ),
-            'testTranslatTypeToPrefix with data set "expected"' => array(
+            'testTranslateTypeToPrefix with data set "expected"' => array(
                 array(
                     'url' => 'http://example.org/data.json',
                     'params' => array(
