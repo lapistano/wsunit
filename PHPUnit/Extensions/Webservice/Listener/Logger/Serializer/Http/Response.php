@@ -58,13 +58,11 @@
 
 class Extensions_Webservice_Logger_Serializer_Http_Response extends Extensions_Webservice_Logger_Serializer
 {
-
-    /**
-     * @inheritdoc
-     */
-    public function serialize()
+    public function __construct()
     {
-        $serialized = '';
-        return $serialized;
+        //$this->types['HttpResponseHeader'] = new Extensions_Webservice_Logger_Serializer_Type_Http_Header();
+        //$this->types['TextPlain']          = new Extensions_Webservice_Logger_Serializer_Type_Text_Plain();
+        //$this->types['TextXml']            = new Extensions_Webservice_Logger_Serializer_Type_Text_Xml();
+        //$this->types['Texthtml']           = new Extensions_Webservice_Logger_Serializer_Type_Text_Html();
     }
 }

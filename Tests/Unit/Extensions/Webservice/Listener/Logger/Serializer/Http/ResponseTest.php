@@ -56,6 +56,7 @@ class Extensions_Webservice_Logger_Serializer_Http_ResponseTest extends Extensio
 {
 
 
+
     /*************************************************************************/
     /* Dataprovider                                                          */
     /*************************************************************************/
