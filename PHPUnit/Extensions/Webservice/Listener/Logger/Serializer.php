@@ -75,15 +75,19 @@ abstract class Extensions_Webservice_Logger_Serializer
      *
      * @return string
      */
-    abstract function serialize();
-
-
-    public function __construct()
+    public function serialize()
     {
-        //$this->types['HttpResponseHeader'] = new Extensions_Webservice_Logger_Serializer_Type_Http_Header();
-        //$this->types['TextPlain']          = new Extensions_Webservice_Logger_Serializer_Type_Text_Plain();
-        //$this->types['TextXml']            = new Extensions_Webservice_Logger_Serializer_Type_Text_Xml();
-        //$this->types['Texthtml']           = new Extensions_Webservice_Logger_Serializer_Type_Text_Html();
+        $serialized = array();
+
+        foreach ($this->types as $serializerTypeName => $serializer) {
+            if (!empty($this->dataContainer[$serializerTypeName])) {
+                foreach ($this->dataContainer[$serializerTypeName] as $data) {
+                    $serialized[] = $serializer->serialize($data);
+                }
+            }
+        }
+
+        return implode("\n", $serialized);
     }
 
     /**

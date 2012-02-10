@@ -75,8 +75,7 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
     protected function getSerializerFixture()
     {
         return $this->getMockBuilder('Extensions_Webservice_Logger_Serializer')
-            ->setMethods(array('serialize'))
-            ->getMock();
+            ->getMockForAbstractClass();
     }
 
     /**
@@ -138,6 +137,40 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
         $serializer->addType($type, array());
     }
 
+    /**
+     * @covers Extensions_Webservice_Logger_Serializer_Http_Response::serialize
+     */
+    public function testSerialize()
+    {
+        $xmlFromArray = '<array><item>Tux</item><item>Beastie</item></array>';
+        $expected = "<array><item>Tux</item><item>Beastie</item></array>\n".
+                    "<string>testSerializerType</string>";
+
+        $typeArray = $this->getSerializerTypeMock(array('getName', 'serialize'));
+        $typeArray
+            ->expects($this->atLeastOnce())
+            ->method('getName')
+            ->will($this->returnValue('testSerializerTypeArray'));
+        $typeArray
+            ->expects($this->once())
+            ->method('serialize')
+            ->will($this->returnValue($xmlFromArray));
+
+        $type = $this->getSerializerTypeMock(array('getName', 'serialize'));
+        $type
+            ->expects($this->atLeastOnce())
+            ->method('getName')
+            ->will($this->returnValue('testSerializerType'));
+        $type
+            ->expects($this->once())
+            ->method('serialize')
+            ->will($this->returnValue('<string>testSerializerType</string>'));
+
+        $serializer = $this->getSerializerFixture();
+        $serializer->register($typeArray, array('Tux', 'Beastie'));
+        $serializer->register($type, array());
+        $this->assertEquals($expected, $serializer->serialize());
+    }
 
     /*************************************************************************/
     /* Dataprovider                                                          */
