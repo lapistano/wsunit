@@ -62,9 +62,10 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
      */
     protected function getSerializerTypeMock(array $methods = array())
     {
+        $methods = array_merge(array('serialize'), $methods);
         return $this->getMockBuilder('Extensions_Webservice_Logger_Serializer_Type')
             ->setMethods($methods)
-            ->getMock();
+            ->getMockForAbstractClass();
     }
 
     /**
@@ -143,8 +144,8 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
     public function testSerialize()
     {
         $xmlFromArray = '<array><item>Tux</item><item>Beastie</item></array>';
-        $expected = "<array><item>Tux</item><item>Beastie</item></array>\n".
-                    "<string>testSerializerType</string>";
+        $expected = "<document>\n<array><item>Tux</item><item>Beastie</item></array>\n".
+                    "<string>testSerializerType</string>\n</document>";
 
         $typeArray = $this->getSerializerTypeMock(array('getName', 'serialize'));
         $typeArray
@@ -172,9 +173,39 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
         $this->assertEquals($expected, $serializer->serialize());
     }
 
+    /**
+     * @covers Extensions_Webservice_Logger_Serializer_Http_Response::isValidTagName
+     */
+    public function testIsValidTagName()
+    {
+        $serializer = $this->getSerializerFixture();
+        $serializer->setDocumentRoot('Tux');
+        $this->assertAttributeEquals('Tux', 'documentRoot', $serializer);
+    }
+
+    /**
+     * @expectedException Extensions_Webservice_Logger_Serializer_Exception
+     * @dataProvider isValidTagNameExpectingExtensionsWebserviceLoggerSerializerExceptionDataprovider
+     * @covers Extensions_Webservice_Logger_Serializer_Http_Response::isValidTagName
+     */
+    public function testIsValidTagNameExpectingExtensionsWebserviceLoggerSerializer($tagName)
+    {
+        $serializer = $this->getSerializerFixture();
+        $serializer->setDocumentRoot($tagName);
+        $this->assertAttributeEquals($tagName, 'documentRoot', $serializer);
+    }
+
+
     /*************************************************************************/
     /* Dataprovider                                                          */
     /*************************************************************************/
 
+    public static function isValidTagNameExpectingExtensionsWebserviceLoggerSerializerExceptionDataprovider()
+    {
+        return array(
+            'with numbers' => array('Beastie23'),
+            'with special chars' => array('$&%^<>'),
+        );
+    }
 
 }

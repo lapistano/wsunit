@@ -71,13 +71,19 @@ abstract class Extensions_Webservice_Logger_Serializer
     protected $types = array();
 
     /**
+     * Will be used as root element for the generated XML document
+     * @var string
+     */
+    protected $documentRoot = 'document';
+
+    /**
      * Stringifies the registered data
      *
      * @return string
      */
     public function serialize()
     {
-        $serialized = array();
+        $serialized = array('<' . $this->documentRoot . '>');
 
         foreach ($this->types as $serializerTypeName => $serializer) {
             if (!empty($this->dataContainer[$serializerTypeName])) {
@@ -87,6 +93,7 @@ abstract class Extensions_Webservice_Logger_Serializer
             }
         }
 
+        $serialized[] = '</' . $this->documentRoot . '>';
         return implode("\n", $serialized);
     }
 
@@ -108,6 +115,7 @@ abstract class Extensions_Webservice_Logger_Serializer
      * Registers the given type in a local registry
      *
      * @param Extensions_Webservice_Logger_Serializer_Type $type
+     * @throws Extensions_Webservice_Logger_Serializer_Exception
      */
     public function addType(Extensions_Webservice_Logger_Serializer_Type $type)
     {
@@ -121,9 +129,41 @@ abstract class Extensions_Webservice_Logger_Serializer
         }
     }
 
+    /**
+     * Registers a custom tag name to be used as the root element in the generated XML document.
+     *
+     * @param string $tagName
+     * @throws Extensions_Webservice_Logger_Serializer_Exception
+     */
+    public function setDocumentRoot($tagName)
+    {
+        if ($this->isValidTagName($tagName)) {
+            $this->documentRoot = $tagName;
+        } else {
+            throw new Extensions_Webservice_Logger_Serializer_Exception(
+                'Invalid tag name given.',
+                Extensions_Webservice_Logger_Serializer_Exception::InvalidTagName
+            );
+        }
+    }
+
+
+    /**
+     * Applies a number of checks to determine if the given string is a valid tag name.
+     *
+     * @param sting $tagName
+     * @return boolean true, if the string is a valis tag name, else false.
+     */
+    protected function isValidTagName($tagName)
+    {
+        preg_match('(([^a-z]))i', $tagName, $matches);
+        return !isset($matches[1]);
+    }
+
 }
 
 class Extensions_Webservice_Logger_Serializer_Exception extends \Exception
 {
     const DoubleTypeRegistrationAttempt = 1;
+    const InvalidTagName = 2;
 }
