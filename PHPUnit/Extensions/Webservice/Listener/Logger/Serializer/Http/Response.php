@@ -60,7 +60,7 @@ class Extensions_Webservice_Logger_Serializer_Http_Response extends Extensions_W
 {
     public function __construct()
     {
-        //$this->types['HttpResponseHeader'] = new Extensions_Webservice_Logger_Serializer_Type_Http_Header();
+        $this->types['Array'] = new Extensions_Webservice_Logger_Serializer_Type_Array();
         //$this->types['TextPlain']          = new Extensions_Webservice_Logger_Serializer_Type_Text_Plain();
         //$this->types['TextXml']            = new Extensions_Webservice_Logger_Serializer_Type_Text_Xml();
         //$this->types['Texthtml']           = new Extensions_Webservice_Logger_Serializer_Type_Text_Html();

@@ -85,7 +85,7 @@ class Extensions_Webservice_Listener_Logger implements Extensions_Webservice_Lis
      *
      * @param string $name
      */
-    public function setFilename($name, $ext = 'txt') 
+    public function setFilename($name, $ext = 'txt')
     {
         // sanitize $name
         $name = $this->sanitizeString($name);

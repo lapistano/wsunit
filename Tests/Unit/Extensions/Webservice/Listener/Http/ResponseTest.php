@@ -64,9 +64,24 @@ class Extensions_Webservice_Listener_Http_ResponseTest extends Extensions_Webser
      */
     public function testSetHeader()
     {
-        $pb = new ProxyBuilder('Extensions_Webservice_Listener_Http_Response');
-        $response = $pb->setProperties(array('header'))->getProxy();
-        $response->setHeader(array());
+        $header = array(
+            "HTTP/1.0 302 Found",
+            "Location: http://www.iana.org/domains/example/",
+            "Server: BigIP",
+            "Connection: close",
+            "Content-Length: 0",
+            "HTTP/1.1 200 OK",
+            "Date: Thu, 09 Feb 2012 22:28:40 GMT",
+            "Server: Apache/2.2.3 (CentOS)",
+            "Last-Modified: Wed, 09 Feb 2011 17:13:15 GMT",
+            "Vary: Accept-Encoding",
+            "Connection: close",
+            "Content-Type: text/html; charset=UTF-8",
+        );
+        $response = $this->ProxyBuilder('Extensions_Webservice_Listener_Http_Response')
+            ->setProperties(array('header'))
+            ->getProxy();
+        $response->setHeader($header);
         $this->assertInternalType('array', $response->header);
     }
 
@@ -79,17 +94,5 @@ class Extensions_Webservice_Listener_Http_ResponseTest extends Extensions_Webser
         $response = $pb->setProperties(array('body'))->getProxy();
         $response->setBody('');
         $this->assertInternalType('string', $response->body);
-    }
-
-    /**
-     * @covers Extensions_Webservice_Listener_Http_Response::__toString
-     */
-    public function testMagicToSting()
-    {
-        $expected = "Gummibärchen in freier Wildbahn sind ausgestorben.";
-
-        $response = new Extensions_Webservice_Listener_Http_Response();
-        $response->setBody("Gummibärchen in freier Wildbahn sind ausgestorben.");
-        $this->assertEquals($expected, strval($response));
     }
 }

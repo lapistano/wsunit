@@ -76,6 +76,12 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
     private $logger;
 
     /**
+     * Instance of the serializer transcoding the given data into a loggable format.
+     * @var Extensions_Webservice_Logger_Serializer
+     */
+    private $serializer;
+
+    /**
      * Instance of the http client used to send a request to the defined webservice.
      * @var Extensions_Webservice_Listener_Http_Client_Interface
      */
@@ -184,9 +190,14 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
 
         $testMap = $this->mapping[$name];
         foreach ($testMap as $data) {
-            $response = $this->httpClient->get($data['url'], $data['params']);
-            $this->logger->setFilename($test->getName());
-            $this->logger->log($response);
+            $this->logger->setFilename($test->getName(), 'xml');
+            $this->logger->log(
+                $this->serializer->serialize(
+                    $this->httpClient->get(
+                        $data['url'], $data['params']
+                    )
+                )
+            );
         }
     }
 
@@ -214,7 +225,9 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
     {
         $this->factory->register('logger', $this->configuration['logger']);
         $this->factory->register('httpClient', $this->configuration['httpClient']);
+        $this->factory->register('serializer', $this->configuration['serialiser']);
 
+        $this->serializer = $this->factory->getInstanceOf('serializer');
         $this->httpClient = $this->factory->getInstanceOf('httpClient');
         $this->logger     = $this->factory->getInstanceOf('logger');
 

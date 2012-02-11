@@ -64,8 +64,9 @@ class Extensions_Webservice_Listener_Factory
      */
     protected $register = array(
         'httpClient' => 1,
-        'logger' => 1,
-        'loader' => 1,
+        'logger'     => 1,
+        'loader'     => 1,
+        'serializer' => 1,
     );
 
     /**
@@ -82,6 +83,7 @@ class Extensions_Webservice_Listener_Factory
         'httpClient' => 'Extensions_Webservice_Listener_Http_Client_Interface',
         'logger'     => 'Extensions_Webservice_Listener_Logger_Interface',
         'loader'     => 'Extensions_Webservice_Listener_Loader_Interface',
+        'serializer' => 'Extensions_Webservice_Logger_Serializer_Interface',
     );
 
     /**
@@ -130,8 +132,7 @@ class Extensions_Webservice_Listener_Factory
 
         if (! $this->implementsMandatoryInterfaces($class)) {
             throw new FactoryException(
-                'The given class (' . $class . ') does neither implement "Extensions_Webservice_Listener_Logger_Interface" '.
-                'nor "Extensions_Webservice_Listener_Http_Client_Interface"!',
+                'The given class (' . $class . ') does not implement any mandatory interface!',
                 FactoryException::NotAllowedtoRegister
             );
         }

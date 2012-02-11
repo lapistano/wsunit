@@ -56,7 +56,7 @@
  * @since      Class available since Release 3.6.0
  */
 
-class Extensions_Webservice_Listener_Http_Response 
+class Extensions_Webservice_Listener_Http_Response
 {
     /**
      * Contains registered Http header information
@@ -88,15 +88,5 @@ class Extensions_Webservice_Listener_Http_Response
     public function setHeader(array $header)
     {
         $this->header = $header;
-    }
-
-    /**
-     * Creates the string representation of the Extensions_Webservice_Listener_Http_Response.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->body;
     }
 }
