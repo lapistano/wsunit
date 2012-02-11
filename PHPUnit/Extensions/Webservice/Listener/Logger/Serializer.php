@@ -166,4 +166,5 @@ class Extensions_Webservice_Logger_Serializer_Exception extends \Exception
 {
     const DoubleTypeRegistrationAttempt = 1;
     const InvalidTagName = 2;
+    const InvalidType = 3;
 }

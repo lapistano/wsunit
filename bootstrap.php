@@ -31,4 +31,5 @@ require_once PROJECT_DIR . '/Listener/Loader/Configuration.php';
 require_once PROJECT_DIR . '/Listener/Logger.php';
 require_once PROJECT_DIR . '/Listener/Logger/Serializer.php';
 require_once PROJECT_DIR . '/Listener/Logger/Serializer/Type.php';
+require_once PROJECT_DIR . '/Listener/Logger/Serializer/Type/Array.php';
 require_once PROJECT_DIR . '/Listener/Logger/Serializer/Http/Response.php';
