@@ -63,9 +63,10 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
     protected function getSerializerTypeMock(array $methods = array())
     {
         $methods = array_merge(array('serialize'), $methods);
-        return $this->getMockBuilder('Extensions_Webservice_Logger_Serializer_Type')
+        $type = $this->getMockBuilder('Extensions_Webservice_Logger_Serializer_Type')
             ->setMethods($methods)
-            ->getMockForAbstractClass();
+            ->getMock();
+        return $type;
     }
 
     /**
@@ -147,7 +148,7 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
         $expected = "<document>\n<array><item>Tux</item><item>Beastie</item></array>\n".
                     "<string>testSerializerType</string>\n</document>";
 
-        $typeArray = $this->getSerializerTypeMock(array('getName', 'serialize'));
+        $typeArray = $this->getSerializerTypeMock(array('getName'));
         $typeArray
             ->expects($this->atLeastOnce())
             ->method('getName')
@@ -157,7 +158,7 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
             ->method('serialize')
             ->will($this->returnValue($xmlFromArray));
 
-        $type = $this->getSerializerTypeMock(array('getName', 'serialize'));
+        $type = $this->getSerializerTypeMock(array('getName'));
         $type
             ->expects($this->atLeastOnce())
             ->method('getName')
