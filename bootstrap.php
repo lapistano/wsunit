@@ -19,6 +19,7 @@ require_once PROJECT_DIR . '/TestCase.php';
 // interface files
 require_once PROJECT_DIR . '/Listener/Loader/Interface.php';
 require_once PROJECT_DIR . '/Listener/Logger/Interface.php';
+require_once PROJECT_DIR . '/Listener/Logger/Serializer/Interface.php';
 require_once PROJECT_DIR . '/Listener/Http/Client/Interface.php';
 require_once PROJECT_DIR . '/Listener/Http/Response/Interface.php';
 
