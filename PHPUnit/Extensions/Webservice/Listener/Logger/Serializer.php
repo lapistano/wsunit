@@ -56,7 +56,7 @@
  * @since      Class available since Release 3.6.0
  */
 
-abstract class Extensions_Webservice_Logger_Serializer
+abstract class Extensions_Webservice_Logger_Serializer implements Extensions_Webservice_Logger_Serializer_Interface
 {
     /**
      * Register to store data to be serialized
