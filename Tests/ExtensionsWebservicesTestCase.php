@@ -42,9 +42,19 @@
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
+use lapistano\ProxyObject\ProxyBuilder;
 
 class Extensions_Webservice_TestCase extends PHPUnit_Framework_TestCase
 {
+    /**
+     * Provides an instance of the
+     * Enter description here ...
+     * @param unknown_type $classname
+     */
+    protected function getProxyBuilder($classname) {
+         return new ProxyBuilder($classname);
+    }
+
     /**
      * Provides an instance of PHPUnit_Framework_TestSuite.
      *
