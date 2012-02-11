@@ -51,7 +51,7 @@ class Extensions_Webservice_TestCase extends PHPUnit_Framework_TestCase
      * Enter description here ...
      * @param unknown_type $classname
      */
-    protected function getProxyBuilder($classname) {
+    protected function ProxyBuilder($classname) {
          return new ProxyBuilder($classname);
     }
 

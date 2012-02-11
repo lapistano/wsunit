@@ -137,7 +137,7 @@ class Extensions_Webservice_Logger_Serializer_Type_ArrayTest extends Extensions_
             array()
         );
 
-        $serializer = $this->getProxyBuilder('Extensions_Webservice_Logger_Serializer_Type_Array')
+        $serializer = $this->ProxyBuilder('Extensions_Webservice_Logger_Serializer_Type_Array')
             ->setProperties(array('maxDepth'))
             ->getProxy();
 
