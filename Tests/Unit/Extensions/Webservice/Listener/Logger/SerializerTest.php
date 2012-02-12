@@ -52,37 +52,37 @@
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
-class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_TestCase
+class Extensions_Webservice_SerializerTest extends Extensions_Webservice_TestCase
 {
     /**
-     * Provides a dummy of the Extensions_Webservice_Logger_Serializer_Type class.
+     * Provides a dummy of the Extensions_Webservice_Serializer_Type class.
      *
      * @param array $methods
-     * @return Extensions_Webservice_Logger_Serializer_Type
+     * @return Extensions_Webservice_Serializer_Type
      */
     protected function getSerializerTypeMock(array $methods = array())
     {
         $methods = array_merge(array('serialize'), $methods);
-        $type = $this->getMockBuilder('Extensions_Webservice_Logger_Serializer_Type')
+        $type = $this->getMockBuilder('Extensions_Webservice_Serializer_Type')
             ->setMethods($methods)
             ->getMock();
         return $type;
     }
 
     /**
-     * Provides an instance of the abstract Extensions_Webservice_Logger_Serializer class.
+     * Provides an instance of the abstract Extensions_Webservice_Serializer class.
      *
-     * @return Extensions_Webservice_Logger_Serializer
+     * @return Extensions_Webservice_Serializer
      */
     protected function getSerializerFixture()
     {
-        return $this->getMockBuilder('Extensions_Webservice_Logger_Serializer')
+        return $this->getMockBuilder('Extensions_Webservice_Serializer')
             ->getMockForAbstractClass();
     }
 
     /**
      * @expectedException UnexpectedValueException
-     * @covers Extensions_Webservice_Logger_Serializer_Http_Response::register
+     * @covers Extensions_Webservice_Serializer_Http_Response::register
      */
     public function testRegisterExpectingUnexpectedValueException()
     {
@@ -91,7 +91,7 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
     }
 
     /**
-     * @covers Extensions_Webservice_Logger_Serializer_Http_Response::register
+     * @covers Extensions_Webservice_Serializer_Http_Response::register
      */
     public function testRegister()
     {
@@ -112,8 +112,8 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
     }
 
     /**
-     * @covers Extensions_Webservice_Logger_Serializer_Http_Response::addType
-     * @covers Extensions_Webservice_Logger_Serializer_Http_Response::__construct
+     * @covers Extensions_Webservice_Serializer_Http_Response::addType
+     * @covers Extensions_Webservice_Serializer_Http_Response::__construct
      */
     public function testAddType()
     {
@@ -134,8 +134,8 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
     }
 
     /**
-     * @expectedException Extensions_Webservice_Logger_Serializer_Exception
-     * @covers Extensions_Webservice_Logger_Serializer_Http_Response::addType
+     * @expectedException Extensions_Webservice_Serializer_Exception
+     * @covers Extensions_Webservice_Serializer_Http_Response::addType
      */
     public function testAddTypeExpectingExtensionsWebserviceLoggerSerializerException()
     {
@@ -151,7 +151,7 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
     }
 
     /**
-     * @covers Extensions_Webservice_Logger_Serializer_Http_Response::serialize
+     * @covers Extensions_Webservice_Serializer_Http_Response::serialize
      */
     public function testSerialize()
     {
@@ -188,7 +188,7 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
     }
 
     /**
-     * @covers Extensions_Webservice_Logger_Serializer_Http_Response::isValidTagName
+     * @covers Extensions_Webservice_Serializer_Http_Response::isValidTagName
      */
     public function testIsValidTagName()
     {
@@ -198,9 +198,9 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
     }
 
     /**
-     * @expectedException Extensions_Webservice_Logger_Serializer_Exception
+     * @expectedException Extensions_Webservice_Serializer_Exception
      * @dataProvider isValidTagNameExpectingExtensionsWebserviceLoggerSerializerExceptionDataprovider
-     * @covers Extensions_Webservice_Logger_Serializer_Http_Response::isValidTagName
+     * @covers Extensions_Webservice_Serializer_Http_Response::isValidTagName
      */
     public function testIsValidTagNameExpectingExtensionsWebserviceLoggerSerializer($tagName)
     {
@@ -210,7 +210,7 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
     }
 
     /**
-     * @covers Extensions_Webservice_Logger_Serializer_Http_Response::setDocumentRoot
+     * @covers Extensions_Webservice_Serializer_Http_Response::setDocumentRoot
      */
     public function testSetDocumentRoot()
     {
@@ -220,8 +220,8 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
     }
 
     /**
-     * @expectedException Extensions_Webservice_Logger_Serializer_Exception
-     * @covers Extensions_Webservice_Logger_Serializer_Http_Response::setDocumentRoot
+     * @expectedException Extensions_Webservice_Serializer_Exception
+     * @covers Extensions_Webservice_Serializer_Http_Response::setDocumentRoot
      */
     public function testSetDocumentRootExpectingExtensionsWebserviceLoggerSerializerException()
     {

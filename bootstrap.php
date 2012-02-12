@@ -19,7 +19,7 @@ require_once PROJECT_DIR . '/TestCase.php';
 // interface files
 require_once PROJECT_DIR . '/Listener/Loader/Interface.php';
 require_once PROJECT_DIR . '/Listener/Logger/Interface.php';
-require_once PROJECT_DIR . '/Listener/Logger/Serializer/Interface.php';
+require_once PROJECT_DIR . '/Listener/Serializer/Interface.php';
 require_once PROJECT_DIR . '/Listener/Http/Client/Interface.php';
 
 // listener files
@@ -29,7 +29,7 @@ require_once PROJECT_DIR . '/Listener/Http/Client.php';
 require_once PROJECT_DIR . '/Listener/Http/Response.php';
 require_once PROJECT_DIR . '/Listener/Loader/Configuration.php';
 require_once PROJECT_DIR . '/Listener/Logger.php';
-require_once PROJECT_DIR . '/Listener/Logger/Serializer.php';
-require_once PROJECT_DIR . '/Listener/Logger/Serializer/Type.php';
-require_once PROJECT_DIR . '/Listener/Logger/Serializer/Type/Array.php';
-require_once PROJECT_DIR . '/Listener/Logger/Serializer/Http/Response.php';
+require_once PROJECT_DIR . '/Listener/Serializer.php';
+require_once PROJECT_DIR . '/Listener/Serializer/Type.php';
+require_once PROJECT_DIR . '/Listener/Serializer/Type/Array.php';
+require_once PROJECT_DIR . '/Listener/Serializer/Http/Response.php';

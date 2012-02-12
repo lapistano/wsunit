@@ -57,13 +57,13 @@ use lapistano\ProxyObject\ProxyBuilder;
 class Extensions_Webservice_Listener_LoggerTest extends Extensions_Webservice_TestCase
 {
     /**
-     * Provides an instance of the abstract Extensions_Webservice_Logger_Serializer class.
+     * Provides an instance of the abstract Extensions_Webservice_Serializer class.
      *
-     * @return Extensions_Webservice_Logger_Serializer
+     * @return Extensions_Webservice_Serializer
      */
     protected function getSerializerFixture()
     {
-        return $this->getMockBuilder('Extensions_Webservice_Logger_Serializer')
+        return $this->getMockBuilder('Extensions_Webservice_Serializer')
             ->getMockForAbstractClass();
     }
 

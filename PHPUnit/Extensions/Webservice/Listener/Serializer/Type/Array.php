@@ -52,7 +52,7 @@
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
-class Extensions_Webservice_Logger_Serializer_Type_Array extends Extensions_Webservice_Logger_Serializer_Type
+class Extensions_Webservice_Serializer_Type_Array extends Extensions_Webservice_Serializer_Type
 {
     /**
      * Name of the current serialization type
@@ -80,7 +80,7 @@ class Extensions_Webservice_Logger_Serializer_Type_Array extends Extensions_Webs
         if (!is_array($data)) {
             throw new InvalidArgumentException(
                 'Given data set is not an array!',
-                Extensions_Webservice_Logger_Serializer_Exception::InvalidType
+                Extensions_Webservice_Serializer_Exception::InvalidType
             );
         }
 

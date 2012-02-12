@@ -75,7 +75,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
     public function testLoad()
     {
         $expected = array(
-            'serializer' => 'Extensions_Webservice_Logger_Serializer_Http_Response',
+            'serializer' => 'Extensions_Webservice_Serializer_Http_Response',
             'testGetData' => array(
                 array(
                     'url' => 'http://example.org/data.json',
@@ -97,7 +97,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                 ),
             ),
             'testTranslateTypeToPrefix with data set "expected"' => array(
-                'serializer' => 'Extensions_Webservice_Logger_Serializer_Http_Response',
+                'serializer' => 'Extensions_Webservice_Serializer_Http_Response',
                 array(
                     'url' => 'http://example.org/data.json',
                     'params' => array(
@@ -161,7 +161,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
     {
         $configuration = '
             <listener>
-                <serializer>Extensions_Webservice_Logger_Serializer_Http_Response</serializer>
+                <serializer>Extensions_Webservice_Serializer_Http_Response</serializer>
                 <test name="testGetData">
                     <location href="http://example.org/data.json" />
                     <location href="http://example.org/data.xml" />
@@ -171,7 +171,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                     <location href="http://example.org/data.json" />
                 </test>
                 <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
-                    <serializer>Extensions_Webservice_Logger_Serializer_Http_Response</serializer>
+                    <serializer>Extensions_Webservice_Serializer_Http_Response</serializer>
                     <location href="http://example.org/data.json">
                         <query>
                           <param name="mascott[]">tux</param>
@@ -191,7 +191,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
         $xpath = new DOMXpath($dom);
         $node = $xpath->query($path)->item(0);
         $this->assertEquals(
-            'Extensions_Webservice_Logger_Serializer_Http_Response',
+            'Extensions_Webservice_Serializer_Http_Response',
             $loader->extractSerializerClassname($node)
         );
     }

@@ -35,8 +35,8 @@
   // You have to require the used libraries in the bootstrap file.
 -->
   <listeners>
-  <listener class="WebServiceListener">
-    <arguments>
+    <listener class="WebServiceListener">
+      <arguments>
         <object class="Extensions_Webservice_Listener_Factory"/>
         <object class="Extensions_Webservice_Listener_Loader_Configuration"/>
         <array>

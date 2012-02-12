@@ -56,13 +56,13 @@
  * @since      Class available since Release 3.6.0
  */
 
-class Extensions_Webservice_Logger_Serializer_Http_Response extends Extensions_Webservice_Logger_Serializer
+class Extensions_Webservice_Serializer_Http_Response extends Extensions_Webservice_Serializer
 {
     public function __construct()
     {
-        $this->types['Array'] = new Extensions_Webservice_Logger_Serializer_Type_Array();
-        //$this->types['TextPlain']          = new Extensions_Webservice_Logger_Serializer_Type_Text_Plain();
-        //$this->types['TextXml']            = new Extensions_Webservice_Logger_Serializer_Type_Text_Xml();
-        //$this->types['Texthtml']           = new Extensions_Webservice_Logger_Serializer_Type_Text_Html();
+        $this->types['Array'] = new Extensions_Webservice_Serializer_Type_Array();
+        //$this->types['TextPlain']          = new Extensions_Webservice_Serializer_Type_Text_Plain();
+        //$this->types['TextXml']            = new Extensions_Webservice_Serializer_Type_Text_Xml();
+        //$this->types['Texthtml']           = new Extensions_Webservice_Serializer_Type_Text_Html();
     }
 }

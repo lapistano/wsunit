@@ -52,7 +52,7 @@
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
-class Extensions_Webservice_Logger_Serializer_Type_ArrayTest extends Extensions_Webservice_TestCase
+class Extensions_Webservice_Serializer_Type_ArrayTest extends Extensions_Webservice_TestCase
 {
     /**
      * Normalizes a given xml string to be compareable.
@@ -68,7 +68,7 @@ class Extensions_Webservice_Logger_Serializer_Type_ArrayTest extends Extensions_
     }
 
     /**
-     * @covers Extensions_Webservice_Logger_Serializer_Type_Array::serialize
+     * @covers Extensions_Webservice_Serializer_Type_Array::serialize
      */
     public function testSerialize() {
         $xml = '
@@ -97,7 +97,7 @@ class Extensions_Webservice_Logger_Serializer_Type_ArrayTest extends Extensions_
             3 => array(),
         );
 
-        $serializer = new Extensions_Webservice_Logger_Serializer_Type_Array();
+        $serializer = new Extensions_Webservice_Serializer_Type_Array();
 
         $this->assertXmlStringEqualsXmlString(
             $this->sanitizeXml($xml),
@@ -107,15 +107,15 @@ class Extensions_Webservice_Logger_Serializer_Type_ArrayTest extends Extensions_
 
     /**
      * @expectedException InvalidArgumentException
-     * @covers Extensions_Webservice_Logger_Serializer_Type_Array::serialize
+     * @covers Extensions_Webservice_Serializer_Type_Array::serialize
      */
     public function testSerializeExpectingInvalidArgumentException() {
-        $serializer = new Extensions_Webservice_Logger_Serializer_Type_Array();
+        $serializer = new Extensions_Webservice_Serializer_Type_Array();
         $serializer->serialize('Invalid data set');
     }
 
     /**
-     * @covers Extensions_Webservice_Logger_Serializer_Type_Array::serialize
+     * @covers Extensions_Webservice_Serializer_Type_Array::serialize
      */
     public function testSerializeArrayTooDeepError() {
         $xml = '
@@ -137,7 +137,7 @@ class Extensions_Webservice_Logger_Serializer_Type_ArrayTest extends Extensions_
             array()
         );
 
-        $serializer = $this->ProxyBuilder('Extensions_Webservice_Logger_Serializer_Type_Array')
+        $serializer = $this->ProxyBuilder('Extensions_Webservice_Serializer_Type_Array')
             ->setProperties(array('maxDepth'))
             ->getProxy();
 

@@ -83,7 +83,7 @@ class Extensions_Webservice_Listener_Factory
         'httpClient' => 'Extensions_Webservice_Listener_Http_Client_Interface',
         'logger'     => 'Extensions_Webservice_Listener_Logger_Interface',
         'loader'     => 'Extensions_Webservice_Listener_Loader_Interface',
-        'serializer' => 'Extensions_Webservice_Logger_Serializer_Interface',
+        'serializer' => 'Extensions_Webservice_Serializer_Interface',
     );
 
     /**

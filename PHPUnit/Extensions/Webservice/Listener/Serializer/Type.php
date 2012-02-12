@@ -55,7 +55,7 @@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.6.0
  */
-abstract class Extensions_Webservice_Logger_Serializer_Type
+abstract class Extensions_Webservice_Serializer_Type
 {
     /**
      * Name of the current serialization type

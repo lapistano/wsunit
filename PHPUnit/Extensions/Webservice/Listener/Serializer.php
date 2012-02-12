@@ -56,7 +56,7 @@
  * @since      Class available since Release 3.6.0
  */
 
-abstract class Extensions_Webservice_Logger_Serializer implements Extensions_Webservice_Logger_Serializer_Interface
+abstract class Extensions_Webservice_Serializer implements Extensions_Webservice_Serializer_Interface
 {
     /**
      * Register to store data to be serialized
@@ -111,7 +111,7 @@ abstract class Extensions_Webservice_Logger_Serializer implements Extensions_Web
                     'Undefined type (%s). Are you certain you used addType() to make it available in this object?',
                     $type
                 ),
-                Extensions_Webservice_Logger_Serializer_Exception::InvalidType
+                Extensions_Webservice_Serializer_Exception::InvalidType
             );
         }
         $this->dataContainer[$type][] = $data;
@@ -120,17 +120,17 @@ abstract class Extensions_Webservice_Logger_Serializer implements Extensions_Web
     /**
      * Registers the given type in a local registry
      *
-     * @param Extensions_Webservice_Logger_Serializer_Type $type
-     * @throws Extensions_Webservice_Logger_Serializer_Exception
+     * @param Extensions_Webservice_Serializer_Type $type
+     * @throws Extensions_Webservice_Serializer_Exception
      */
-    public function addType(Extensions_Webservice_Logger_Serializer_Type $type)
+    public function addType(Extensions_Webservice_Serializer_Type $type)
     {
         if (!isset($this->types[$type->getName()])) {
             $this->types[$type->getName()] = $type;
         } else {
-            throw new Extensions_Webservice_Logger_Serializer_Exception(
+            throw new Extensions_Webservice_Serializer_Exception(
                 'Given type is already registered!',
-                Extensions_Webservice_Logger_Serializer_Exception::DoubleTypeRegistrationAttempt
+                Extensions_Webservice_Serializer_Exception::DoubleTypeRegistrationAttempt
             );
         }
     }
@@ -139,16 +139,16 @@ abstract class Extensions_Webservice_Logger_Serializer implements Extensions_Web
      * Registers a custom tag name to be used as the root element in the generated XML document.
      *
      * @param string $tagName
-     * @throws Extensions_Webservice_Logger_Serializer_Exception
+     * @throws Extensions_Webservice_Serializer_Exception
      */
     public function setDocumentRoot($tagName)
     {
         if ($this->isValidTagName($tagName)) {
             $this->documentRoot = $tagName;
         } else {
-            throw new Extensions_Webservice_Logger_Serializer_Exception(
+            throw new Extensions_Webservice_Serializer_Exception(
                 'Invalid tag name given.',
-                Extensions_Webservice_Logger_Serializer_Exception::InvalidTagName
+                Extensions_Webservice_Serializer_Exception::InvalidTagName
             );
         }
     }
@@ -168,7 +168,7 @@ abstract class Extensions_Webservice_Logger_Serializer implements Extensions_Web
 
 }
 
-class Extensions_Webservice_Logger_Serializer_Exception extends \Exception
+class Extensions_Webservice_Serializer_Exception extends \Exception
 {
     const DoubleTypeRegistrationAttempt = 1;
     const InvalidTagName = 2;

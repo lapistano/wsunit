@@ -77,7 +77,7 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
 
     /**
      * Instance of the serializer transcoding the given data into a loggable format.
-     * @var Extensions_Webservice_Logger_Serializer
+     * @var Extensions_Webservice_Serializer
      */
     private $serializer;
 

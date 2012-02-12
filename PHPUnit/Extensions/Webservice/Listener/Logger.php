@@ -64,16 +64,16 @@ class Extensions_Webservice_Listener_Logger implements Extensions_Webservice_Lis
     protected $filename = '';
 
     /**
-     * Instance of an implementation of  the Extensions_Webservice_Logger_Serializer_Interface.
-     * @var Extensions_Webservice_Logger_Serializer_Interface
+     * Instance of an implementation of  the Extensions_Webservice_Serializer_Interface.
+     * @var Extensions_Webservice_Serializer_Interface
      */
     protected $serializer;
 
     /**
      *
-     * @param Extensions_Webservice_Logger_Serializer_Interface $serializer
+     * @param Extensions_Webservice_Serializer_Interface $serializer
      */
-    public function __construct(Extensions_Webservice_Logger_Serializer_Interface $serializer)
+    public function __construct(Extensions_Webservice_Serializer_Interface $serializer)
     {
         $this->serializer = $serializer;
     }

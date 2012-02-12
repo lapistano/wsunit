@@ -1,6 +1,6 @@
 <?php
 
-interface Extensions_Webservice_Logger_Serializer_Interface
+interface Extensions_Webservice_Serializer_Interface
 {
     /**
      * Stringifies the registered data
@@ -20,16 +20,16 @@ interface Extensions_Webservice_Logger_Serializer_Interface
     /**
      * Registers the given type in a local registry
      *
-     * @param Extensions_Webservice_Logger_Serializer_Type $type
-     * @throws Extensions_Webservice_Logger_Serializer_Exception
+     * @param Extensions_Webservice_Serializer_Type $type
+     * @throws Extensions_Webservice_Serializer_Exception
      */
-    public function addType(Extensions_Webservice_Logger_Serializer_Type $type);
+    public function addType(Extensions_Webservice_Serializer_Type $type);
 
     /**
      * Registers a custom tag name to be used as the root element in the generated XML document.
      *
      * @param string $tagName
-     * @throws Extensions_Webservice_Logger_Serializer_Exception
+     * @throws Extensions_Webservice_Serializer_Exception
      */
     public function setDocumentRoot($tagName);
 }
