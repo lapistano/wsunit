@@ -196,6 +196,25 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
         $this->assertAttributeEquals($tagName, 'documentRoot', $serializer);
     }
 
+    /**
+     * @covers Extensions_Webservice_Logger_Serializer_Http_Response::setDocumentRoot
+     */
+    public function testSetDocumentRoot()
+    {
+        $serializer = $this->getSerializerFixture();
+        $serializer->setDocumentRoot('Tux');
+        $this->assertAttributeEquals('Tux', 'documentRoot', $serializer);
+    }
+
+    /**
+     * @expectedException Extensions_Webservice_Logger_Serializer_Exception
+     * @covers Extensions_Webservice_Logger_Serializer_Http_Response::setDocumentRoot
+     */
+    public function testSetDocumentRootExpectingExtensionsWebserviceLoggerSerializerException()
+    {
+        $serializer = $this->getSerializerFixture();
+        $serializer->setDocumentRoot('232');
+    }
 
     /*************************************************************************/
     /* Dataprovider                                                          */

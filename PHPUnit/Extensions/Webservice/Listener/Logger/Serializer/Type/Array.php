@@ -100,4 +100,6 @@ class Extensions_Webservice_Logger_Serializer_Type_Array extends Extensions_Webs
         $xml .= "</array>";
         return $xml;
     }
+
+    protected function Dummy(){}
 }

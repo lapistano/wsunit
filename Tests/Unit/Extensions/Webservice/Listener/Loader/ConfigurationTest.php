@@ -75,6 +75,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
     public function testLoad()
     {
         $expected = array(
+            'serializer' => 'Extensions_Webservice_Logger_Serializer_Http_Response',
             'testGetData' => array(
                 array(
                     'url' => 'http://example.org/data.json',
@@ -96,6 +97,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                 ),
             ),
             'testTranslateTypeToPrefix with data set "expected"' => array(
+                'serializer' => 'Extensions_Webservice_Logger_Serializer_Http_Response',
                 array(
                     'url' => 'http://example.org/data.json',
                     'params' => array(
@@ -111,5 +113,100 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
 
         $loader = new Extensions_Webservice_Listener_Loader_Configuration();
         $this->assertEquals($expected, $loader->load('../../../../../Tests/_files/configuration.xml'));
+    }
+
+    /**
+     * @dataProvider extractSerializerClassnameDataprovider
+     * @covers Extensions_Webservice_Listener_Loader_Configuration::extractSerializerClassname
+     */
+    public function testExtractSerializerClassnameNoElementFound($path)
+    {
+        $configuration = '
+            <listener>
+                <test name="testGetData">
+                    <location href="http://example.org/data.json" />
+                    <location href="http://example.org/data.xml" />
+                    <location href="http://example.org/data.txt" />
+                </test>
+                <test name="testReadData">
+                    <location href="http://example.org/data.json" />
+                </test>
+                <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
+                    <location href="http://example.org/data.json">
+                        <query>
+                          <param name="mascott[]">tux</param>
+                          <param name="mascott[RedHat]">beastie</param>
+                          <param name="os">Linux</param>
+                        </query>
+                    </location>
+                </test>
+            </listener>
+        ';
+        $loader = $this->ProxyBuilder('Extensions_Webservice_Listener_Loader_Configuration')
+            ->setMethods(array('extractSerializerClassname'))
+            ->getProxy();
+
+        $dom = new DOMDocument();
+        $dom->loadXml($configuration);
+        $xpath = new DOMXpath($dom);
+        $node = $xpath->query($path)->item(0);
+        $this->assertEmpty($loader->extractSerializerClassname($node));
+    }
+
+    /**
+     * @dataProvider extractSerializerClassnameDataprovider
+     * @covers Extensions_Webservice_Listener_Loader_Configuration::extractSerializerClassname
+     */
+    public function testExtractSerializerClassname($path)
+    {
+        $configuration = '
+            <listener>
+                <serializer>Extensions_Webservice_Logger_Serializer_Http_Response</serializer>
+                <test name="testGetData">
+                    <location href="http://example.org/data.json" />
+                    <location href="http://example.org/data.xml" />
+                    <location href="http://example.org/data.txt" />
+                </test>
+                <test name="testReadData">
+                    <location href="http://example.org/data.json" />
+                </test>
+                <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
+                    <serializer>Extensions_Webservice_Logger_Serializer_Http_Response</serializer>
+                    <location href="http://example.org/data.json">
+                        <query>
+                          <param name="mascott[]">tux</param>
+                          <param name="mascott[RedHat]">beastie</param>
+                          <param name="os">Linux</param>
+                        </query>
+                    </location>
+                </test>
+            </listener>
+        ';
+        $loader = $this->ProxyBuilder('Extensions_Webservice_Listener_Loader_Configuration')
+            ->setMethods(array('extractSerializerClassname'))
+            ->getProxy();
+
+        $dom = new DOMDocument();
+        $dom->loadXml($configuration);
+        $xpath = new DOMXpath($dom);
+        $node = $xpath->query($path)->item(0);
+        $this->assertEquals(
+            'Extensions_Webservice_Logger_Serializer_Http_Response',
+            $loader->extractSerializerClassname($node)
+        );
+    }
+
+
+    /*************************************************************************/
+    /* Dataprovider                                                          */
+    /*************************************************************************/
+
+
+    public static function extractSerializerClassnameDataprovider()
+    {
+        return array(
+            'global serializer' => array("//listener/serializer"),
+            'local serializer' => array("//listener/test/serializer"),
+        );
     }
 }

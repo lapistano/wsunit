@@ -133,6 +133,9 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
      */
     public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
+        $this->errors[] = new PHPUnit_Framework_TestFailure($test, $e);
+        $this->lastTestFailed = TRUE;
+        $this->time          += $time;
     }
 
     /**
@@ -176,6 +179,7 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
      */
     public function startTest(PHPUnit_Framework_Test $test)
     {
+
         //print_r(get_class_methods(get_class($test)));die;
 
         if ($test instanceof PHPUnit_Framework_Warning) {
@@ -183,21 +187,39 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
         }
 
         $name = $test->getName();
+
         if (!isset($this->mapping[$name])) {
             // log that there is no url set for this test
             return;
         }
 
-        $testMap = $this->mapping[$name];
-        foreach ($testMap as $data) {
-            $this->logger->setFilename($test->getName(), 'xml');
-            $this->logger->log(
-                $this->serializer->serialize(
-                    $this->httpClient->get(
-                        $data['url'], $data['params']
-                    )
-                )
+        if (!empty($this->mapping[$name]['serializer'])) {
+            $this->factory->register('serializer', $this->mapping[$name]['serializer']);
+            $logger = $this->factory->getInstanceOf(
+                'logger',
+                $this->factory->getInstanceOf('serializer', true)
             );
+            unset($this->mapping[$name]['serializer']);
+        } else {
+            $this->addError(
+                $test,
+                new PHPUnit_Framework_OutputError(
+                    sprintf(
+                        'No serializer found for test: %s. '.
+                        'Either define a global serializer or add one to the specific section '.
+                        'in your configuration file.',
+                        $test->getName()
+                    )
+                ),
+                PHP_Timer::$requestTime
+            );
+        }
+
+        foreach ($this->mapping[$name] as $data) {
+            $logger = $this->logger;
+            $response = $this->httpClient->get($data['url'], $data['params']);
+            $logger->setFilename($test->getName(), 'xml');
+            $logger->log($response);
         }
     }
 
@@ -225,14 +247,19 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
     {
         $this->factory->register('logger', $this->configuration['logger']);
         $this->factory->register('httpClient', $this->configuration['httpClient']);
-        $this->factory->register('serializer', $this->configuration['serialiser']);
 
-        $this->serializer = $this->factory->getInstanceOf('serializer');
         $this->httpClient = $this->factory->getInstanceOf('httpClient');
-        $this->logger     = $this->factory->getInstanceOf('logger');
 
         $this->loadMapping();
 
+        // get serializer from configuration
+        if (!empty($this->mapping['serializer'])) {
+            $this->factory->register('serializer', $this->mapping['serializer']);
+            $serializer = $this->factory->getInstanceOf('serializer');
+        }
+        if (!empty($serializer)) {
+            $this->logger = $this->factory->getInstanceOf('logger', $serializer);
+        }
     }
 
     /**

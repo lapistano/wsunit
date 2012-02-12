@@ -46,9 +46,6 @@
           <element key="logger">
             <string>Extensions_Webservice_Listener_Logger</string>
           </element>
-          <element key="serialiser">
-            <string>Extensions_Webservice_Logger_Serializer_Http_Response</string>
-          </element>
           <element key="mappingFile">
             <string>../../../../../Tests/_files/configuration.xml</string>
           </element>

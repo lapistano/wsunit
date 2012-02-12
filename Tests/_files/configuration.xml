@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <listener>
+    <serializer>Extensions_Webservice_Logger_Serializer_Http_Response</serializer>
     <test name="testGetData">
         <location href="http://example.org/data.json" />
         <location href="http://example.org/data.xml" />
@@ -9,6 +10,7 @@
         <location href="http://example.org/data.json" />
     </test>
     <test name='testTranslateTypeToPrefix with data set "expected"'>
+        <serializer>Extensions_Webservice_Logger_Serializer_Http_Response</serializer>
         <location href="http://example.org/data.json">
             <query>
               <param name="mascott[]">tux</param>

@@ -90,20 +90,27 @@ class Extensions_Webservice_Listener_Factory
      * Provides an instance of the class registered to the given type.
      *
      * @param  string $type Name of the class instance to be returned
+     * @param boolean $force If true it forces the creation of a new instance.
+     *
      * @throws ReflectionException in case something went wrong when trying to instantiate the registered class.
      * @throws FactoryException in case the type to be registered is not known.
      * @return object
      */
-    public function getInstanceOf($type)
+    public function getInstanceOf($type, $force = false)
     {
         if (!isset($this->register[$type]) || 1 === $this->register[$type]) {
             throw new FactoryException('Unknown type (' . $type .')!', FactoryException::UnknownType);
         }
 
-        if (empty($this->instances[$type])) {
+        if ($force || empty($this->instances[$type])) {
             $params = func_get_args();
             // remove $type
             array_shift($params);
+
+            if (isset($params[0]) && is_bool($params[0])) {
+                // remove $force
+                array_shift($params);
+            }
 
             $class = new ReflectionClass($this->register[$type]);
 

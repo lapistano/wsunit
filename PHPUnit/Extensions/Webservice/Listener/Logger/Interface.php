@@ -59,6 +59,12 @@
 interface Extensions_Webservice_Listener_Logger_Interface
 {
     /**
+     *
+     * @param Extensions_Webservice_Logger_Serializer_Interface $serializer
+     */
+    public function __construct(Extensions_Webservice_Logger_Serializer_Interface $serializer);
+
+    /**
      * Persists the given message.
      *
      * @param string $message

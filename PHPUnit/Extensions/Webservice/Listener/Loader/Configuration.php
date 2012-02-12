@@ -99,6 +99,8 @@ class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_
         $transcoded = array();
         $xpath = new DOMXpath($data);
         $elements = $xpath->query("//listener/test");
+        $transcoded['serializer'] = $this->extractSerializerClassname($xpath->query("//listener/serializer")->item(0));
+
 
         if (!is_null($elements)) {
             foreach ($elements as $test) {
@@ -106,6 +108,11 @@ class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_
 
                 if (!isset($transcoded[$testName])) {
                     $transcoded[$testName] = array();
+                }
+
+                $serializer = $this->extractSerializerClassname($xpath->query("serializer", $test)->item(0));
+                if (!empty($serializer)) {
+                    $transcoded[$testName]['serializer'] = $serializer;
                 }
 
                 $locations = $xpath->query('location', $test);
@@ -136,5 +143,18 @@ class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_
             }
         }
         return $transcoded;
+    }
+
+    /**
+     * Extracts the name of the serializer from the given node.
+     *
+     * @param DOMNode $node
+     * @return string
+     */
+    protected function extractSerializerClassname($node) {
+        if (!is_null($node)) {
+            return $node->nodeValue;
+        }
+        return '';
     }
 }
