@@ -57,12 +57,24 @@ use lapistano\ProxyObject\ProxyBuilder;
 class Extensions_Webservice_Listener_LoggerTest extends Extensions_Webservice_TestCase
 {
     /**
+     * Provides an instance of the abstract Extensions_Webservice_Logger_Serializer class.
+     *
+     * @return Extensions_Webservice_Logger_Serializer
+     */
+    protected function getSerializerFixture()
+    {
+        return $this->getMockBuilder('Extensions_Webservice_Logger_Serializer')
+            ->getMockForAbstractClass();
+    }
+
+    /**
      * @covers Extensions_Webservice_Listener_Logger::setFilename
+     * @covers Extensions_Webservice_Listener_Logger::__construct
      */
     public function testSetFilename()
     {
         $logger = $this->ProxyBuilder('Extensions_Webservice_Listener_Logger')
-            ->disableOriginalConstructor()
+            ->setConstructorArgs(array($this->getSerializerFixture()))
             ->setProperties(array('filename'))
             ->getProxy();
         $logger->setFilename('testLogger with data set "expected"');
@@ -83,6 +95,11 @@ class Extensions_Webservice_Listener_LoggerTest extends Extensions_Webservice_Te
             'TestTranslatTypeToPrefixWithDataSetExpected',
             $logger->sanitizeString('testTranslatTypeToPrefix with data set "expected"')
         );
+    }
 
+
+    public function testLog()
+    {
+        $this->markTestSkipped('Due to called user land function!');
     }
 }

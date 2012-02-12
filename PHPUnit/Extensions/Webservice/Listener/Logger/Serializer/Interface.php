@@ -12,10 +12,10 @@ interface Extensions_Webservice_Logger_Serializer_Interface
     /**
      * Adds the given data to a registry.
      *
-     * @param Extensions_Webservice_Logger_Serializer_Type $type
+     * @param string $type
      * @param mixed $data
      */
-    public function register(Extensions_Webservice_Logger_Serializer_Type $type, $data);
+    public function register( $type, $data);
 
     /**
      * Registers the given type in a local registry

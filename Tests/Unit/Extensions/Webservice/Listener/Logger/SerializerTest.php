@@ -81,13 +81,23 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
     }
 
     /**
+     * @expectedException UnexpectedValueException
+     * @covers Extensions_Webservice_Logger_Serializer_Http_Response::register
+     */
+    public function testRegisterExpectingUnexpectedValueException()
+    {
+        $serializer = $this->getSerializerFixture();
+        $serializer->register('testSerializerType', array());
+    }
+
+    /**
      * @covers Extensions_Webservice_Logger_Serializer_Http_Response::register
      */
     public function testRegister()
     {
         $type = $this->getSerializerTypeMock(array('getName'));
         $type
-            ->expects($this->exactly(4))
+            ->expects($this->exactly(2))
             ->method('getName')
             ->will($this->returnValue('testSerializerType'));
 
@@ -96,7 +106,8 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
         );
 
         $serializer = $this->getSerializerFixture();
-        $serializer->register($type, array());
+        $serializer->addType($type);
+        $serializer->register('testSerializerType', array());
         $this->assertAttributeEquals($expected, 'dataContainer', $serializer);
     }
 
@@ -169,8 +180,10 @@ class Extensions_Webservice_Logger_SerializerTest extends Extensions_Webservice_
             ->will($this->returnValue('<string>testSerializerType</string>'));
 
         $serializer = $this->getSerializerFixture();
-        $serializer->register($typeArray, array('Tux', 'Beastie'));
-        $serializer->register($type, array());
+        $serializer->addType($typeArray);
+        $serializer->register('testSerializerTypeArray', array('Tux', 'Beastie'));
+        $serializer->addType($type);
+        $serializer->register('testSerializerType', array());
         $this->assertEquals($expected, $serializer->serialize());
     }
 

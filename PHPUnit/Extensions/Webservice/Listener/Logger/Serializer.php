@@ -100,15 +100,21 @@ abstract class Extensions_Webservice_Logger_Serializer implements Extensions_Web
     /**
      * Adds the given data to a registry.
      *
-     * @param Extensions_Webservice_Logger_Serializer_Type $type
+     * @param string $type
      * @param mixed $data
      */
-    public function register(Extensions_Webservice_Logger_Serializer_Type $type, $data)
+    public function register($type, $data)
     {
-        if (!isset($this->types[$type->getName()])) {
-            $this->addType($type);
+        if (!isset($this->types[$type])) {
+            throw new UnexpectedValueException(
+                sprintf(
+                    'Undefined type (%s). Are you certain you used addType() to make it available in this object?',
+                    $type
+                ),
+                Extensions_Webservice_Logger_Serializer_Exception::InvalidType
+            );
         }
-        $this->dataContainer[$type->getName()][] = $data;
+        $this->dataContainer[$type][] = $data;
     }
 
     /**

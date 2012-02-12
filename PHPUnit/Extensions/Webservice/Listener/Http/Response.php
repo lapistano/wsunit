@@ -89,4 +89,24 @@ class Extensions_Webservice_Listener_Http_Response
     {
         $this->header = $header;
     }
+
+    /**
+     * Provides the response body.
+     *
+     * @return string
+     */
+    public function getBody()
+    {
+        return $this->body;
+    }
+
+    /**
+     * Provides the response header.
+     *
+     * @return array
+     */
+    public function getHeader()
+    {
+        return $this->header;
+    }
 }
