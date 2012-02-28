@@ -16,14 +16,14 @@ Example Configuation
     <listeners>
       <listener class="WebServiceListener">
         <arguments>
-            <object class="Factory"/>
-            <object class="ConfigurationLoader"/>
+            <object class="Extensions_Webservice_Listener_Factory"/>
+            <object class="Extensions_Webservice_Listener_Loader_Configuration"/>
             <array>
               <element key="httpClient">
-                <string>Buzz</string>
+                <string>Extensions_Webservice_Listener_Http_Client</string>
               </element>
               <element key="logger">
-                <string>MonoLog</string>
+                <string>Extensions_Webservice_Listener_Logger</string>
               </element>
               <element key="configuration">
                 <string>/path/to/configuration.(xml|yml|json|txt)</string>
@@ -35,6 +35,3 @@ Example Configuation
 
 Dependencies
 ============
-
-Monolog
--------
