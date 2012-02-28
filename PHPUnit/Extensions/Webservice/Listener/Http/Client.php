@@ -76,17 +76,18 @@ class Extensions_Webservice_Listener_Http_Client implements Extensions_Webservic
         $opts = array(
             'http' => array(
                 'method'        => "GET",
-                'query'         => http_build_query($query, '', '&'),
                 'max_redirects' => 5,
                 'timeout'       => 1.0,
             )
         );
 
-        $context = stream_context_create($opts);
+        if (!empty($query)) {
+            $url .= '?'.http_build_query($query, '', '&');
+        }
 
         // Open the file using the HTTP headers set above
         $response = $this->getResponseObject();
-        $response->setBody(file_get_contents($url, false, $context));
+        $response->setBody(file_get_contents($url, false, stream_context_create($opts)));
 
         $responseHeader = isset($http_response_header)? $http_response_header : array();
         $response->setHeader($responseHeader);
