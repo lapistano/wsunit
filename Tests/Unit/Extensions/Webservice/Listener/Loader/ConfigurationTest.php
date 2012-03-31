@@ -57,9 +57,6 @@
  */
 class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions_Webservice_TestCase
 {
-
-
-
     /**
      * @expectedException InvalidArgumentException
      * @covers Extensions_Webservice_Listener_Loader_Configuration::load
@@ -82,7 +79,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
             'Example_TestCase' => array(
                 'testGetData' => array(
                     'locations' => array(
-                        array(
+                        'expected' => array(
                             'url' => 'http://example.org/data.json',
                             'params' => array(),
                         ),
@@ -101,7 +98,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                 'testTranslateTypeToPrefix with data set "expected"' => array(
                     'serializer' => 'Extensions_Webservice_Serializer_Http_Response',
                     'locations' => array(
-                        array(
+                        'expected' => array(
                             'url' => 'http://example.org/data.json',
                             'params' => array(
                                 'mascott' => array(
@@ -201,7 +198,9 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
         );
     }
 
-
+    /**
+     * @covers Extensions_Webservice_Listener_Loader_Configuration::extractLocations
+     */
     public function testExtractLocations()
     {
         $expected = array(

@@ -153,6 +153,7 @@ class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_
         $case      = array();
         $locations = $xpath->query('location', $node);
         foreach ($locations as $location) {
+            $dataName = $location->getAttribute('dataName');
             $testData = array();
             $testData['url'] = $location->getAttribute('href');
             $testData['params'] = array();
@@ -174,7 +175,12 @@ class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_
                     $testData['params'][$paramName] = $param->nodeValue;
                 }
             }
-            $case[] = $testData;
+
+            if (!empty($dataName)) {
+                $case[$dataName] = $testData;
+            } else {
+                $case[] = $testData;
+            }
         }
         return $case;
     }

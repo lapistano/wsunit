@@ -73,7 +73,7 @@ class Extensions_Webservice_Constraint_JsonErrorMessageProviderTest extends Exte
         $this->assertEquals(
             $expected,
             Extensions_Webservice_Constraint_JsonErrorMessageProvider::determineJsonError(
-                $error, 
+                $error,
                 $prefix
             )
         );
@@ -97,8 +97,8 @@ class Extensions_Webservice_Constraint_JsonErrorMessageProviderTest extends Exte
             'JSON_ERROR_SYNTAX' => array(
                 'Syntax error, malformed JSON', 'json_error_syntax', ''),
             'JSON_ERROR_UTF8`' => array(
-                'Malformed UTF-8 characters, possibly incorrectly encoded', 
-                'json_error_utf8', 
+                'Malformed UTF-8 characters, possibly incorrectly encoded',
+                'json_error_utf8',
                 ''
             ),
             'Invalid error indicator' => array('Unknown error', 'invalid_error_indicator', ''),

@@ -4,8 +4,9 @@
 define("PROJECT_DIR", __DIR__ . '/PHPUnit/Extensions/Webservice');
 define("TEST_DIR", __DIR__ . '/Tests');
 
-// losd fixture file
+// load fixture file
 require_once TEST_DIR . '/ExtensionsWebservicesTestCase.php';
+require_once TEST_DIR . '/_files/wsTestCaseMock.php';
 
 // load necessary libraries
 require_once 'PHPUnit/Framework/TestCase.php';

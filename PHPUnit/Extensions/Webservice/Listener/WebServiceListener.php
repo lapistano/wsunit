@@ -61,43 +61,43 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
      * Instance of the Extensions_Webservice_Listener_Factory
      * @var Extensions_Webservice_Listener_Factory
      */
-    private $factory;
+    protected $factory;
 
     /**
      * Instance of the Extensions_Webservice_Listener_Loader
      * @var Extensions_Webservice_Listener_Loader
      */
-    private $loader;
+    protected $loader;
 
     /**
      * Instance of the logger observing the http client to capture the response and its header.
      * @var Extensions_Webservice_Listener_Logger_Interface
      */
-    private $logger;
+    protected $logger;
 
     /**
      * Instance of the serializer transcoding the given data into a loggable format.
      * @var Extensions_Webservice_Serializer
      */
-    private $serializer;
+    protected $serializer;
 
     /**
      * Instance of the http client used to send a request to the defined webservice.
      * @var Extensions_Webservice_Listener_Http_Client_Interface
      */
-    private $httpClient;
+    protected $httpClient;
 
     /**
      * Provides information about the configuration details of the listener.
      * @var array
      */
-    private $configuration = array();
+    protected $configuration = array();
 
     /**
      * Contains the mapping information of which urls a test has to call
      * @var array
      */
-    private $mapping = array();
+    protected $mapping = array();
 
     /**
      * Constructor of the class.
@@ -215,12 +215,15 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
             );
         }
 
-        foreach ($configuration['locations'] as $location) {
-            $logger = $this->logger;
-            $response = $this->httpClient->get($location['url'], $location['params']);
-            $logger->setFilename($test->getName(), 'xml');
-            $logger->log($response);
+        if ($this->hasDataprovider($test)) {
+            $response = $this->sendRequest($configuration, $this->getRunlevel($test));
+        } else {
+            $response = $this->sendRequest($configuration);
         }
+
+        // persist response
+        $this->logger->setFilename($test->getName(), 'xml');
+        $this->logger->log($response);
     }
 
     /**
@@ -257,6 +260,7 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
             $this->factory->register('serializer', $this->mapping['serializer']);
             $serializer = $this->factory->getInstanceOf('serializer');
         }
+        // initialize a loader only if there is a serializer defined.
         if (!empty($serializer)) {
             $this->logger = $this->factory->getInstanceOf('logger', $serializer);
         }
@@ -274,6 +278,56 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
 
 
     /**
+     * Send a request to the service provider.
+     *
+     * @param array $configuration
+     * @param string $runlevel
+     *
+     * @return Extensions_Webservice_Listener_Http_Response
+     */
+    protected function sendRequest($configuration, $runlevel = 0)
+    {
+        if (!empty($configuration['locations'][$runlevel])) {
+            $location = $configuration['locations'][$runlevel];
+        } else {
+            $location = end($configuration['locations']);
+        }
+        return $this->httpClient->get($location['url'], $location['params']);
+    }
+
+    /**
+     * Determines which location shall be fetched from the list of configured locations.
+     *
+     * @param PHPUnit_Framework_TestCase $test
+     * @return string
+     */
+    protected function getRunlevel(PHPUnit_Framework_TestCase $test)
+    {
+        return $this->extractRunlevelFromTestName($test->getName());
+    }
+
+    /**
+     * Extracts the runlevel from the test name.
+     *
+     * @param string $name
+     * @return string
+     */
+    protected function extractRunlevelFromTestName($name)
+    {
+        // reg exp matches onto the following strings:
+        // [...] with data set "error syntax in expected JSON" [...]
+        // [...] with data set #0 [...]
+        preg_match('(with data set (?:(?:#(\d+))|"([^"]+)"))', $name, $matches);
+
+        // normalize the array:
+        // array_filter with no callback removes empty entries
+        // array_values resets the keys
+        $matches = array_values(array_filter($matches));
+
+        return (!empty($matches[1])) ? $matches[1] : 0;
+    }
+
+    /**
      * Fetches the information about which test has to request which url.
      *
      * @return array
@@ -284,5 +338,17 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
             $this->mapping = $this->loader->load($this->configuration['mappingFile']);
         }
         return $this->mapping;
+    }
+
+    /**
+     * Determines, if there is a data provider defined for the current test case.
+     *
+     * @param PHPUnit_Framework_Test $test
+     * @return boolean
+     */
+    protected function hasDataprovider(PHPUnit_Framework_TestCase $test)
+    {
+        $annotations = $test->getAnnotations();
+        return !empty($annotations['method']['dataProvider']);
     }
 }
