@@ -179,27 +179,28 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
      */
     public function startTest(PHPUnit_Framework_Test $test)
     {
-
-        //print_r(get_class_methods(get_class($test)));die;
-
         if ($test instanceof PHPUnit_Framework_Warning) {
             return;
         }
 
         $name = $test->getName();
+        $class = get_class($test);
 
-        if (!isset($this->mapping[$name])) {
-            // log that there is no url set for this test
+        if (!isset($this->mapping[$class][$name])) {
+            //Proposal: log that there is no url set for this test
             return;
         }
 
-        if (!empty($this->mapping[$name]['serializer'])) {
-            $this->factory->register('serializer', $this->mapping[$name]['serializer']);
+        $configuration = $this->mapping[$class][$name];
+
+        // load dedicated serializer for a specific test
+        if (!empty($configuration['serializer'])) {
+            $this->factory->register('serializer', $configuration['serializer']);
             $logger = $this->factory->getInstanceOf(
                 'logger',
                 $this->factory->getInstanceOf('serializer', true)
             );
-            unset($this->mapping[$name]['serializer']);
+            unset($configuration['serializer']);
         } else {
             $this->addError(
                 $test,
@@ -215,7 +216,7 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
             );
         }
 
-        foreach ($this->mapping[$name] as $data) {
+        foreach ($configuration as $data) {
             $logger = $this->logger;
             $response = $this->httpClient->get($data['url'], $data['params']);
             $logger->setFilename($test->getName(), 'xml');
@@ -273,7 +274,11 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
     }
 
 
-
+    /**
+     * Fetches the information about which test has to request which url.
+     *
+     * @return array
+     */
     protected function loadMapping()
     {
         if (empty($this->mapping)) {

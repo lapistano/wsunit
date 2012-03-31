@@ -104,17 +104,17 @@ class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_
 
         if (!is_null($elements)) {
             foreach ($elements as $test) {
-                $testName = $test->getAttribute('name');
+                $testClassName = $test->getAttribute('case');
+                $testName      = $test->getAttribute('name');
+                $case          = array();
 
-                if (!isset($transcoded[$testName])) {
-                    $transcoded[$testName] = array();
-                }
-
+                // determine if there is a testcase specific serializer defined
                 $serializer = $this->extractSerializerClassname($xpath->query("serializer", $test)->item(0));
                 if (!empty($serializer)) {
-                    $transcoded[$testName]['serializer'] = $serializer;
+                    $case['serializer'] = $serializer;
                 }
 
+                // extract location urls to be requested for each run of the test
                 $locations = $xpath->query('location', $test);
                 foreach ($locations as $location) {
                     $testData = array();
@@ -138,10 +138,17 @@ class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_
                             $testData['params'][$paramName] = $param->nodeValue;
                         }
                     }
-                    $transcoded[$testName][] = $testData;
+                    $case[] = $testData;
                 }
+
+                // assemble into general array
+                if (!isset($transcoded[$testClassName])) {
+                    $transcoded[$testClassName] = array();
+                }
+                $transcoded[$testClassName][$testName] = $case;
             }
         }
+
         return $transcoded;
     }
 

@@ -76,36 +76,40 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
     {
         $expected = array(
             'serializer' => 'Extensions_Webservice_Serializer_Http_Response',
-            'testGetData' => array(
-                array(
-                    'url' => 'http://example.org/data.json',
-                    'params' => array(),
-                ),
-                array(
-                    'url' => 'http://example.org/data.xml',
-                    'params' => array(),
-                ),
-                array(
-                    'url' => 'http://example.org/data.txt',
-                    'params' => array(),
-                ),
-            ),
-            'testReadData' => array(
-                array(
-                    'url' => 'http://example.org/data.json',
-                    'params' => array(),
+            'Example_TestCase' => array(
+                'testGetData' => array(
+                    array(
+                        'url' => 'http://example.org/data.json',
+                        'params' => array(),
+                    ),
+                    array(
+                        'url' => 'http://example.org/data.xml',
+                        'params' => array(),
+                    ),
+                    array(
+                        'url' => 'http://example.org/data.txt',
+                        'params' => array(),
+                    ),
                 ),
             ),
-            'testTranslateTypeToPrefix with data set "expected"' => array(
-                'serializer' => 'Extensions_Webservice_Serializer_Http_Response',
-                array(
-                    'url' => 'http://example.org/data.json',
-                    'params' => array(
-                        'mascott' => array(
-                            'tux',
-                            'RedHat' => 'beastie',
-                         ),
-                        'os' => 'Linux',
+            'Extensions_Webservice_Constraint_JsonErrorMessageProviderTest' => array(
+                'testTranslateTypeToPrefix with data set "expected"' => array(
+                    'serializer' => 'Extensions_Webservice_Serializer_Http_Response',
+                    array(
+                        'url' => 'http://example.org/data.json',
+                        'params' => array(
+                            'mascott' => array(
+                                'tux',
+                                'RedHat' => 'beastie',
+                             ),
+                            'os' => 'Linux',
+                        ),
+                    ),
+                ),
+                'testDetermineJsonError' => array(
+                    array(
+                        'url' => 'http://example.org/data.json',
+                        'params' => array(),
                     ),
                 ),
             ),
