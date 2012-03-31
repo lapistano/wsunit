@@ -200,7 +200,6 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
                 'logger',
                 $this->factory->getInstanceOf('serializer', true)
             );
-            unset($configuration['serializer']);
         } else {
             $this->addError(
                 $test,
@@ -216,9 +215,9 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
             );
         }
 
-        foreach ($configuration as $data) {
+        foreach ($configuration['locations'] as $location) {
             $logger = $this->logger;
-            $response = $this->httpClient->get($data['url'], $data['params']);
+            $response = $this->httpClient->get($location['url'], $location['params']);
             $logger->setFilename($test->getName(), 'xml');
             $logger->log($response);
         }

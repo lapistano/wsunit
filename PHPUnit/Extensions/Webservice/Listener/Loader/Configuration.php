@@ -101,7 +101,6 @@ class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_
         $elements = $xpath->query("//listener/test");
         $transcoded['serializer'] = $this->extractSerializerClassname($xpath->query("//listener/serializer")->item(0));
 
-
         if (!is_null($elements)) {
             foreach ($elements as $test) {
                 $testClassName = $test->getAttribute('case');
@@ -115,31 +114,7 @@ class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_
                 }
 
                 // extract location urls to be requested for each run of the test
-                $locations = $xpath->query('location', $test);
-                foreach ($locations as $location) {
-                    $testData = array();
-                    $testData['url'] = $location->getAttribute('href');
-                    $testData['params'] = array();
-
-                    $params = $xpath->query('query/param', $location);
-                    foreach ($params as $param) {
-                        $paramName = $param->getAttribute('name');
-
-                        $pos = strpos($paramName, '[');
-                        if ($pos > 0) {
-                            preg_match("(^([^\[]+)\[([^\[]*)\]$)", $paramName, $matches);
-
-                            if (!empty($matches[2])) {
-                                $testData['params'][$matches[1]][$matches[2]] = $param->nodeValue;
-                            } else {
-                                $testData['params'][$matches[1]][] = $param->nodeValue;
-                            }
-                        } else {
-                            $testData['params'][$paramName] = $param->nodeValue;
-                        }
-                    }
-                    $case[] = $testData;
-                }
+                $case['locations'] = $this->extractLocations($test, $xpath);
 
                 // assemble into general array
                 if (!isset($transcoded[$testClassName])) {
@@ -148,7 +123,6 @@ class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_
                 $transcoded[$testClassName][$testName] = $case;
             }
         }
-
         return $transcoded;
     }
 
@@ -158,10 +132,50 @@ class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_
      * @param DOMNode $node
      * @return string
      */
-    protected function extractSerializerClassname($node) {
+    protected function extractSerializerClassname($node)
+    {
         if (!is_null($node)) {
             return $node->nodeValue;
         }
         return '';
+    }
+
+    /**
+     * Extracts urls to be visited on each test run
+     *
+     * @param DOMXPath   $xpath
+     * @param DOMElement $node
+     *
+     * @return array
+     */
+    protected function extractLocations($node, $xpath)
+    {
+        $case      = array();
+        $locations = $xpath->query('location', $node);
+        foreach ($locations as $location) {
+            $testData = array();
+            $testData['url'] = $location->getAttribute('href');
+            $testData['params'] = array();
+
+            $params = $xpath->query('query/param', $location);
+            foreach ($params as $param) {
+                $paramName = $param->getAttribute('name');
+
+                $pos = strpos($paramName, '[');
+                if ($pos > 0) {
+                    preg_match("(^([^\[]+)\[([^\[]*)\]$)", $paramName, $matches);
+
+                    if (!empty($matches[2])) {
+                        $testData['params'][$matches[1]][$matches[2]] = $param->nodeValue;
+                    } else {
+                        $testData['params'][$matches[1]][] = $param->nodeValue;
+                    }
+                } else {
+                    $testData['params'][$paramName] = $param->nodeValue;
+                }
+            }
+            $case[] = $testData;
+        }
+        return $case;
     }
 }

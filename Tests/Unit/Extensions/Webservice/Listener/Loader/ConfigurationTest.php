@@ -57,6 +57,9 @@
  */
 class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions_Webservice_TestCase
 {
+
+
+
     /**
      * @expectedException InvalidArgumentException
      * @covers Extensions_Webservice_Listener_Loader_Configuration::load
@@ -78,38 +81,44 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
             'serializer' => 'Extensions_Webservice_Serializer_Http_Response',
             'Example_TestCase' => array(
                 'testGetData' => array(
-                    array(
-                        'url' => 'http://example.org/data.json',
-                        'params' => array(),
-                    ),
-                    array(
-                        'url' => 'http://example.org/data.xml',
-                        'params' => array(),
-                    ),
-                    array(
-                        'url' => 'http://example.org/data.txt',
-                        'params' => array(),
+                    'locations' => array(
+                        array(
+                            'url' => 'http://example.org/data.json',
+                            'params' => array(),
+                        ),
+                        array(
+                            'url' => 'http://example.org/data.xml',
+                            'params' => array(),
+                        ),
+                        array(
+                            'url' => 'http://example.org/data.txt',
+                            'params' => array(),
+                        ),
                     ),
                 ),
             ),
             'Extensions_Webservice_Constraint_JsonErrorMessageProviderTest' => array(
                 'testTranslateTypeToPrefix with data set "expected"' => array(
                     'serializer' => 'Extensions_Webservice_Serializer_Http_Response',
-                    array(
-                        'url' => 'http://example.org/data.json',
-                        'params' => array(
-                            'mascott' => array(
-                                'tux',
-                                'RedHat' => 'beastie',
-                             ),
-                            'os' => 'Linux',
+                    'locations' => array(
+                        array(
+                            'url' => 'http://example.org/data.json',
+                            'params' => array(
+                                'mascott' => array(
+                                    'tux',
+                                    'RedHat' => 'beastie',
+                                 ),
+                                'os' => 'Linux',
+                            ),
                         ),
                     ),
                 ),
                 'testDetermineJsonError' => array(
-                    array(
-                        'url' => 'http://example.org/data.json',
-                        'params' => array(),
+                    'locations' => array(
+                        array(
+                            'url' => 'http://example.org/data.json',
+                            'params' => array(),
+                        ),
                     ),
                 ),
             ),
@@ -166,14 +175,6 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
         $configuration = '
             <listener>
                 <serializer>Extensions_Webservice_Serializer_Http_Response</serializer>
-                <test name="testGetData">
-                    <location href="http://example.org/data.json" />
-                    <location href="http://example.org/data.xml" />
-                    <location href="http://example.org/data.txt" />
-                </test>
-                <test name="testReadData">
-                    <location href="http://example.org/data.json" />
-                </test>
                 <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
                     <serializer>Extensions_Webservice_Serializer_Http_Response</serializer>
                     <location href="http://example.org/data.json">
@@ -200,6 +201,54 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
         );
     }
 
+
+    public function testExtractLocations()
+    {
+        $expected = array(
+            array(
+                'url'   => 'http://example.org/data.xml',
+                'params' => array(),
+            ),
+            array(
+                'url'   => 'http://example.org/data.json',
+                'params' => array(
+                    'mascott' => array(
+                        'tux',
+                        'RedHat' => 'beastie',
+                    ),
+                    'os'      => 'Linux',
+                ),
+            ),
+        );
+
+        $configuration = '
+            <listener>
+                <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
+                    <serializer>Extensions_Webservice_Serializer_Http_Response</serializer>
+                    <location href="http://example.org/data.xml" />
+                    <location href="http://example.org/data.json">
+                        <query>
+                          <param name="mascott[]">tux</param>
+                          <param name="mascott[RedHat]">beastie</param>
+                          <param name="os">Linux</param>
+                        </query>
+                    </location>
+                </test>
+            </listener>
+        ';
+        $loader = $this->ProxyBuilder('Extensions_Webservice_Listener_Loader_Configuration')
+            ->setMethods(array('extractLocations'))
+            ->getProxy();
+
+        $dom = new DOMDocument();
+        $dom->loadXml($configuration);
+        $xpath = new DOMXpath($dom);
+        $node = $xpath->query("//listener/test")->item(0);
+        $this->assertEquals(
+            $expected,
+            $loader->extractLocations($node, $xpath)
+        );
+    }
 
     /*************************************************************************/
     /* Dataprovider                                                          */
