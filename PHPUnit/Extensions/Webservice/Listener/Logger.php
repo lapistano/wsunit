@@ -92,7 +92,13 @@ class Extensions_Webservice_Listener_Logger implements Extensions_Webservice_Lis
 
         // due to time issues just a bad hack .. to be refactored asap
         $path = TEST_DIR . '/_files/responses';
-        $file = $path . '/' . $this->generateFilename($this->test->getName()) . '.xml';
+        $file = $path . '/' . $this->generateFilename($this->test->getName());
+        $filename = $file . '.xml';
+
+        if (file_exists($filename)) {
+            rename($filename, $file . microtime() . '.xml');
+        }
+
         file_put_contents($file, $this->serializer->serialize());
     }
 
