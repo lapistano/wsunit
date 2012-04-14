@@ -8,7 +8,7 @@
     </test>
     <test case="Extensions_Webservice_Constraint_JsonErrorMessageProviderTest" name='testTranslateTypeToPrefix with data set "expected"'>
         <serializer>Extensions_Webservice_Serializer_Http_Response</serializer>
-        <location  dataName="expected" href="http://example.org/data.json">
+        <location dataName="expected" href="http://blog.bastian-feder.de/blog.rss">
             <query>
               <param name="mascott[]">tux</param>
               <param name="mascott[RedHat]">beastie</param>

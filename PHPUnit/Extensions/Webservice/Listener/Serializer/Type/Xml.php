@@ -44,7 +44,7 @@
  */
 
 /**
- *
+ * type definitnion of a serializer.
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
@@ -55,85 +55,53 @@
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.6.0
  */
-class Extensions_Webservice_Listener_Logger implements Extensions_Webservice_Listener_Logger_Interface
+class Extensions_Webservice_Serializer_Type_Xml extends Extensions_Webservice_Serializer_Type
 {
     /**
-     * Contains an instance of an PHPUnit_Framework_Test.
-     * @var PHPUnit_Framework_Test
+     * Name of the current serialization type
+     * @var string
      */
-    protected $test = null;
+    protected $name = 'Xml';
+
 
     /**
-     * Instance of an implementation of  the Extensions_Webservice_Serializer_Interface.
-     * @var Extensions_Webservice_Serializer_Interface
-     */
-    protected $serializer;
-
-    /**
+     * Does the actual serialization.
      *
-     * @param Extensions_Webservice_Serializer_Interface $serializer
-     */
-    public function __construct(Extensions_Webservice_Serializer_Interface $serializer)
-    {
-        $this->serializer = $serializer;
-    }
-
-    /**
-     * Persists the given message.
-     *
-     * @param string $message
-     * @param string $level
-     */
-    public function log($message, $level = '')
-    {
-        $this->serializer->register('Array', $message->getHeader());
-        $this->serializer->register('Xml', $message->getBody());
-        $this->serializer->setDocumentRoot('response');
-
-        // due to time issues just a bad hack .. to be refactored asap
-        $path = TEST_DIR . '/_files/responses';
-        $file = $path . '/' . $this->generateFilename($this->test->getName());
-        $filename = $file . '.xml';
-
-        if (file_exists($filename)) {
-            rename($filename, $file . microtime(true) . '.xml');
-        }
-
-        file_put_contents($filename, $this->serializer->serialize());
-    }
-
-    /**
-     * Registers a Test.
-     *
-     * @see Extensions_Webservice_Listener_Logger_Interface::registerTest()
-     */
-    public function registerTest(PHPUnit_Framework_Test $test)
-    {
-        $this->test = $test;
-    }
-
-    /**
-     * Removes a number of not allowed chars from the passed string to be a valid filename.
-     *
-     * @param string $string
+     * @param mixed $data
      * @return string
      */
-    protected function sanitizeString($string)
+    public function serialize($data)
     {
-        $chars = array('"');
-        return str_replace($chars, '', $string);
+        // verify if $data is valid xml
+        $this->isValid($data);
+
+        /* remove <?xml ... ?> line before returning the body */
+        return preg_replace('#<\?xml [^>]+>#', '', $data);
     }
 
-
-    protected function generateFilename($string)
+    /**
+     * Provides the name of the current serializer type.
+     *
+     * @return string
+     */
+    public function getName()
     {
-        $sanitizedItems = array();
-        $array = explode(' ', $this->sanitizeString($string));
+        return $this->name;
+    }
 
-        foreach ($array as $item) {
-            $sanitizedItems[] = ucfirst(trim($item));
+    /**
+     * Checks it the given string is a valid XMLM string.
+     *
+     * @param string $data
+     * @throws Extensions_Webservice_Serializer_Type in case an invalid data string was passed.
+     */
+    protected function isValid($data)
+    {
+        if (!$dom = DOMDocument::loadXml($data)) {
+            throw new InvalidArgumentException(
+                'Given data set is not a valid XML string!',
+                Extensions_Webservice_Serializer_Exception::InvalidType
+            );
         }
-
-        return join('', $sanitizedItems);
     }
 }

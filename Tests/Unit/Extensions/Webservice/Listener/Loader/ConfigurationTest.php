@@ -99,7 +99,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                     'serializer' => 'Extensions_Webservice_Serializer_Http_Response',
                     'locations' => array(
                         'expected' => array(
-                            'url' => 'http://example.org/data.json',
+                            'url' => 'http://blog.bastian-feder.de/blog.rss',
                             'params' => array(
                                 'mascott' => array(
                                     'tux',
@@ -142,7 +142,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                     <location href="http://example.org/data.json" />
                 </test>
                 <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
-                    <location href="http://example.org/data.json">
+                    <location href="http://blog.bastian-feder.de/blog.rss">
                         <query>
                           <param name="mascott[]">tux</param>
                           <param name="mascott[RedHat]">beastie</param>
@@ -174,7 +174,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                 <serializer>Extensions_Webservice_Serializer_Http_Response</serializer>
                 <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
                     <serializer>Extensions_Webservice_Serializer_Http_Response</serializer>
-                    <location href="http://example.org/data.json">
+                    <location href="http://blog.bastian-feder.de/blog.rss">
                         <query>
                           <param name="mascott[]">tux</param>
                           <param name="mascott[RedHat]">beastie</param>
@@ -209,7 +209,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                 'params' => array(),
             ),
             array(
-                'url'   => 'http://example.org/data.json',
+                'url'   => 'http://blog.bastian-feder.de/blog.rss',
                 'params' => array(
                     'mascott' => array(
                         'tux',
@@ -225,7 +225,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                 <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
                     <serializer>Extensions_Webservice_Serializer_Http_Response</serializer>
                     <location href="http://example.org/data.xml" />
-                    <location href="http://example.org/data.json">
+                    <location href="http://blog.bastian-feder.de/blog.rss">
                         <query>
                           <param name="mascott[]">tux</param>
                           <param name="mascott[RedHat]">beastie</param>

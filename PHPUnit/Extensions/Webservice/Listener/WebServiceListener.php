@@ -134,7 +134,7 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
     public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
         $this->errors[] = new PHPUnit_Framework_TestFailure($test, $e);
-        $this->lastTestFailed = TRUE;
+        $this->lastTestFailed = true;
         $this->time          += $time;
     }
 

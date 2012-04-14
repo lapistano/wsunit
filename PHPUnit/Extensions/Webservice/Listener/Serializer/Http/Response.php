@@ -62,7 +62,7 @@ class Extensions_Webservice_Serializer_Http_Response extends Extensions_Webservi
     {
         $this->types['Array'] = new Extensions_Webservice_Serializer_Type_Array();
         //$this->types['TextPlain']          = new Extensions_Webservice_Serializer_Type_Text_Plain();
-        //$this->types['TextXml']            = new Extensions_Webservice_Serializer_Type_Text_Xml();
+        $this->types['Xml']            = new Extensions_Webservice_Serializer_Type_Xml();
         //$this->types['Texthtml']           = new Extensions_Webservice_Serializer_Type_Text_Html();
     }
 }
