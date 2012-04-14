@@ -72,4 +72,10 @@ interface Extensions_Webservice_Listener_Logger_Interface
      */
     public function log($message, $level = '');
 
+    /**
+     * Registers a PHPUnit_Framework_Test to determine e.g. a filename.
+     *
+     * @param unknown_type $test
+     */
+    public function registerTest(PHPUnit_Framework_Test $test);
 }

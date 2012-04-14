@@ -222,7 +222,7 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
         }
 
         // persist response
-        $this->logger->setFilename($test->getName(), 'xml');
+        $this->logger->registerTest($test);
         $this->logger->log($response);
     }
 
@@ -280,7 +280,7 @@ class WebServiceListener implements PHPUnit_Framework_TestListener
     /**
      * Send a request to the service provider.
      *
-     * @param array $configuration
+     * @param array  $configuration
      * @param string $runlevel
      *
      * @return Extensions_Webservice_Listener_Http_Response

@@ -58,10 +58,10 @@
 class Extensions_Webservice_Listener_Logger implements Extensions_Webservice_Listener_Logger_Interface
 {
     /**
-     * Contains the name of the file to be logged to.
-     * @var string
+     * Contains an instance of an PHPUnit_Framework_Test.
+     * @var PHPUnit_Framework_Test
      */
-    protected $filename = '';
+    protected $test = null;
 
     /**
      * Instance of an implementation of  the Extensions_Webservice_Serializer_Interface.
@@ -87,27 +87,18 @@ class Extensions_Webservice_Listener_Logger implements Extensions_Webservice_Lis
     public function log($message, $level = '')
     {
         $this->serializer->register('Array', $message->getHeader());
+        //$this->serializer->register('Xml', $message->getBody());
         $this->serializer->setDocumentRoot('response');
 
         // due to time issues just a bad hack .. to be refactored asap
         $path = TEST_DIR . '/_files/responses';
-        $file = $path . '/' . $this->filename;
+        $file = $path . '/' . $this->sanitizeString($this->test->getName()) . '.xml';
         file_put_contents($file, $this->serializer->serialize());
     }
 
-    /**
-     * Registers the given string as name for the log file.
-     *
-     * To prevent an invalid filename will be generated using the passed string.
-     * It will be sanitized first.
-     *
-     * @param string $name
-     */
-    public function setFilename($name, $ext = 'txt')
+    public function registerTest(PHPUnit_Framework_Test $test)
     {
-        // sanitize $name
-        $name = $this->sanitizeString($name);
-        $this->filename = $name . '.' . $ext;
+        $this->test = $test;
     }
 
     /**

@@ -68,17 +68,19 @@ class Extensions_Webservice_Listener_LoggerTest extends Extensions_Webservice_Te
     }
 
     /**
-     * @covers Extensions_Webservice_Listener_Logger::setFilename
+     * @covers Extensions_Webservice_Listener_Logger::registerTest
      * @covers Extensions_Webservice_Listener_Logger::__construct
      */
-    public function testSetFilename()
+    public function testRegisterTest()
     {
-        $logger = $this->ProxyBuilder('Extensions_Webservice_Listener_Logger')
-            ->setConstructorArgs(array($this->getSerializerFixture()))
-            ->setProperties(array('filename'))
-            ->getProxy();
-        $logger->setFilename('testLogger with data set "expected"');
-        $this->assertEquals('TestLoggerWithDataSetExpected.txt', $logger->filename);
+        // 'testLogger with data set "expected"'
+        $test = $this->getMockBuilder('\\PHPUnit_Framework_Test')
+            ->setMethods(array('run'))
+            ->getMockForAbstractClass();
+
+        $logger = new Extensions_Webservice_Listener_Logger($this->getSerializerFixture());
+        $logger->registerTest($test);
+        $this->assertAttributeInstanceOf('\\PHPUnit_Framework_Test', 'test', $logger);
     }
 
 
