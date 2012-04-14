@@ -109,18 +109,20 @@ class Extensions_Webservice_Listener_Logger implements Extensions_Webservice_Lis
      */
     protected function sanitizeString($string)
     {
+        $chars = array('"');
+        return str_replace($chars, '', $string);
+    }
+
+
+    protected function generateFilename($string)
+    {
         $sanitizedItems = array();
-        $array = explode(' ', $string);
+        $array = explode(' ', $this->sanitizeString($string));
 
         foreach ($array as $item) {
-            if ('"' == $item) continue;
-            if (0 <= strpos('"', $item)) {
-                $item = str_replace('"', '', $item);
-            }
             $sanitizedItems[] = ucfirst(trim($item));
         }
 
         return join('', $sanitizedItems);
     }
-
 }

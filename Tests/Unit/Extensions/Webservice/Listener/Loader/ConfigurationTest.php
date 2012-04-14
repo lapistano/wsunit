@@ -152,7 +152,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                 </test>
             </listener>
         ';
-        $loader = $this->ProxyBuilder('Extensions_Webservice_Listener_Loader_Configuration')
+        $loader = $this->getProxyBuilder('Extensions_Webservice_Listener_Loader_Configuration')
             ->setMethods(array('extractSerializerClassname'))
             ->getProxy();
 
@@ -184,7 +184,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                 </test>
             </listener>
         ';
-        $loader = $this->ProxyBuilder('Extensions_Webservice_Listener_Loader_Configuration')
+        $loader = $this->getProxyBuilder('Extensions_Webservice_Listener_Loader_Configuration')
             ->setMethods(array('extractSerializerClassname'))
             ->getProxy();
 
@@ -235,7 +235,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                 </test>
             </listener>
         ';
-        $loader = $this->ProxyBuilder('Extensions_Webservice_Listener_Loader_Configuration')
+        $loader = $this->getProxyBuilder('Extensions_Webservice_Listener_Loader_Configuration')
             ->setMethods(array('extractLocations'))
             ->getProxy();
 

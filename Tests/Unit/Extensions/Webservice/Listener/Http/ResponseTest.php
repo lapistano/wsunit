@@ -43,7 +43,6 @@
  * @since      File available since Release 3.6.0
  */
 
-use lapistano\ProxyObject\ProxyBuilder;
 
 /**
  *
@@ -78,7 +77,7 @@ class Extensions_Webservice_Listener_Http_ResponseTest extends Extensions_Webser
             "Connection: close",
             "Content-Type: text/html; charset=UTF-8",
         );
-        $response = $this->ProxyBuilder('Extensions_Webservice_Listener_Http_Response')
+        $response = $this->getProxyBuilder('Extensions_Webservice_Listener_Http_Response')
             ->setProperties(array('header'))
             ->getProxy();
         $response->setHeader($header);
@@ -90,7 +89,7 @@ class Extensions_Webservice_Listener_Http_ResponseTest extends Extensions_Webser
      */
     public function testSetBody()
     {
-        $pb = new ProxyBuilder('Extensions_Webservice_Listener_Http_Response');
+        $pb = $this->getProxyBuilder('Extensions_Webservice_Listener_Http_Response');
         $response = $pb->setProperties(array('body'))->getProxy();
         $response->setBody('');
         $this->assertInternalType('string', $response->body);
