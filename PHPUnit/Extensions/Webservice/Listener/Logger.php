@@ -92,10 +92,15 @@ class Extensions_Webservice_Listener_Logger implements Extensions_Webservice_Lis
 
         // due to time issues just a bad hack .. to be refactored asap
         $path = TEST_DIR . '/_files/responses';
-        $file = $path . '/' . $this->sanitizeString($this->test->getName()) . '.xml';
+        $file = $path . '/' . $this->generateFilename($this->test->getName()) . '.xml';
         file_put_contents($file, $this->serializer->serialize());
     }
 
+    /**
+     * Registers a Test.
+     *
+     * @see Extensions_Webservice_Listener_Logger_Interface::registerTest()
+     */
     public function registerTest(PHPUnit_Framework_Test $test)
     {
         $this->test = $test;
@@ -109,18 +114,20 @@ class Extensions_Webservice_Listener_Logger implements Extensions_Webservice_Lis
      */
     protected function sanitizeString($string)
     {
+        $chars = array('"');
+        return str_replace($chars, '', $string);
+    }
+
+
+    protected function generateFilename($string)
+    {
         $sanitizedItems = array();
-        $array = explode(' ', $string);
+        $array = explode(' ', $this->sanitizeString($string));
 
         foreach ($array as $item) {
-            if ('"' == $item) continue;
-            if (0 <= strpos('"', $item)) {
-                $item = str_replace('"', '', $item);
-            }
             $sanitizedItems[] = ucfirst(trim($item));
         }
 
         return join('', $sanitizedItems);
     }
-
 }

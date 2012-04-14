@@ -96,7 +96,7 @@ class Extensions_Webservice_ListenerTest extends Extensions_Webservice_TestCase
             ->method('getAnnotations')
             ->will($this->returnValue($annotations));
 
-        $wst = $this->ProxyBuilder('WebServiceListener')
+        $wst = $this->getProxyBuilder('WebServiceListener')
             ->disableOriginalConstructor()
             ->setMethods(array('hasDataprovider'))
             ->getProxy();
@@ -115,7 +115,7 @@ class Extensions_Webservice_ListenerTest extends Extensions_Webservice_TestCase
             ->method('load')
             ->will($this->returnValue($mapping));
 
-        $wst = $this->ProxyBuilder('WebServiceListener')
+        $wst = $this->getProxyBuilder('WebServiceListener')
             ->disableOriginalConstructor()
             ->setMethods(array('loadMapping'))
             ->setProperties(array('mapping', 'loader', 'configuration'))
@@ -143,7 +143,7 @@ class Extensions_Webservice_ListenerTest extends Extensions_Webservice_TestCase
             ->method('getName')
             ->will($this->returnValue($name));
 
-        $wst = $this->ProxyBuilder('WebServiceListener')
+        $wst = $this->getProxyBuilder('WebServiceListener')
             ->disableOriginalConstructor()
             ->setMethods(array('getRunlevel'))
             ->getProxy();
@@ -189,7 +189,7 @@ class Extensions_Webservice_ListenerTest extends Extensions_Webservice_TestCase
             )
             ->will($this->returnValue('Tux'));
 
-        $wst = $this->ProxyBuilder('WebServiceListener')
+        $wst = $this->getProxyBuilder('WebServiceListener')
             ->disableOriginalConstructor()
             ->setProperties(array('logger', 'httpClient'))
             ->setMethods(array('sendRequest'))

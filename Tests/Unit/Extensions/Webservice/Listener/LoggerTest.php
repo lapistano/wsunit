@@ -83,25 +83,66 @@ class Extensions_Webservice_Listener_LoggerTest extends Extensions_Webservice_Te
         $this->assertAttributeInstanceOf('\\PHPUnit_Framework_Test', 'test', $logger);
     }
 
-
     /**
+     * @dataProvider sanitizeStringDataprovider
      * @covers Extensions_Webservice_Listener_Logger::sanitizeString
      */
-    public function testSanitizeString()
+    public function testSanitizeString($expected, $string)
     {
-        $logger = $this->ProxyBuilder('Extensions_Webservice_Listener_Logger')
+        $logger = $this->getProxyBuilder('Extensions_Webservice_Listener_Logger')
             ->disableOriginalConstructor()
             ->setMethods(array('sanitizeString'))
             ->getProxy();
-        $this->assertEquals(
-            'TestTranslatTypeToPrefixWithDataSetExpected',
-            $logger->sanitizeString('testTranslatTypeToPrefix with data set "expected"')
-        );
+        $this->assertEquals($expected, $logger->sanitizeString($string));
     }
 
+    /**
+     * @dataProvider generateFilenameDataprovider
+     * @covers Extensions_Webservice_Listener_Logger::generateFilename
+     */
+    public function testGenerateFilename($expected, $string)
+    {
+        $logger = $this->getProxyBuilder('Extensions_Webservice_Listener_Logger')
+            ->disableOriginalConstructor()
+            ->setMethods(array('generateFilename'))
+            ->getProxy();
+        $this->assertEquals($expected, $logger->generateFilename($string));
+    }
 
+    /**
+     * @covers Extensions_Webservice_Listener_Logger::Log
+     */
     public function testLog()
     {
         $this->markTestSkipped('Due to called user land function!');
+    }
+
+
+    public static function generateFilenameDataprovider()
+    {
+        return array(
+            'string with whitespace' => array(
+                'TestTranslatTypeToPrefixWithDataSetExpected',
+                'testTranslatTypeToPrefix with data set "expected"',
+            ),
+            'string without whitespace' => array(
+                'Tux',
+                'Tux',
+            ),
+        );
+    }
+
+    public static function sanitizeStringDataprovider()
+    {
+        return array(
+            'string with unallowed char' => array(
+                'testTranslatTypeToPrefix with data set expected',
+                'testTranslatTypeToPrefix with data set "expected"',
+            ),
+            'string without unallowed char' => array(
+                'Tux',
+                'Tux',
+            ),
+        );
     }
 }

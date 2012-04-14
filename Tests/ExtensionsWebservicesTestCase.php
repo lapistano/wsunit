@@ -44,14 +44,15 @@
  */
 use lapistano\ProxyObject\ProxyBuilder;
 
-class Extensions_Webservice_TestCase extends PHPUnit_Framework_TestCase
+abstract class Extensions_Webservice_TestCase extends PHPUnit_Framework_TestCase
 {
     /**
      * Provides an instance of the
      * Enter description here ...
      * @param unknown_type $classname
      */
-    protected function ProxyBuilder($classname) {
+    protected function getProxyBuilder($classname)
+    {
          return new ProxyBuilder($classname);
     }
 
