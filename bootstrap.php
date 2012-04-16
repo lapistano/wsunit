@@ -12,11 +12,6 @@ require_once TEST_DIR . '/_files/wsTestCaseMock.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 require_once TEST_DIR . '/libs/lapistano/proxy-object/bootstrap.php';
 
-// load source to be tested
-require_once PROJECT_DIR . '/Constraint/JsonMatches.php';
-require_once PROJECT_DIR . '/Constraint/JsonErrorMessageProvider.php';
-require_once PROJECT_DIR . '/TestCase.php';
-
 // interface files
 require_once PROJECT_DIR . '/Listener/Loader/Interface.php';
 require_once PROJECT_DIR . '/Listener/Logger/Interface.php';
