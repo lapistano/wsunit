@@ -1,8 +1,8 @@
 <?php
 /**
- * PHPUnit
+ * PHPUnit - Test listener extension
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2012 Bastian Feder <php@bastian-feder.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,22 +37,22 @@
  * @package    PHPUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2002-2011 Sebastian Bergmann <sebastian@phpunit.de>
+ * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://www.phpunit.de/
+ * @link       http://github.com/lapistano/wsunit
  * @since      File available since Release 3.6.0
  */
 
 /**
- * type definitnion of a serializer.
+ * Type defintion of a serializer
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2011 Bastian Feder <php@bastian-feder.de>
+ * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version    Release: @package_version@
- * @link       http://www.phpunit.de/
+ * @link       http://github.com/lapistano/wsunit
  * @since      Class available since Release 3.6.0
  */
 abstract class Extensions_Webservice_Serializer_Type

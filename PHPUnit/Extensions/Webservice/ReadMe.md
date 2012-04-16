@@ -1,9 +1,7 @@
 =============================
 PHPUnit WebServices Extension
 =============================
-The possibility to register test listeners to PHPUnit makes it extremly easy to execute actions on a certain state of 
-the test runner (e.g. when the test is started). 
-WSUnit make highly use of this possibility and listens to some of the emmited signals.
+The possibility to register test listeners to PHPUnit makes it extremly easy to execute actions on a certain state of the test runner (e.g. when the test is started). WSUnit make highly use of this possibility and listens to some of the emmited signals.
 
 Purpose
 ========
