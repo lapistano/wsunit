@@ -15,10 +15,6 @@ GitHub
 ------
 $ git clone git://github.com/lapistano/wsunit.git
 
-Composer
---------
-$php composer.phar install
-
 Configuation
 ============
 The configuration has two parts. One is the registration of the actual test listener to PHPUnit, the 2nd is the definition of which test (identified by it's name) shall be request the response of which location.
