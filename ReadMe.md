@@ -45,9 +45,7 @@ read the 'Test Listener' section or copy the example to your configuration and s
     </listener>
   </listeners>
 ```
-
-Arguments
-~~~~~~~~~
+### Arguments
 
 (object) Extensions_Webservice_Listener_Factory
     Factory class providing objects mandatory for the operation of the listener.
@@ -84,8 +82,8 @@ The name and the location of the configuration file is set in the `element[key='
     </test>
 </listener>
 ```
-Available tags
-~~~~~~~~~~~~~~
+
+###Available tags
 
 - **test**
 Encapsulated with the 'listener' tag as root tag each test to be recognized is represented by a 'test' tag and section. A test is recognized by the test case (case attribute) and name (name attribute) of a test. If your test registers a dataprovider be aware that the name of the test will be altered by PHPUnit (see the second test section in the example).
