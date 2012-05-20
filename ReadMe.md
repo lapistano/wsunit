@@ -47,13 +47,13 @@ read the 'Test Listener' section or copy the example to your configuration and s
 ```
 ### Arguments
 
-(object) Extensions_Webservice_Listener_Factory
+`(object) Extensions_Webservice_Listener_Factory`
     Factory class providing objects mandatory for the operation of the listener.
     
-(object) Extensions_Webservice_Listener_Loader_Configuration
+`(object) Extensions_Webservice_Listener_Loader_Configuration`
     Object to load the configuration file.
 
-(array) Contains the names of classes to be registered to the factory and the location of the location definition file.
+`(array)` Contains the names of classes to be registered to the factory and the location of the location definition file.
 
 
 Test listener configuration
