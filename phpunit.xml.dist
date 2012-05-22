@@ -25,7 +25,7 @@
     <whitelist addUncoveredFilesFromWhitelist="true">
       <directory suffix=".php">PHPUnit</directory>
       <exclude>
-        <directory>PHPUnit/Extensions/Webservice/Listener/lib</directory>
+        <directory>src/lib</directory>
       </exclude>
     </whitelist>
   </filter>
@@ -37,17 +37,17 @@
   <listeners>
     <listener class="WebServiceListener">
       <arguments>
-        <object class="Extensions_Webservice_Listener_Factory"/>
-        <object class="Extensions_Webservice_Listener_Loader_Configuration"/>
+        <object class="\lapistano\wsunit\Extensions_Webservice_Listener_Factory"/>
+        <object class="\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration"/>
         <array>
           <element key="httpClient">
-            <string>Extensions_Webservice_Listener_Http_Client</string>
+            <string>lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Client</string>
           </element>
           <element key="logger">
-            <string>Extensions_Webservice_Listener_Logger</string>
+            <string>lapistano\wsunit\Extensions_Webservice_Listener_Logger</string>
           </element>
           <element key="mappingFile">
-            <string>../../../../../Tests/_files/configuration.xml</string>
+            <string>../../Tests/_files/configuration.xml</string>
           </element>
         </array>
       </arguments>
