@@ -27,6 +27,9 @@ GitHub
 ------
 ```bash
 $ git clone git://github.com/lapistano/wsunit.git
+$ mkdir -p wsunit/vendor/lapistano
+$ cd wsunit/vendor/lapistano
+$ git clone git://github.com/lapistano/proxy-object.git
 ```
 
 Configuation
