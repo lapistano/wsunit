@@ -15,13 +15,13 @@ There is not much to install but to download the sources, configure the test lis
 
 Composer
 --------
-'''
+```json
 {
     "require": {
-        "lapistano/wsunit": " 2.*
+        "lapistano/wsunit": " 2.*"
     }
 }
-'''
+```
 
 GitHub
 ------
