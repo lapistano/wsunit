@@ -10,7 +10,7 @@ require_once TEST_DIR . '/_files/wsTestCaseMock.php';
 
 // load necessary libraries
 require_once 'PHPUnit/Framework/TestCase.php';
-require_once TEST_DIR . '/libs/lapistano/proxy-object/bootstrap.php';
+require_once 'vendor/lapistano/proxy-object/bootstrap.php';
 
 // interface files
 require_once PROJECT_DIR . '/Loader/Interface.php';
