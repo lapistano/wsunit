@@ -25,7 +25,9 @@ Composer
 
 GitHub
 ------
+```bash
 $ git clone git://github.com/lapistano/wsunit.git
+```
 
 Configuation
 ============
