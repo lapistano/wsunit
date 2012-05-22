@@ -103,4 +103,4 @@ Dependencies
 Optional
 --------
 - [proxy-object](http://github.com/lapistano/proxy-object) in case you want to run the test suite. It has to be put in
-  `the Tests/libs` directory. You either my clone it from github or use composer to fetch it.
+  the `vendor` directory, located in the project root. You either my clone it from github or use composer to fetch it.
