@@ -97,3 +97,8 @@ Defined within the test section it defines the location and it's optional query 
 Dependencies
 ============
 - [PHPUnit](http://github.com/sebastianbergmann/phpunit)
+
+Optional
+--------
+- [proxy-object](http://github.com/lapistano/proxy-object) in case you want to run the test suite. It has to be put in
+  `the Tests/libs` directory. You either my clone it from github or use composer to fetch it.
