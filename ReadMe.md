@@ -3,6 +3,8 @@ PHPUnit WebServices Extension
 =============================
 The possibility to register test listeners to PHPUnit makes it extremly easy to execute actions on a certain state of the test runner (e.g. when the test is started). WSUnit make highly use of this possibility and listens to some of the emmited signals.
 
+Current travis status: [![Build Status](https://secure.travis-ci.org/lapistano/wsunit.png?branch=master)](http://travis-ci.org/lapistano/wsunit)
+
 Purpose
 ========
 WSUnit lifts unit tests to functional tests by configuration. Once configured the test listener sends a request to a specified location, records the respond body & header, and persists it onto the filesystem. The test itself then e.g. verifies the correctness of the response. The Idea behind this was not to be forced to write API test more than once and to increase the reuse of already written verifications.
