@@ -23,7 +23,7 @@
 
   <filter>
     <whitelist addUncoveredFilesFromWhitelist="true">
-      <directory suffix=".php">PHPUnit</directory>
+      <directory suffix=".php">src</directory>
       <exclude>
         <directory>src/lib</directory>
       </exclude>
