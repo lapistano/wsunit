@@ -13,6 +13,16 @@ Installation
 ============
 There is not much to install but to download the sources, configure the test listener in the phpunit.xml.dist, and create the configuration file to tell the listener which test shall call which url ot fetch the response. If you are using composer you simply have to define the dependency to WSUnit in your configuration and set up WSUnit accourding to the following description.
 
+Composer
+--------
+'''
+{
+    "require": {
+        "lapistano/wsunit": " 2.*
+    }
+}
+'''
+
 GitHub
 ------
 $ git clone git://github.com/lapistano/wsunit.git
