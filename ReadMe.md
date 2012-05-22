@@ -45,14 +45,14 @@ read the 'Test Listener' section or copy the example to your configuration and s
 <listeners>
   <listener class="WebServiceListener">
     <arguments>
-        <object class="Extensions_Webservice_Listener_Factory"/>
-        <object class="Extensions_Webservice_Listener_Loader_Configuration"/>
+        <object class="\lapistano\wsunit\Extensions_Webservice_Listener_Factory"/>
+        <object class="\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration"/>
         <array>
           <element key="httpClient">
-            <string>Extensions_Webservice_Listener_Http_Client</string>
+            <string>lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Client</string>
           </element>
           <element key="logger">
-            <string>Extensions_Webservice_Listener_Logger</string>
+            <string>lapitano\wsunit\Extensions_Webservice_Listener_Logger</string>
           </element>
           <element key="configuration">
             <string>/path/to/configuration.xml</string>
