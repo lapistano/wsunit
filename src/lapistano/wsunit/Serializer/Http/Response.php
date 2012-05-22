@@ -47,7 +47,7 @@ namespace lapistano\wsunit\Serializer\Http;
 
 use lapistano\wsunit\Serializer\Extensions_Webservice_Serializer;
 use lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type_Array;
-use lapistano\wsuniti\Serializer\Type\Extensions_Webservice_Serializer_Type_Xml;
+use lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type_Xml;
 
 /**
  * Serializer to stringify a Http response to a transferable, computer-readable format.

@@ -43,7 +43,7 @@
  * @since      File available since Release 3.6.0
  */
 
-namespace lapistano\wsuniti\Serializer\Type;
+namespace lapistano\wsunit\Serializer\Type;
 
 use lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Exception;
 
