@@ -1,0 +1,21 @@
+{
+    "name": "lapistano/wsunit",
+    "description": "A PHPUnit extension providing the possibility to lift a unit test to a functional tes, just by configuration",
+    "keywords": ["testing", "wsunit", "phpunit", "extension", "functional testing", "unit testing"],
+    "homepage": "http://www.github.com/lapistano/wsunit"
+    "type": "library",
+    "license": "BSD License",
+    "require": {
+        "php":">=5.3.6"
+    },
+    "autoload": {
+        "psr-0": { "lapistano": "src/" }
+    },
+    "authors": [
+        {
+            "name": "Bastian Feder",
+            "email": "php@bastian-feder.de",
+            "homepage": "http://blog.bastian-feder.de"
+        }
+    ]
+}
