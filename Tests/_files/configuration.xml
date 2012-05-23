@@ -6,7 +6,7 @@
         <location href="http://example.org/data.xml" />
         <location href="http://example.org/data.txt" />
     </test>
-    <test case="Extensions_Webservice_Constraint_JsonErrorMessageProviderTest" name='testTranslateTypeToPrefix with data set "expected"'>
+    <test case="lapistano\wsunit\Extensions_Webservice_Listener_LoggerTest" name='testSanitizeString with data set "string without unallowed char"'>
         <serializer>\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response</serializer>
         <location dataName="expected" href="http://blog.bastian-feder.de/blog.rss">
             <query>
@@ -16,7 +16,7 @@
             </query>
         </location>
     </test>
-    <test case="Extensions_Webservice_Constraint_JsonErrorMessageProviderTest" name='testDetermineJsonError'>
-        <location href="http://example.org/data.json" />
+    <test case="lapistano\wsunit\Extensions_Webservice_Listener_LoggerTest" name="testLog">
+        <location href="http://blog.bastian-feder.de/blog.rss" />
     </test>
 </listener>

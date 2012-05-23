@@ -98,8 +98,8 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                     ),
                 ),
             ),
-            'Extensions_Webservice_Constraint_JsonErrorMessageProviderTest' => array(
-                'testTranslateTypeToPrefix with data set "expected"' => array(
+            'lapistano\wsunit\Extensions_Webservice_Listener_LoggerTest' => array(
+                'testSanitizeString with data set "string without unallowed char"' => array(
                     'serializer' => '\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response',
                     'locations' => array(
                         'expected' => array(
@@ -114,10 +114,10 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                         ),
                     ),
                 ),
-                'testDetermineJsonError' => array(
+                'testLog' => array(
                     'locations' => array(
                         array(
-                            'url' => 'http://example.org/data.json',
+                            'url' => 'http://blog.bastian-feder.de/blog.rss',
                             'params' => array(),
                         ),
                     ),
