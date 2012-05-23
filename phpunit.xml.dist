@@ -24,9 +24,6 @@
   <filter>
     <whitelist addUncoveredFilesFromWhitelist="true">
       <directory suffix=".php">src</directory>
-      <exclude>
-        <directory>src/lib</directory>
-      </exclude>
     </whitelist>
   </filter>
 
@@ -41,18 +38,17 @@
         <object class="\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration"/>
         <array>
           <element key="httpClient">
-            <string>lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Client</string>
+            <string>\lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Client</string>
           </element>
           <element key="logger">
-            <string>lapistano\wsunit\Extensions_Webservice_Listener_Logger</string>
+            <string>\lapistano\wsunit\Extensions_Webservice_Listener_Logger</string>
           </element>
           <element key="mappingFile">
-            <string>../../Tests/_files/configuration.xml</string>
+            <string>../../../Tests/_files/configuration.xml</string>
           </element>
         </array>
       </arguments>
     </listener>
   </listeners>
 
-  
 </phpunit>

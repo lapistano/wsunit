@@ -81,7 +81,7 @@ abstract class Extensions_Webservice_TestCase extends \PHPUnit_Framework_TestCas
             'httpClient' => '\lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Client',
             'logger'     => '\lapistano\wsunit\Extensions_Webservice_Listener_Logger',
             'serialiser' => '\lapistano\wsunit\Http\Extensions_Webservice_Serializer_Http_Response',
-            'mappingFile' => '../../Tests/_files/configuration.xml',
+            'mappingFile' => '../../../Tests/_files/configuration.xml',
         );
     }
 

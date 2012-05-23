@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <listener>
-    <serializer>Extensions_Webservice_Serializer_Http_Response</serializer>
+    <serializer>\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response</serializer>
     <test case="Example_TestCase" name="testGetData">
         <location dataName="expected" href="http://example.org/data.json" />
         <location href="http://example.org/data.xml" />
         <location href="http://example.org/data.txt" />
     </test>
     <test case="Extensions_Webservice_Constraint_JsonErrorMessageProviderTest" name='testTranslateTypeToPrefix with data set "expected"'>
-        <serializer>Extensions_Webservice_Serializer_Http_Response</serializer>
+        <serializer>\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response</serializer>
         <location dataName="expected" href="http://blog.bastian-feder.de/blog.rss">
             <query>
               <param name="mascott[]">tux</param>

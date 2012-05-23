@@ -73,6 +73,7 @@ class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_
         if (!is_readable($configFile)) {
             throw new \InvalidArgumentException('File not found ( '. $configFile.' ).');
         }
+
         return $this->transcode($this->getDomFromFile($configFile));
     }
 
