@@ -43,7 +43,7 @@ read the 'Test Listener' section or copy the example to your configuration and s
 
 ```xml
 <listeners>
-  <listener class="WebServiceListener">
+  <listener class="\lapistano\wsunit\WebServiceListener">
     <arguments>
         <object class="\lapistano\wsunit\Extensions_Webservice_Listener_Factory"/>
         <object class="\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration"/>
@@ -83,12 +83,12 @@ The name and the location of the configuration file is set in the `element[key='
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <listener>
-    <serializer>Extensions_Webservice_Serializer_Http_Response</serializer>
+    <serializer>\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response</serializer>
     <test case="Example_TestCase" name="testGetData">
         <location href="http://example.org/data.txt" />
     </test>
-    <test case="Extensions_Webservice_Constraint_JsonErrorMessageProviderTest" name='testTranslateTypeToPrefix with data set "expected"'>
-        <serializer>Extensions_Webservice_Serializer_Http_Response</serializer>
+    <test case="\lapistano\wsunit\Extensions_Webservice_Constraint_JsonErrorMessageProviderTest" name='testTranslateTypeToPrefix with data set "expected"'>
+        <serializer>\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response</serializer>
         <location dataName="expected" href="http://blog.bastian-feder.de/blog.rss">
             <query>
               <param name="mascott[]">tux</param>
