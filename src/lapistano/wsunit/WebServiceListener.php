@@ -61,31 +61,31 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
 {
     /**
      * Instance of the Extensions_Webservice_Listener_Factory
-     * @var Extensions_Webservice_Listener_Factory
+     * @var \lapistano\wsunit\Extensions_Webservice_Listener_Factory
      */
     protected $factory;
 
     /**
      * Instance of the Extensions_Webservice_Listener_Loader
-     * @var Extensions_Webservice_Listener_Loader
+     * @var \lapistano\wsunit\Extensions_Webservice_Listener_Loader
      */
     protected $loader;
 
     /**
      * Instance of the logger observing the http client to capture the response and its header.
-     * @var Extensions_Webservice_Listener_Logger_Interface
+     * @var \lapistano\wsunit\Extensions_Webservice_Listener_Logger_Interface
      */
     protected $logger;
 
     /**
      * Instance of the serializer transcoding the given data into a loggable format.
-     * @var Extensions_Webservice_Serializer
+     * @var \lapistano\wsunit\Extensions_Webservice_Serializer
      */
     protected $serializer;
 
     /**
      * Instance of the http client used to send a request to the defined webservice.
-     * @var Extensions_Webservice_Listener_Http_Client_Interface
+     * @var \lapistano\wsunit\Http\Client\Extensions_Webservice_Listener_Http_Client_Interface
      */
     protected $httpClient;
 
@@ -205,7 +205,7 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
         } else {
             $this->addError(
                 $test,
-                new PHPUnit_Framework_OutputError(
+                new \PHPUnit_Framework_OutputError(
                     sprintf(
                         'No serializer found for test: %s. '.
                         'Either define a global serializer or add one to the specific section '.
@@ -213,7 +213,7 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
                         $test->getName()
                     )
                 ),
-                PHP_Timer::$requestTime
+                \PHP_Timer::$requestTime
             );
         }
 
