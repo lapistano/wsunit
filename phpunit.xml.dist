@@ -9,6 +9,7 @@
   <testsuites>
     <testsuite name="WsUnit">
         <directory>Tests/Unit</directory>
+        <directory>Tests/Integration</directory>
     </testsuite>
   </testsuites>
 
