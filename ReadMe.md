@@ -119,3 +119,16 @@ Optional
 --------
 - [proxy-object](http://github.com/lapistano/proxy-object) in case you want to run the test suite. It has to be put in
   the `vendor` directory, located in the project root. You either my clone it from github or use composer to fetch it.
+  
+To be done
+==========
+As far as ws unit has come by now, unfortunately it is far from being complete. The following list shall give you an
+idea about what to be expected next:
+
+- Add name of the test case to name of persisted fixture file to ensure uniqueness.
+- Implement a generic (fallback) serializer to be able to persits any response.
+- Provide ability to use wsunit with Symfony2 (this might already be ok, but it is not tested yet)
+- Open new repository for serialisers, loaders, and loggers to be as compatible as one could be.
+- Provide more serializer, loader, and logger implementations (e.g to load the configuration from yml- files)
+
+If you have other usecases, ideas and/or demands feel free to fork and contribute. You are more than welcome ;)
