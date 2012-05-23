@@ -6,7 +6,7 @@
     "type": "library",
     "license": "BSD License",
     "require": {
-        "php": ">=5.3.6",
+        "php": ">=5.3.6"
     },
     "require-dev": {
         "lapistano/proxy-object": "2.*"
