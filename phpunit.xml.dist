@@ -9,7 +9,6 @@
   <testsuites>
     <testsuite name="WsUnit">
         <directory>Tests/Unit</directory>
-        <directory>Tests/Integration</directory>
     </testsuite>
   </testsuites>
 
@@ -32,7 +31,7 @@
   // You have to require the used libraries in the bootstrap file.
 -->
   <listeners>
-    <listener class="WebServiceListener">
+    <listener class="\lapistano\wsunit\WebServiceListener">
       <arguments>
         <object class="\lapistano\wsunit\Extensions_Webservice_Listener_Factory"/>
         <object class="\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration"/>
@@ -44,7 +43,7 @@
             <string>\lapistano\wsunit\Extensions_Webservice_Listener_Logger</string>
           </element>
           <element key="mappingFile">
-            <string>../../../Tests/_files/configuration.xml</string>
+            <string>../../../../Tests/_files/configuration.xml</string>
           </element>
         </array>
       </arguments>
