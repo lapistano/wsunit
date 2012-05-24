@@ -100,11 +100,12 @@ class Extensions_Webservice_Serializer_Type_Xml extends Extensions_Webservice_Se
      * Checks it the given string is a valid XMLM string.
      *
      * @param string $data
-     * @throws \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Exception in case an invalid data string was passed.
+     * @throws \InvalidArgumentException in case an invalid data string was passed.
      */
     protected function isValid($data)
     {
-        if (!$dom = \DOMDocument::loadXml($data)) {
+        $doc = new \DOMDocument();
+        if (!$dom = $doc->loadXml($data, LIBXML_NOERROR)) {
             throw new \InvalidArgumentException(
                 'Given data set is not a valid XML string!',
                 Extensions_Webservice_Serializer_Exception::InvalidType
