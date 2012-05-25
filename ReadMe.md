@@ -90,8 +90,9 @@ The name and the location of the configuration file is set in the `element[key='
 
 
 **WARNING:**
-Beawre that if you decide to use namespaces they also have to be used in the phpunit configuration file to identify the used classes.
-In case you did something wrong here phpunit will just ignore your listener without any warning or error being thrown. Don't ask me why I know this.
+Beware that if you decide to use namespaces they also have to be used in the phpunit configuration file to identify the used classes.
+In case you did something wrong here PHPUnit will just ignore your listener without any warning or error being thrown. Don't ask me why I know this.
+This behavior is fixed in PHPUnit 3.7.
 
 
 ```xml
