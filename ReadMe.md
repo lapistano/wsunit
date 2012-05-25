@@ -97,24 +97,23 @@ This behavior is fixed in PHPUnit 3.7.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<listeners>
-    <listener class="\lapistano\wsunit\WebServiceListener">
+<listener>
+    <serializer>\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response</serializer>
+    <test case="Example_TestCase" name="testGetData">
+        <location href="http://example.org/data.txt" />
+    </test>
+    <test case="\lapistano\wsunit\Extensions_Webservice_Constraint_JsonErrorMessageProviderTest" name='testTranslateTypeToPrefix with data set "expected"'>
         <serializer>\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response</serializer>
-        <test case="Example_TestCase" name="testGetData">
-            <location href="http://example.org/data.txt" />
-        </test>
-        <test case="\lapistano\wsunit\Extensions_Webservice_Constraint_JsonErrorMessageProviderTest" name='testTranslateTypeToPrefix with data set "expected"'>
-            <serializer>\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response</serializer>
-            <location dataName="expected" href="http://blog.bastian-feder.de/blog.rss">
-                <query>
-                    <param name="mascott[]">tux</param>
-                    <param name="mascott[RedHat]">beastie</param>
-                    <param name="os">Linux</param>
-                </query>
-            </location>
-        </test>
-    </listener>
-</listeners>
+        <location dataName="expected" href="http://blog.bastian-feder.de/blog.rss">
+            <query>
+                <param name="mascott[]">tux</param>
+                <param name="mascott[RedHat]">beastie</param>
+                <param name="os">Linux</param>
+            </query>
+        </location>
+    </test>
+</listener>
+
 ```
 
 ###Available tags
