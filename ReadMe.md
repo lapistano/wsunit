@@ -17,14 +17,22 @@ Composer
 --------
 ```json
 {
-    "require": {
+    "require-dev": {
         "lapistano/wsunit": " 2.*"
     }
 }
 ```
+This composer configuration will checkout the sources tagged as the 2nd release. In case your want the 'cutting eadge' version
+replace '2.*' by 'dev-master'. But be alarmed that this might be broken sometimes.
 
-GitHub
+**NOTE:**
+In case you do not know what this means the [composer project website](http://getcomposer.org) is a good place to start.
+
+Github
 ------
+Thus I recommend the composer way to make proxy-object a dependency to your project. 
+The sources are also available via github. Just clone it as you might be familiar with.
+
 ```bash
 $ git clone git://github.com/lapistano/wsunit.git
 $ mkdir -p wsunit/vendor/lapistano
@@ -80,24 +88,32 @@ Beside making PHPUnit aware of the test listener and to actually make each test 
 **NOTE:**
 The name and the location of the configuration file is set in the `element[key='configuration']` element of the test listener registration in PHPUnit.
 
+
+**WARNING:**
+Beawre that if you decide to use namespaces they also have to be used in the phpunit configuration file to identify the used classes.
+In case you did something wrong here phpunit will just ignore your listener without any warning or error being thrown. Don't ask me why I know this.
+
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<listener>
-    <serializer>\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response</serializer>
-    <test case="Example_TestCase" name="testGetData">
-        <location href="http://example.org/data.txt" />
-    </test>
-    <test case="\lapistano\wsunit\Extensions_Webservice_Constraint_JsonErrorMessageProviderTest" name='testTranslateTypeToPrefix with data set "expected"'>
+<listeners>
+    <listener class="\lapistano\wsunit\WebServiceListener">
         <serializer>\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response</serializer>
-        <location dataName="expected" href="http://blog.bastian-feder.de/blog.rss">
-            <query>
-              <param name="mascott[]">tux</param>
-              <param name="mascott[RedHat]">beastie</param>
-              <param name="os">Linux</param>
-            </query>
-        </location>
-    </test>
-</listener>
+        <test case="Example_TestCase" name="testGetData">
+            <location href="http://example.org/data.txt" />
+        </test>
+        <test case="\lapistano\wsunit\Extensions_Webservice_Constraint_JsonErrorMessageProviderTest" name='testTranslateTypeToPrefix with data set "expected"'>
+            <serializer>\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response</serializer>
+            <location dataName="expected" href="http://blog.bastian-feder.de/blog.rss">
+                <query>
+                    <param name="mascott[]">tux</param>
+                    <param name="mascott[RedHat]">beastie</param>
+                    <param name="os">Linux</param>
+                </query>
+            </location>
+        </test>
+    </listener>
+</listeners>
 ```
 
 ###Available tags
