@@ -43,22 +43,69 @@
  * @since      File available since Release 3.6.0
  */
 
-namespace lapistano\wsunit\Loader;
+namespace lapistano\wsunit\Http;
 
 /**
- * Interface description for a loader (e.g. Configuration loader)
+ * Basic http client to request information from an url via GET method.
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
  * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://github.com/lapistano/wsunit
  * @version    Release: @package_version@
- * @since      File available since Release 3.6.0
+ * @link       http://github.com/lapistano/wsunit
+ * @since      Class available since Release 3.6.0
  */
 
-interface Extensions_Webservice_Listener_Loader_Interface
+class HttpClient implements HttpClientInterface
 {
-    public function load($data);
+    /**
+     * Contains the object representation of a server response
+     * @var \lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Response
+     */
+    protected $response = null;
+
+    /**
+     * Sends a request to the given url.
+     *
+     * @param string $url
+     * @param array $query
+     * @return string The http response with the response header included.
+     */
+    public function get($url, array $query = array())
+    {
+        $opts = array(
+            'http' => array(
+                'method'        => "GET",
+                'max_redirects' => 5,
+                'timeout'       => 1.0,
+            )
+        );
+
+        if (!empty($query)) {
+            $url .= '?'.http_build_query($query, '', '&');
+        }
+
+        // Open the file using the HTTP headers set above
+        $response = $this->getResponseObject();
+        $response->setBody(file_get_contents($url, false, stream_context_create($opts)));
+
+        $responseHeader = isset($http_response_header)? $http_response_header : array();
+        $response->setHeader($responseHeader);
+
+        return $response;
+    }
+
+    /**
+     * Provides a cached instance of a Http response object.
+     * @return Extensions_Webservice_Listener_HttpResponse
+     */
+    protected function getResponseObject()
+    {
+        if (empty($this->response)) {
+            $this->response = new HttpResponse();
+        }
+        return $this->response;
+    }
 }

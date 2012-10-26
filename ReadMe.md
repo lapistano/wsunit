@@ -45,14 +45,14 @@ read the 'Test Listener' section or copy the example to your configuration and s
 <listeners>
   <listener class="\lapistano\wsunit\WebServiceListener">
     <arguments>
-        <object class="\lapistano\wsunit\Extensions_Webservice_Listener_Factory"/>
-        <object class="\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration"/>
+        <object class="\lapistano\wsunit\ExtensionsWebserviceListenerFactory"/>
+        <object class="\lapistano\wsunit\Loader\LoaderConfiguration"/>
         <array>
           <element key="httpClient">
-            <string>lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Client</string>
+            <string>lapistano\wsunit\Http\HttpClient</string>
           </element>
           <element key="logger">
-            <string>lapitano\wsunit\Extensions_Webservice_Listener_Logger</string>
+            <string>lapitano\wsunit\Logger\LoggerFilesystem</string>
           </element>
           <element key="configuration">
             <string>/path/to/configuration.xml</string>
@@ -66,7 +66,7 @@ read the 'Test Listener' section or copy the example to your configuration and s
 
 `(object) Extensions_Webservice_Listener_Factory`
     Factory class providing objects mandatory for the operation of the listener.
-    
+
 `(object) Extensions_Webservice_Listener_Loader_Configuration`
     Object to load the configuration file.
 
@@ -106,7 +106,7 @@ The name and the location of the configuration file is set in the `element[key='
 Encapsulated with the 'listener' tag as root tag each test to be recognized is represented by a 'test' tag and section. A test is recognized by the test case (case attribute) and name (name attribute) of a test. If your test registers a dataprovider be aware that the name of the test will be altered by PHPUnit (see the second test section in the example).
 
 - **serializer**
-This tag can be defined in the <listener> tag to be to overall used serialize or in the <test> configuration to override a globally set serializer. 
+This tag can be defined in the <listener> tag to be to overall used serialize or in the <test> configuration to override a globally set serializer.
 
 - **location**
 Defined within the test section it defines the location and it's optional query string. Once these information are set the configured location will be tackled for it's response.
@@ -119,7 +119,7 @@ Optional
 --------
 - [proxy-object](http://github.com/lapistano/proxy-object) in case you want to run the test suite. It has to be put in
   the `vendor` directory, located in the project root. You either my clone it from github or use composer to fetch it.
-  
+
 To be done
 ==========
 As far as ws unit has come by now, unfortunately it is far from being complete. The following list shall give you an

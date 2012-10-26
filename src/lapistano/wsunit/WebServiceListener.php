@@ -60,32 +60,32 @@ namespace lapistano\wsunit;
 class WebServiceListener implements \PHPUnit_Framework_TestListener
 {
     /**
-     * Instance of the Extensions_Webservice_Listener_Factory
-     * @var \lapistano\wsunit\Extensions_Webservice_Listener_Factory
+     * Instance of the WebserviceListenerFactory
+     * @var \lapistano\wsunit\WebserviceListenerFactory
      */
     protected $factory;
 
     /**
      * Instance of the Extensions_Webservice_Listener_Loader
-     * @var \lapistano\wsunit\Extensions_Webservice_Listener_Loader
+     * @var \lapistano\wsunit\Loader\LoaderInterface
      */
     protected $loader;
 
     /**
      * Instance of the logger observing the http client to capture the response and its header.
-     * @var \lapistano\wsunit\Extensions_Webservice_Listener_Logger_Interface
+     * @var \lapistano\wsunit\Logger\LoggerInterface
      */
     protected $logger;
 
     /**
      * Instance of the serializer transcoding the given data into a loggable format.
-     * @var \lapistano\wsunit\Extensions_Webservice_Serializer
+     * @var \lapistano\wsunit\Serializer\SerializerInterface
      */
     protected $serializer;
 
     /**
      * Instance of the http client used to send a request to the defined webservice.
-     * @var \lapistano\wsunit\Http\Client\Extensions_Webservice_Listener_Http_Client_Interface
+     * @var \lapistano\wsunit\Http\HttpClientInterface
      */
     protected $httpClient;
 
@@ -112,17 +112,17 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
      * )
      * </code>
      *
-     * @param \lapistano\wsunit\Extensions_Webservice_Listener_Factory                   $factory
-     * @param \lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Interface   $loader
-     * @param array                                                                      $configuration
+     * @param \lapistano\wsunit\WebserviceListenerFactory $factory
+     * @param \lapistano\wsunit\Loader\LoaderInterface    $loader
+     * @param array                                       $configuration
      */
     public function __construct(
-        \lapistano\wsunit\Extensions_Webservice_Listener_Factory $factory,
-        \lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Interface $loader,
+        \lapistano\wsunit\WebserviceListenerFactory $factory,
+        \lapistano\wsunit\Loader\LoaderInterface $loader,
         array $configuration)
     {
-        $this->factory       = $factory;
-        $this->loader        = $loader;
+        $this->factory = $factory;
+        $this->loader = $loader;
         $this->configuration = $configuration;
     }
 
@@ -131,13 +131,13 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
      *
      * @param  \PHPUnit_Framework_Test $test
      * @param  \Exception              $e
-     * @param  float                  $time
+     * @param  float                   $time
      */
     public function addError(\PHPUnit_Framework_Test $test, \Exception $e, $time)
     {
         $this->errors[] = new \PHPUnit_Framework_TestFailure($test, $e);
         $this->lastTestFailed = true;
-        $this->time          += $time;
+        $this->time += $time;
     }
 
     /**
@@ -145,7 +145,7 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
      *
      * @param  \PHPUnit_Framework_Test                 $test
      * @param  \PHPUnit_Framework_AssertionFailedError $e
-     * @param  float                                  $time
+     * @param  float                                   $time
      */
     public function addFailure(\PHPUnit_Framework_Test $test, \PHPUnit_Framework_AssertionFailedError $e, $time)
     {
@@ -156,7 +156,7 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
      *
      * @param  \PHPUnit_Framework_Test $test
      * @param  \Exception              $e
-     * @param  float                  $time
+     * @param  float                   $time
      */
     public function addIncompleteTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
     {
@@ -167,7 +167,8 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
      *
      * @param  \PHPUnit_Framework_Test $test
      * @param  \Exception              $e
-     * @param  float                  $time
+     * @param  float                   $time
+     *
      * @since  Method available since Release 3.0.0
      */
     public function addSkippedTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
@@ -197,19 +198,21 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
 
         // load dedicated serializer for a specific test
         if (!empty($configuration['serializer'])) {
+
             $this->factory->register('serializer', $configuration['serializer']);
-            $logger = $this->factory->getInstanceOf(
-                'logger',
-                $this->factory->getInstanceOf('serializer', true)
-            );
+
+            $serializer = $this->factory->getInstanceOf('serializer', true);
+
         } else {
+
             $this->addError(
                 $test,
+
                 new \PHPUnit_Framework_OutputError(
                     sprintf(
-                        'No serializer found for test: %s. '.
-                        'Either define a global serializer or add one to the specific section '.
-                        'in your configuration file.',
+                        'No serializer found for test: %s. ' .
+                            'Either define a global serializer or add one to the specific section ' .
+                            'in your configuration file.',
                         $test->getName()
                     )
                 ),
@@ -232,7 +235,7 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
      * A test ended.
      *
      * @param  \PHPUnit_Framework_Test $test
-     * @param  float                  $time
+     * @param  float                   $time
      */
     public function endTest(\PHPUnit_Framework_Test $test, $time)
     {
@@ -246,6 +249,7 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
      * A test suite started.
      *
      * @param  \PHPUnit_Framework_TestSuite $suite
+     *
      * @since  Method available since Release 2.2.0
      */
     public function startTestSuite(\PHPUnit_Framework_TestSuite $suite)
@@ -262,9 +266,10 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
             $this->factory->register('serializer', $this->mapping['serializer']);
             $serializer = $this->factory->getInstanceOf('serializer');
         }
+
         // initialize a loader only if there is a serializer defined.
         if (!empty($serializer)) {
-            $this->logger = $this->factory->getInstanceOf('logger', $serializer);
+            $this->logger = $this->factory->getInstanceOf('logger', true, $serializer);
         }
     }
 
@@ -272,6 +277,7 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
      * A test suite ended.
      *
      * @param  \PHPUnit_Framework_TestSuite $suite
+     *
      * @since  Method available since Release 2.2.0
      */
     public function endTestSuite(\PHPUnit_Framework_TestSuite $suite)
@@ -294,6 +300,7 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
         } else {
             $location = end($configuration['locations']);
         }
+
         return $this->httpClient->get($location['url'], $location['params']);
     }
 
@@ -301,6 +308,7 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
      * Determines which location shall be fetched from the list of configured locations.
      *
      * @param \PHPUnit_Framework_TestCase $test
+     *
      * @return string
      */
     protected function getRunlevel(\PHPUnit_Framework_TestCase $test)
@@ -312,6 +320,7 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
      * Extracts the runlevel from the test name.
      *
      * @param string $name
+     *
      * @return string
      */
     protected function extractRunlevelFromTestName($name)
@@ -339,6 +348,7 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
         if (empty($this->mapping)) {
             $this->mapping = $this->loader->load($this->configuration['mappingFile']);
         }
+
         return $this->mapping;
     }
 
@@ -346,11 +356,13 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
      * Determines, if there is a data provider defined for the current test case.
      *
      * @param \PHPUnit_Framework_Test $test
+     *
      * @return boolean
      */
     protected function hasDataprovider(\PHPUnit_Framework_TestCase $test)
     {
         $annotations = $test->getAnnotations();
+
         return !empty($annotations['method']['dataProvider']);
     }
 }

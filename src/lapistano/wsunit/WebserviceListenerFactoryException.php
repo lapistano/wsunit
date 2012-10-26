@@ -43,29 +43,10 @@
  * @since      File available since Release 3.6.0
  */
 
-namespace lapistano\wsunit\Http\Client;
+namespace lapistano\wsunit;
 
-/**
- * Interface description for a HTTP Client 
- *
- * @package    WsUnit
- * @subpackage Extensions_WebServiceListener
- * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2012 Bastian Feder <php@bastian-feder.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://github.com/lapistano/wsunit
- * @since      File available since Release 3.6.0
- */
-
-interface Extensions_Webservice_Listener_Http_Client_Interface
+class WebserviceListenerFactoryException extends \Exception
 {
-    /**
-     * Sends a request to the given url.
-     *
-     * @param string $url
-     * @param string $query
-     * @return string The http response with the response header included.
-     */
-    public function get($url, array $query = array());
-
+    const UNKNOWN_TYPE = 1;
+    const NOT_ALLOWED_TO_REGISTER = 2;
 }

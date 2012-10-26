@@ -43,9 +43,9 @@
  * @since      File available since Release 3.6.0
  */
 
-namespace lapistano\wsunit;
+namespace lapistano\wsunit\Logger;
 
-use lapistano\wsunit\Logger\Extensions_Webservice_Listener_Logger_Interface;
+use lapistano\wsunit\Serializer\SerializerInterface;
 
 /**
  * Logger to persist data onto the filesystem.
@@ -59,7 +59,7 @@ use lapistano\wsunit\Logger\Extensions_Webservice_Listener_Logger_Interface;
  * @link       http://github.com/lapistano/wsunit
  * @since      Class available since Release 3.6.0
  */
-class Extensions_Webservice_Listener_Logger implements Extensions_Webservice_Listener_Logger_Interface
+class LoggerFilesystem implements LoggerInterface
 {
     /**
      * Contains an instance of an PHPUnit_Framework_Test.
@@ -68,16 +68,15 @@ class Extensions_Webservice_Listener_Logger implements Extensions_Webservice_Lis
     protected $test = null;
 
     /**
-     * Instance of an implementation of  the Extensions_Webservice_Serializer_Interface.
-     * @var lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Interface
+     * Instance of an implementation of the SerializerInterface.
+     * @var lapistano\wsunit\Serializer\SerializerInterface
      */
     protected $serializer;
 
     /**
-     *
      * @param lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Interface $serializer
      */
-    public function __construct(\lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Interface $serializer)
+    public function __construct(SerializerInterface $serializer)
     {
         $this->serializer = $serializer;
     }
@@ -110,7 +109,7 @@ class Extensions_Webservice_Listener_Logger implements Extensions_Webservice_Lis
      * Registers a Test.
      *
      * @parameter \PHPUnit_Framework_Test $test
-     * @see lapistano\wsunit\Logger\Extensions_Webservice_Listener_Logger_Interface::registerTest()
+     * @see lapistano\wsunit\Logger\LoggerInterface::registerTest()
      */
     public function registerTest(\PHPUnit_Framework_Test $test)
     {

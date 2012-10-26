@@ -57,14 +57,14 @@ namespace lapistano\wsunit\Loader;
  * @since      File available since Release 3.6.0
  */
 
-class Extensions_Webservice_Listener_Loader_Configuration implements Extensions_Webservice_Listener_Loader_Interface
+class LoaderConfiguration implements LoaderInterface
 {
     /**
      * Loads the configuration from the given file.
      *
      * @param string $configFile
      *
-     * @see \lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Interface::load()
+     * @see \lapistano\wsunit\Loader\LoaderInterface::load()
      */
     public function load($configFile)
     {

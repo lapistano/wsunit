@@ -1,8 +1,8 @@
 <?php
 /**
- * PHPUnit
+ * PHPUnit - Test listener extension
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2012 Bastian Feder <php@bastian-feder.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,71 +34,59 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    WsUnit
+ * @package    PHPUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2002-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://www.phpunit.de/
+ * @link       http://github.com/lapistano/wsunit
  * @since      File available since Release 3.6.0
  */
-namespace lapistano\wsunit;
+
+namespace lapistano\wsunit\Serializer;
 
 /**
- *
+ * Interface definition for a serializer.
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2011 Bastian Feder <php@bastian-feder.de>
+ * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://www.phpunit.de/
- * @since      File available since Release 3.6.0
+ * @version    Release: @package_version@
+ * @link       http://github.com/lapistano/wsunit
+ * @since      Class available since Release 3.6.0
  */
-class WebserviceListenerIntegrationTest extends Wsunit_TestCase
+interface SerializerInterface
 {
     /**
-     * Provides an instance of the WebServiceListener.
+     * Stringifies the registered data
      *
-     * @return \lapistano\wsunit\WebServiceListener
+     * @return string
      */
-    protected function getListener()
-    {
-        return  new WebServiceListener(
-            new WebserviceListenerFactory(),
-            $this->getLoaderFake(),
-            $this->getConfiguration()
-        );
-    }
+    public function serialize();
 
     /**
-     * @covers \lapistano\wsunit\WebServiceListener::startTestSuite
+     * Adds the given data to a registry.
+     *
+     * @param string $type
+     * @param mixed $data
      */
-    public function testStartTestSuite()
-    {
-        $listener = $this->getListener();
-        $listener->startTestSuite($this->getTestSuiteStub());
-
-        $this->assertAttributeInstanceOf(
-            '\lapistano\wsunit\Http\HttpClientInterface',
-            'httpClient',
-            $listener
-        );
-    }
+    public function register( $type, $data);
 
     /**
-     * @covers \lapistano\wsunit\WebServiceListener::addError
+     * Registers the given type in a local registry
+     *
+     * @param  \lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type $type
+     * @throws \lapistano\wsunit\Serializer\SerializerException
      */
-    public function testAddError()
-    {
-        $test = $this->getMockBuilder('\\PHPUnit_Framework_Test')
-            ->getMock();
+    public function addType(\lapistano\wsunit\Serializer\Type\SerializerTypeAbstract $type);
 
-        $listener = $this->getListener();
-        $listener->addError($test, new \Exception('Test'), '1337633050');
-
-        $errors = $this->readAttribute($listener, 'errors');
-        $this->assertInstanceOf('\PHPUnit_Framework_TestFailure', $errors[0]);
-        $this->assertAttributeSame(true, 'lastTestFailed', $listener);
-    }
+    /**
+     * Registers a custom tag name to be used as the root element in the generated XML document.
+     *
+     * @param string $tagName
+     * @throws \lapistano\wsunit\Serializer\SerializerException
+     */
+    public function setDocumentRoot($tagName);
 }

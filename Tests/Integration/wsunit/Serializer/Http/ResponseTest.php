@@ -44,7 +44,7 @@
  */
 namespace lapistano\wsunit\Serializer\Http;
 
-use lapistano\wsunit\Extensions_Webservice_TestCase;
+use lapistano\wsunit\Wsunit_TestCase;
 
 /**
  * @package    WsUnit
@@ -55,23 +55,23 @@ use lapistano\wsunit\Extensions_Webservice_TestCase;
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
-class Extensions_Webservice_Serializer_Http_ResponseIntegrationTest extends Extensions_Webservice_TestCase
+class Extensions_Webservice_Serializer_Http_ResponseIntegrationTest extends Wsunit_TestCase
 {
     /**
-     * @covers \lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response::__construct
+     * @covers \lapistano\wsunit\Serializer\Http\SerializerHttpResponse::__construct
      */
     public function testConstruct()
     {
-        $serializer = new Extensions_Webservice_Serializer_Http_Response();
+        $serializer = new SerializerHttpResponse();
 
         $types = $this->readAttribute($serializer, 'types');
 
         $this->assertInstanceOf(
-            '\lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type_Array',
+            '\lapistano\wsunit\Serializer\Type\SerializerTypeArray',
             $types['Array']
         );
         $this->assertInstanceOf(
-            '\lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type_Xml',
+            '\lapistano\wsunit\Serializer\Type\SerializerTypeXml',
             $types['Xml']
         );
     }

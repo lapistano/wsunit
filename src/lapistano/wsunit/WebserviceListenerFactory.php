@@ -58,7 +58,7 @@ namespace lapistano\wsunit;
  * @since      Class available since Release 3.6.0
  */
 
-class Extensions_Webservice_Listener_Factory
+class WebserviceListenerFactory
 {
     /**
      * Register of types and corresponding classes.
@@ -66,8 +66,8 @@ class Extensions_Webservice_Listener_Factory
      */
     protected $register = array(
         'httpClient' => 1,
-        'logger'     => 1,
-        'loader'     => 1,
+        'logger' => 1,
+        'loader' => 1,
         'serializer' => 1,
     );
 
@@ -82,26 +82,29 @@ class Extensions_Webservice_Listener_Factory
      * @var array
      */
     protected $interfaces = array(
-        'httpClient' => '\lapistano\wsunit\Http\Client\Extensions_Webservice_Listener_Http_Client_Interface',
-        'logger'     => '\lapistano\wsunit\Logger\Extensions_Webservice_Listener_Logger_Interface',
-        'loader'     => '\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Interface',
-        'serializer' => '\lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Interface',
+        'httpClient' => '\\lapistano\\wsunit\\Http\\HttpClientInterface',
+        'logger' => '\\lapistano\\wsunit\\Logger\\LoggerInterface',
+        'loader' => '\\lapistano\\wsunit\\Loader\\LoaderInterface',
+        'serializer' => '\\lapistano\\wsunit\\Serializer\\SerializerInterface',
     );
 
     /**
      * Provides an instance of the class registered to the given type.
      *
-     * @param  string $type Name of the class instance to be returned
+     * @param  string $type  Name of the class instance to be returned
      * @param boolean $force If true it forces the creation of a new instance.
      *
      * @throws ReflectionException in case something went wrong when trying to instantiate the registered class.
-     * @throws FactoryException in case the type to be registered is not known.
+     * @throws ExtensionsWebserviceListenerFactoryException in case the type to be registered is not known.
      * @return object
      */
     public function getInstanceOf($type, $force = false)
     {
         if (!isset($this->register[$type]) || 1 === $this->register[$type]) {
-            throw new FactoryException('Unknown type (' . $type .')!', FactoryException::UnknownType);
+            throw new WebserviceListenerFactoryException(
+                'Unknown type (' . $type . ')!',
+                WebserviceListenerFactoryException::UNKNOWN_TYPE
+            );
         }
 
         if ($force || empty($this->instances[$type])) {
@@ -131,18 +134,22 @@ class Extensions_Webservice_Listener_Factory
      *
      * @param string $type
      * @param string $class
-     * @throws FactoryException in case the type to be registered is not known.
+     *
+     * @throws ExtensionsWebserviceListenerFactoryException in case the type to be registered is not known.
      */
     public function register($type, $class)
     {
         if (!isset($this->register[$type])) {
-            throw new FactoryException('Unknown type (' . $type .')!', FactoryException::UnknownType);
+            throw new WebserviceListenerFactoryException(
+                'Unknown type (' . $type . ')!',
+                WebserviceListenerFactoryException::UNKNOWN_TYPE
+            );
         }
 
-        if (! $this->implementsMandatoryInterfaces($class)) {
-            throw new FactoryException(
+        if (!$this->implementsMandatoryInterfaces($class)) {
+            throw new WebserviceListenerFactoryException(
                 'The given class (' . $class . ') does not implement any mandatory interface!',
-                FactoryException::NotAllowedtoRegister
+                WebserviceListenerFactoryException::NOT_ALLOWED_TO_REGISTER
             );
         }
         $this->register[$type] = $class;
@@ -152,26 +159,25 @@ class Extensions_Webservice_Listener_Factory
      * Determines if the class to be registered implements a supported interface.
      *
      * @param string $class
+     *
      * @return boolean true, if at least on of the mandatory interfaces is implemented.
      */
     protected function implementsMandatoryInterfaces($class)
     {
         try {
             $reflection = new \ReflectionClass($class);
+
             foreach ($this->interfaces as $interface) {
+
                 if ($reflection->implementsInterface($interface)) {
                     return true;
                 }
             }
         } catch (\ReflectionException $re) {
+
             return false;
         }
+
         return false;
     }
-}
-
-class FactoryException extends \Exception
-{
-    const UnknownType = 1;
-    const NotAllowedtoRegister = 2;
 }

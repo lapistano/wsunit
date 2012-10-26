@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <listener>
-    <serializer>\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response</serializer>
+    <serializer>\lapistano\wsunit\Serializer\Http\SerializerHttpResponse</serializer>
     <test case="Example_TestCase" name="testGetData">
         <location dataName="expected" href="http://example.org/data.json" />
         <location href="http://example.org/data.xml" />
         <location href="http://example.org/data.txt" />
     </test>
-    <test case="lapistano\wsunit\Extensions_Webservice_Listener_LoggerTest" name='testSanitizeString with data set "string without unallowed char"'>
-        <serializer>\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response</serializer>
+    <test case="lapistano\wsunit\Logger\LoggerFilesystemTest"
+          name='testSanitizeString with data set "string without unallowed char"'>
+        <serializer>\lapistano\wsunit\Serializer\Http\SerializerHttpResponse</serializer>
         <location dataName="expected" href="http://blog.bastian-feder.de/blog.rss">
             <query>
               <param name="mascott[]">tux</param>
@@ -16,7 +17,7 @@
             </query>
         </location>
     </test>
-    <test case="lapistano\wsunit\Extensions_Webservice_Listener_LoggerTest" name="testLog">
+    <test case="lapistano\wsunit\Logger\LoggerFilesystemTest" name="testLog">
         <location href="http://blog.bastian-feder.de/blog.rss" />
     </test>
 </listener>

@@ -45,7 +45,7 @@
 
 namespace lapistano\wsunit\Serializer;
 
-use lapistano\wsunit\Extensions_Webservice_TestCase;
+use lapistano\wsunit\Wsunit_TestCase;
 
 /**
  * @package    WsUnit
@@ -56,37 +56,37 @@ use lapistano\wsunit\Extensions_Webservice_TestCase;
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
-class Extensions_Webservice_SerializerTest extends Extensions_Webservice_TestCase
+class SerializerTest extends Wsunit_TestCase
 {
     /**
-     * Provides a dummy of the Extensions_Webservice_Serializer_Type class.
+     * Provides a dummy of the SerializerTypeAbstract class.
      *
      * @param array $methods
-     * @return \lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type
+     * @return \lapistano\wsunit\Serializer\Type\SerializerTypeAbstract
      */
     protected function getSerializerTypeMock(array $methods = array())
     {
         $methods = array_merge(array('serialize'), $methods);
-        $type = $this->getMockBuilder('\lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type')
+        $type = $this->getMockBuilder('\lapistano\wsunit\Serializer\Type\SerializerTypeAbstract')
             ->setMethods($methods)
             ->getMock();
         return $type;
     }
 
     /**
-     * Provides an instance of the abstract Extensions_Webservice_Serializer class.
+     * Provides an instance of the abstract SerializerAbstract class.
      *
-     * @return \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer
+     * @return \lapistano\wsunit\Serializer\SerializerAbstract
      */
     protected function getSerializerFixture()
     {
-        return $this->getMockBuilder('\lapistano\wsunit\Serializer\Extensions_Webservice_Serializer')
+        return $this->getMockBuilder('\lapistano\wsunit\Serializer\SerializerAbstract')
             ->getMockForAbstractClass();
     }
 
     /**
      * @expectedException \UnexpectedValueException
-     * @covers \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer::register
+     * @covers \lapistano\wsunit\Serializer\SerializerAbstract::register
      */
     public function testRegisterExpectingUnexpectedValueException()
     {
@@ -95,7 +95,7 @@ class Extensions_Webservice_SerializerTest extends Extensions_Webservice_TestCas
     }
 
     /**
-     * @covers \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer::register
+     * @covers \lapistano\wsunit\Serializer\SerializerAbstract::register
      */
     public function testRegister()
     {
@@ -116,7 +116,7 @@ class Extensions_Webservice_SerializerTest extends Extensions_Webservice_TestCas
     }
 
     /**
-     * @covers \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer::addType
+     * @covers \lapistano\wsunit\Serializer\SerializerAbstract::addType
      */
     public function testAddType()
     {
@@ -137,8 +137,8 @@ class Extensions_Webservice_SerializerTest extends Extensions_Webservice_TestCas
     }
 
     /**
-     * @expectedException \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Exception
-     * @covers \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer::addType
+     * @expectedException \lapistano\wsunit\Serializer\SerializerException
+     * @covers \lapistano\wsunit\Serializer\SerializerAbstract::addType
      */
     public function testAddTypeExpectingExtensionsWebserviceLoggerSerializerException()
     {
@@ -154,7 +154,7 @@ class Extensions_Webservice_SerializerTest extends Extensions_Webservice_TestCas
     }
 
     /**
-     * @covers \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer::serialize
+     * @covers \lapistano\wsunit\Serializer\SerializerAbstract::serialize
      */
     public function testSerialize()
     {
@@ -191,7 +191,7 @@ class Extensions_Webservice_SerializerTest extends Extensions_Webservice_TestCas
     }
 
     /**
-     * @covers \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer::isValidTagName
+     * @covers \lapistano\wsunit\Serializer\SerializerAbstract::isValidTagName
      */
     public function testIsValidTagName()
     {
@@ -201,9 +201,9 @@ class Extensions_Webservice_SerializerTest extends Extensions_Webservice_TestCas
     }
 
     /**
-     * @expectedException \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Exception
+     * @expectedException \lapistano\wsunit\Serializer\SerializerException
      * @dataProvider isValidTagNameExpectingExtensionsWebserviceLoggerSerializerExceptionDataprovider
-     * @covers \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer::isValidTagName
+     * @covers \lapistano\wsunit\Serializer\SerializerAbstract::isValidTagName
      */
     public function testIsValidTagNameExpectingExtensionsWebserviceLoggerSerializer($tagName)
     {
@@ -211,9 +211,16 @@ class Extensions_Webservice_SerializerTest extends Extensions_Webservice_TestCas
         $serializer->setDocumentRoot($tagName);
         $this->assertAttributeEquals($tagName, 'documentRoot', $serializer);
     }
+    public static function isValidTagNameExpectingExtensionsWebserviceLoggerSerializerExceptionDataprovider()
+    {
+        return array(
+            'with numbers' => array('Beastie23'),
+            'with special chars' => array('$&%^<>'),
+        );
+    }
 
     /**
-     * @covers \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer::setDocumentRoot
+     * @covers \lapistano\wsunit\Serializer\SerializerAbstract::setDocumentRoot
      */
     public function testSetDocumentRoot()
     {
@@ -223,25 +230,12 @@ class Extensions_Webservice_SerializerTest extends Extensions_Webservice_TestCas
     }
 
     /**
-     * @expectedException \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Exception
-     * @covers \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer::setDocumentRoot
+     * @expectedException \lapistano\wsunit\Serializer\SerializerException
+     * @covers \lapistano\wsunit\Serializer\SerializerAbstract::setDocumentRoot
      */
     public function testSetDocumentRootExpectingExtensionsWebserviceLoggerSerializerException()
     {
         $serializer = $this->getSerializerFixture();
         $serializer->setDocumentRoot('232');
     }
-
-    /*************************************************************************/
-    /* Dataprovider                                                          */
-    /*************************************************************************/
-
-    public static function isValidTagNameExpectingExtensionsWebserviceLoggerSerializerExceptionDataprovider()
-    {
-        return array(
-            'with numbers' => array('Beastie23'),
-            'with special chars' => array('$&%^<>'),
-        );
-    }
-
 }

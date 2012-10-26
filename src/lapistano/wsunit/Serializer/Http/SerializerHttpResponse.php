@@ -43,41 +43,32 @@
  * @since      File available since Release 3.6.0
  */
 
-namespace lapistano\wsunit\Logger;
+namespace lapistano\wsunit\Serializer\Http;
+
+use lapistano\wsunit\Serializer\SerializerAbstract;
+use lapistano\wsunit\Serializer\Type\SerializerTypeArray;
+use lapistano\wsunit\Serializer\Type\SerializerTypeXml;
 
 /**
- *
+ * Serializer to stringify a Http response to a transferable, computer-readable format.
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
  * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://github.com/lapistano/wsunit
  * @version    Release: @package_version@
- * @since      File available since Release 3.6.0
+ * @link       http://github.com/lapistano/wsunit
+ * @since      Class available since Release 3.6.0
  */
 
-interface Extensions_Webservice_Listener_Logger_Interface
+class SerializerHttpResponse extends SerializerAbstract
 {
-    /**
-     *
-     * @param lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Interface $serializer
-     */
-    public function __construct(\lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Interface $serializer);
-
-    /**
-     * Persists the given message.
-     *
-     * @param string $message
-     * @param string $level
-     */
-    public function log($message, $level = '');
-
-    /**
-     * Registers a PHPUnit_Framework_Test to determine e.g. a filename.
-     *
-     * @param \PHPUnit_Framework_Test $test
-     */
-    public function registerTest(\PHPUnit_Framework_Test $test);
+    public function __construct()
+    {
+        $this->types['Array']          = new SerializerTypeArray();
+        //$this->types['TextPlain']      = new SerializerTypeTextPlain();
+        $this->types['Xml']            = new SerializerTypeXml();
+        //$this->types['Texthtml']       = new SerializerTypeTextHtml();
+    }
 }

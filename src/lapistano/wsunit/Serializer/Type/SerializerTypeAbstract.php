@@ -57,7 +57,7 @@ namespace lapistano\wsunit\Serializer\Type;
  * @link       http://github.com/lapistano/wsunit
  * @since      Class available since Release 3.6.0
  */
-abstract class Extensions_Webservice_Serializer_Type
+abstract class SerializerTypeAbstract
 {
     /**
      * Name of the current serialization type

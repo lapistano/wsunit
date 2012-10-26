@@ -57,8 +57,7 @@ namespace lapistano\wsunit\Serializer;
  * @link       http://github.com/lapistano/wsunit
  * @since      Class available since Release 3.6.0
  */
-
-abstract class Extensions_Webservice_Serializer implements Extensions_Webservice_Serializer_Interface
+abstract class SerializerAbstract implements SerializerInterface
 {
     /**
      * Register to store data to be serialized
@@ -113,7 +112,7 @@ abstract class Extensions_Webservice_Serializer implements Extensions_Webservice
                     'Undefined type (%s). Are you certain you used addType() to make it available in this object?',
                     $type
                 ),
-                Extensions_Webservice_Serializer_Exception::InvalidType
+                SerializerException::INVALID_TYPE
             );
         }
         $this->dataContainer[$type][] = $data;
@@ -123,16 +122,16 @@ abstract class Extensions_Webservice_Serializer implements Extensions_Webservice
      * Registers the given type in a local registry
      *
      * @param Extensions_Webservice_Serializer_Type $type
-     * @throws Extensions_Webservice_Serializer_Exception
+     * @throws SerializerException
      */
-    public function addType(\lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type $type)
+    public function addType(\lapistano\wsunit\Serializer\Type\SerializerTypeAbstract $type)
     {
         if (!isset($this->types[$type->getName()])) {
             $this->types[$type->getName()] = $type;
         } else {
-            throw new Extensions_Webservice_Serializer_Exception(
+            throw new SerializerException(
                 'Given type is already registered!',
-                Extensions_Webservice_Serializer_Exception::DoubleTypeRegistrationAttempt
+                SerializerException::DOUBLE_TYPE_REGISTRATION_ATTEMPT
             );
         }
     }
@@ -141,16 +140,16 @@ abstract class Extensions_Webservice_Serializer implements Extensions_Webservice
      * Registers a custom tag name to be used as the root element in the generated XML document.
      *
      * @param string $tagName
-     * @throws Extensions_Webservice_Serializer_Exception
+     * @throws SerializerException
      */
     public function setDocumentRoot($tagName)
     {
         if ($this->isValidTagName($tagName)) {
             $this->documentRoot = $tagName;
         } else {
-            throw new Extensions_Webservice_Serializer_Exception(
+            throw new SerializerException(
                 'Invalid tag name given.',
-                Extensions_Webservice_Serializer_Exception::InvalidTagName
+                SerializerException::INVALID_TAGNAME
             );
         }
     }
@@ -168,11 +167,4 @@ abstract class Extensions_Webservice_Serializer implements Extensions_Webservice
         return !isset($matches[1]);
     }
 
-}
-
-class Extensions_Webservice_Serializer_Exception extends \Exception
-{
-    const DoubleTypeRegistrationAttempt = 1;
-    const InvalidTagName = 2;
-    const InvalidType = 3;
 }

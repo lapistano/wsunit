@@ -45,7 +45,7 @@
 
 namespace lapistano\wsunit\Serializer\Type;
 
-use lapistano\wsunit\Extensions_Webservice_TestCase;
+use lapistano\wsunit\Wsunit_TestCase;
 
 /**
  * @package    WsUnit
@@ -56,7 +56,7 @@ use lapistano\wsunit\Extensions_Webservice_TestCase;
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
-class Extensions_Webservice_Serializer_Type_ArrayTest extends Extensions_Webservice_TestCase
+class SerializerTypeArrayTest extends Wsunit_TestCase
 {
     /**
      * Normalizes a given xml string to be compareable.
@@ -72,7 +72,7 @@ class Extensions_Webservice_Serializer_Type_ArrayTest extends Extensions_Webserv
     }
 
     /**
-     * @covers \lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type_Array::serialize
+     * @covers \lapistano\wsunit\Serializer\Type\SerializerTypeArray::serialize
      */
     public function testSerialize() {
         $xml = '
@@ -101,7 +101,7 @@ class Extensions_Webservice_Serializer_Type_ArrayTest extends Extensions_Webserv
             3 => array(),
         );
 
-        $serializer = new Extensions_Webservice_Serializer_Type_Array();
+        $serializer = new SerializerTypeArray();
 
         $this->assertXmlStringEqualsXmlString(
             $this->sanitizeXml($xml),
@@ -111,15 +111,15 @@ class Extensions_Webservice_Serializer_Type_ArrayTest extends Extensions_Webserv
 
     /**
      * @expectedException \InvalidArgumentException
-     * @covers \lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type_Array::serialize
+     * @covers \lapistano\wsunit\Serializer\Type\SerializerTypeArray::serialize
      */
     public function testSerializeExpectingInvalidArgumentException() {
-        $serializer = new Extensions_Webservice_Serializer_Type_Array();
+        $serializer = new SerializerTypeArray();
         $serializer->serialize('Invalid data set');
     }
 
     /**
-     * @covers \lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type_Array::serialize
+     * @covers \lapistano\wsunit\Serializer\Type\SerializerTypeArray::serialize
      */
     public function testSerializeArrayTooDeepError() {
         $xml = '
@@ -141,14 +141,14 @@ class Extensions_Webservice_Serializer_Type_ArrayTest extends Extensions_Webserv
             array()
         );
 
-        $serializer = $this->getProxyBuilder('\lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type_Array')
+        $serializer = $this->getProxyBuilder('\lapistano\wsunit\Serializer\Type\SerializerTypeArray')
             ->setProperties(array('maxDepth'))
             ->getProxy();
-
         $serializer->maxDepth = 2;
+
         $this->assertXmlStringEqualsXmlString(
             $this->sanitizeXml($xml),
-            $this->sanitizeXML($serializer->serialize($data))
+            $this->sanitizeXml($serializer->serialize($data))
         );
     }
 

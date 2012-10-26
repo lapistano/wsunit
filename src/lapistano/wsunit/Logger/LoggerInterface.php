@@ -1,8 +1,8 @@
 <?php
 /**
- * PHPUnit
+ * PHPUnit - Test listener extension
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2012 Bastian Feder <php@bastian-feder.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,18 +34,16 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    WsUnit
+ * @package    PHPUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2002-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://www.phpunit.de/
+ * @link       http://github.com/lapistano/wsunit
  * @since      File available since Release 3.6.0
  */
 
-namespace lapistano\wsunit\Http;
-
-use lapistano\wsunit\Extensions_Webservice_TestCase;
+namespace lapistano\wsunit\Logger;
 
 /**
  *
@@ -53,48 +51,33 @@ use lapistano\wsunit\Extensions_Webservice_TestCase;
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2011 Bastian Feder <php@bastian-feder.de>
+ * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://www.phpunit.de/
+ * @link       http://github.com/lapistano/wsunit
+ * @version    Release: @package_version@
  * @since      File available since Release 3.6.0
  */
 
-class Extensions_Webservice_Listener_Http_ResponseTest extends Extensions_Webservice_TestCase
+interface LoggerInterface
 {
     /**
-     * @covers \lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Response::setHeader
+     *
+     * @param lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Interface $serializer
      */
-    public function testSetHeader()
-    {
-        $header = array(
-            "HTTP/1.0 302 Found",
-            "Location: http://www.iana.org/domains/example/",
-            "Server: BigIP",
-            "Connection: close",
-            "Content-Length: 0",
-            "HTTP/1.1 200 OK",
-            "Date: Thu, 09 Feb 2012 22:28:40 GMT",
-            "Server: Apache/2.2.3 (CentOS)",
-            "Last-Modified: Wed, 09 Feb 2011 17:13:15 GMT",
-            "Vary: Accept-Encoding",
-            "Connection: close",
-            "Content-Type: text/html; charset=UTF-8",
-        );
-        $response = $this->getProxyBuilder('\lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Response')
-            ->setProperties(array('header'))
-            ->getProxy();
-        $response->setHeader($header);
-        $this->assertInternalType('array', $response->header);
-    }
+    public function __construct(\lapistano\wsunit\Serializer\SerializerInterface $serializer);
 
     /**
-     * @covers \lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Response::setBody
+     * Persists the given message.
+     *
+     * @param string $message
+     * @param string $level
      */
-    public function testSetBody()
-    {
-        $pb = $this->getProxyBuilder('\lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Response');
-        $response = $pb->setProperties(array('body'))->getProxy();
-        $response->setBody('');
-        $this->assertInternalType('string', $response->body);
-    }
+    public function log($message, $level = '');
+
+    /**
+     * Registers a PHPUnit_Framework_Test to determine e.g. a filename.
+     *
+     * @param \PHPUnit_Framework_Test $test
+     */
+    public function registerTest(\PHPUnit_Framework_Test $test);
 }

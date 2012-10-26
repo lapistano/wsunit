@@ -43,71 +43,22 @@
  * @since      File available since Release 3.6.0
  */
 
-namespace lapistano\wsunit\Serializer\Type;
-
-use lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Exception;
+namespace lapistano\wsunit\Loader;
 
 /**
- * Array serializer to convert an array into a XML string
+ * Interface description for a loader (e.g. Configuration loader)
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
  * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
  * @link       http://github.com/lapistano/wsunit
- * @since      Class available since Release 3.6.0
+ * @version    Release: @package_version@
+ * @since      File available since Release 3.6.0
  */
 
-class Extensions_Webservice_Serializer_Type_Array extends Extensions_Webservice_Serializer_Type
+interface LoaderInterface
 {
-    /**
-     * Name of the current serialization type
-     * @var string
-     */
-    protected $name = 'Array';
-
-    /**
-     * Maximum depth of recursion while iterating throw the data set.
-     * @var integer
-     */
-    protected $maxDepth = 20;
-
-    /**
-     * Does the actual serialization.
-     *
-     * @param mixed $data
-     * @return string
-     */
-    public function serialize($data, $key = '', $depth = 0) {
-        if ($this->maxDepth <= $depth) {
-            return '<error>Maximum amount recursions exceeded</error>';
-        }
-
-        if (!is_array($data)) {
-            throw new \InvalidArgumentException(
-                'Given data set is not an array!',
-                Extensions_Webservice_Serializer_Exception::InvalidType
-            );
-        }
-
-        $xml = (!empty($key) && !is_numeric($key) )? '<array name="' . $key . '">' : '<array>';
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                $xml .= $this->serialize($value, $key, $depth);
-                continue;
-            }
-            $xml .= sprintf(
-                '<item %s>%s</item>',
-                (!empty($key) && !is_numeric($key) ) ? 'name="' . $key . '"' : '',
-                $value
-            );
-            ++$depth;
-        }
-        $xml .= "</array>";
-        return $xml;
-    }
-
-    protected function Dummy(){}
+    public function load($data);
 }
