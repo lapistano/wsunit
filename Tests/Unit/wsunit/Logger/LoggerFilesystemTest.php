@@ -71,8 +71,8 @@ class LoggerFilesystemTest extends Wsunit_TestCase
     }
 
     /**
-     * @covers \lapistano\wsunit\LoggerFilesystem::registerTest
-     * @covers \lapistano\wsunit\LoggerFilesystem::__construct
+     * @covers \lapistano\wsunit\Logger\LoggerFilesystem::registerTest
+     * @covers \lapistano\wsunit\Logger\LoggerFilesystem::__construct
      */
     public function testRegisterTest()
     {
@@ -88,7 +88,7 @@ class LoggerFilesystemTest extends Wsunit_TestCase
 
     /**
      * @dataProvider sanitizeStringDataprovider
-     * @covers \lapistano\wsunit\LoggerFilesystem::sanitizeString
+     * @covers \lapistano\wsunit\Logger\LoggerFilesystem::sanitizeString
      */
     public function testSanitizeString($expected, $string)
     {
