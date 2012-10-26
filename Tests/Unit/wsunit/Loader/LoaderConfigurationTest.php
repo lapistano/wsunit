@@ -62,6 +62,30 @@ use lapistano\wsunit\Wsunit_TestCase;
 class LoaderConfigurationTest extends Wsunit_TestCase
 {
     /**
+     * Provides an example loader configuration.
+     *
+     * @return string
+     */
+    protected function getLoaderConfigurationXmlFixture()
+    {
+        return '
+            <listener>
+                <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
+                    <serializer>SerializerHttpResponse</serializer>
+                    <location href="http://example.org/data.xml" />
+                    <location href="http://blog.bastian-feder.de/blog.rss">
+                        <query>
+                          <param name="mascott[]">tux</param>
+                          <param name="mascott[RedHat]">beastie</param>
+                          <param name="os">Linux</param>
+                        </query>
+                    </location>
+                </test>
+            </listener>
+        ';
+    }
+
+    /**
      * @expectedException \InvalidArgumentException
      * @covers \lapistano\wsunit\Loader\LoaderConfiguration::load
      */
@@ -224,33 +248,53 @@ class LoaderConfigurationTest extends Wsunit_TestCase
             ),
         );
 
-        $configuration = '
-            <listener>
-                <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
-                    <serializer>SerializerHttpResponse</serializer>
-                    <location href="http://example.org/data.xml" />
-                    <location href="http://blog.bastian-feder.de/blog.rss">
-                        <query>
-                          <param name="mascott[]">tux</param>
-                          <param name="mascott[RedHat]">beastie</param>
-                          <param name="os">Linux</param>
-                        </query>
-                    </location>
-                </test>
-            </listener>
-        ';
         $loader = $this->getProxyBuilder('\lapistano\wsunit\Loader\LoaderConfiguration')
             ->setMethods(array('extractLocations'))
             ->getProxy();
 
         $dom = new \DOMDocument();
-        $dom->loadXml($configuration);
+        $dom->loadXml($this->getLoaderConfigurationXmlFixture());
+
         $xpath = new \DOMXpath($dom);
         $node = $xpath->query("//listener/test")->item(0);
+
         $this->assertEquals(
             $expected,
             $loader->extractLocations($node, $xpath)
         );
+    }
+
+    public function testExtractMetaDataFromLocation()
+    {
+        $expected = array(
+            'url' => 'http://blog.bastian-feder.de/blog.rss',
+            'params' => array(
+                'mascott' => array(
+                    0 => 'tux',
+                    'RedHat' => 'beastie'
+                ),
+                'os' => 'Linux'
+            ),
+        );
+
+        $loader = $this->getProxyBuilder('\lapistano\wsunit\Loader\LoaderConfiguration')
+            ->setMethods(array('extractMetaDataFromLocation'))
+            ->getProxy();
+
+        $dom = new \DOMDocument();
+        $dom->loadXml($this->getLoaderConfigurationXmlFixture());
+
+        $xpath = new \DOMXpath($dom);
+        $node = $xpath->query("//listener/test")->item(0);
+
+        $this->assertEquals(
+            $expected,
+            $loader->extractMetaDataFromLocation(
+                $xpath->query('location', $node)->item(1),
+                $xpath
+            )
+        );
+
     }
 
     /*************************************************************************/

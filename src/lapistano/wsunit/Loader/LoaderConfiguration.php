@@ -71,7 +71,7 @@ class LoaderConfiguration implements LoaderInterface
         $configFile = __DIR__ . '/' . $configFile;
 
         if (!is_readable($configFile)) {
-            throw new \InvalidArgumentException('File not found ( '. $configFile.' ).');
+            throw new \InvalidArgumentException('File not found ( ' . $configFile . ' ).');
         }
 
         return $this->transcode($this->getDomFromFile($configFile));
@@ -81,12 +81,14 @@ class LoaderConfiguration implements LoaderInterface
      * Converts the content of the given file to a DOM object
      *
      * @param string $file
+     *
      * @return \DOMDocument
      */
     protected function getDomFromFile($file)
     {
         $dom = new \DomDocument();
         $dom->load($file);
+
         return $dom;
     }
 
@@ -94,6 +96,7 @@ class LoaderConfiguration implements LoaderInterface
      * Transcodes the given DOMDocument to an array
      *
      * @param \DOMDocument $data
+     *
      * @return array
      */
     protected function transcode(\DOMDocument $data)
@@ -106,8 +109,8 @@ class LoaderConfiguration implements LoaderInterface
         if (!is_null($elements)) {
             foreach ($elements as $test) {
                 $testClassName = $test->getAttribute('case');
-                $testName      = $test->getAttribute('name');
-                $case          = array();
+                $testName = $test->getAttribute('name');
+                $case = array();
 
                 // determine if there is a testcase specific serializer defined
                 $serializer = $this->extractSerializerClassname($xpath->query("serializer", $test)->item(0));
@@ -125,6 +128,7 @@ class LoaderConfiguration implements LoaderInterface
                 $transcoded[$testClassName][$testName] = $case;
             }
         }
+
         return $transcoded;
     }
 
@@ -132,6 +136,7 @@ class LoaderConfiguration implements LoaderInterface
      * Extracts the name of the serializer from the given node.
      *
      * @param \DOMNode $node
+     *
      * @return string
      */
     protected function extractSerializerClassname($node)
@@ -139,6 +144,7 @@ class LoaderConfiguration implements LoaderInterface
         if (!is_null($node)) {
             return $node->nodeValue;
         }
+
         return '';
     }
 
@@ -150,33 +156,14 @@ class LoaderConfiguration implements LoaderInterface
      *
      * @return array
      */
-    protected function extractLocations($node, $xpath)
+    protected function extractLocations(\DOMElement $node, \DOMXPath $xpath)
     {
-        $case      = array();
+        $case = array();
         $locations = $xpath->query('location', $node);
+
         foreach ($locations as $location) {
             $dataName = $location->getAttribute('dataName');
-            $testData = array();
-            $testData['url'] = $location->getAttribute('href');
-            $testData['params'] = array();
-
-            $params = $xpath->query('query/param', $location);
-            foreach ($params as $param) {
-                $paramName = $param->getAttribute('name');
-
-                $pos = strpos($paramName, '[');
-                if ($pos > 0) {
-                    preg_match("(^([^\[]+)\[([^\[]*)\]$)", $paramName, $matches);
-
-                    if (!empty($matches[2])) {
-                        $testData['params'][$matches[1]][$matches[2]] = $param->nodeValue;
-                    } else {
-                        $testData['params'][$matches[1]][] = $param->nodeValue;
-                    }
-                } else {
-                    $testData['params'][$paramName] = $param->nodeValue;
-                }
-            }
+            $testData = $this->extractMetaDataFromLocation($location, $xpath);
 
             if (!empty($dataName)) {
                 $case[$dataName] = $testData;
@@ -184,6 +171,63 @@ class LoaderConfiguration implements LoaderInterface
                 $case[] = $testData;
             }
         }
+
         return $case;
+    }
+
+    /**
+     * Extracts information from a location.
+     *
+     * @param \DOMElement    $location
+     * @param \DOMXPath      $xpath
+     *
+     * @return array
+     */
+    protected function extractMetaDataFromLocation(\DOMElement $location, \DOMXPath $xpath)
+    {
+        $testData = array();
+        $testData['url'] = $location->getAttribute('href');
+        $testData['params'] = $this->extractParameterFromLocation($xpath->query('query/param', $location));
+
+        return $testData;
+    }
+
+    /**
+     * Extracts each location parameter to an array.
+     *
+     * @param \DOMNodeList $params
+     *
+     * @return array
+     */
+    protected function extractParameterFromLocation(\DOMNodeList $params)
+    {
+        $locationParameters = array();
+
+        foreach ($params as $param) {
+
+            $paramName = $param->getAttribute('name');
+            $pos = strpos($paramName, '[');
+
+            if ($pos > 0) {
+                $matches = array();
+
+                preg_match("(^([^\[]+)\[([^\[]*)\]$)", $paramName, $matches);
+
+                if (!empty($matches[2])) {
+
+                    $locationParameters[$matches[1]][$matches[2]] = $param->nodeValue;
+
+                } else {
+
+                    $locationParameters[$matches[1]][] = $param->nodeValue;
+                }
+
+            } else {
+
+                $locationParameters[$paramName] = $param->nodeValue;
+            }
+        }
+
+        return $locationParameters;
     }
 }
