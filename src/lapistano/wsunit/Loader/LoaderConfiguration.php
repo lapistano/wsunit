@@ -187,7 +187,7 @@ class LoaderConfiguration implements LoaderInterface
     {
         $testData = array();
         $testData['url'] = $location->getAttribute('href');
-        $testData['params'] = $this->extractParameterFromLocation($xpath->query('query/param', $location));
+        $testData['params'] = $this->extractParametersFromLocation($xpath->query('query/param', $location));
 
         return $testData;
     }
@@ -199,7 +199,7 @@ class LoaderConfiguration implements LoaderInterface
      *
      * @return array
      */
-    protected function extractParameterFromLocation(\DOMNodeList $params)
+    protected function extractParametersFromLocation(\DOMNodeList $params)
     {
         $locationParameters = array();
 
