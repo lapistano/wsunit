@@ -54,15 +54,15 @@ namespace lapistano\wsunit;
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
-class Extensions_Webservice_Listener_FactoryTest extends Extensions_Webservice_TestCase
+class Extensions_Webservice_Listener_FactoryTest extends Wsunit_TestCase
 {
     /**
-     * @covers \lapistano\wsunit\Extensions_Webservice_Listener_Factory::register
-     * @covers \lapistano\wsunit\Extensions_Webservice_Listener_Factory::implementsMandatoryInterfaces
+     * @covers \lapistano\wsunit\WebserviceListenerFactory::register
+     * @covers \lapistano\wsunit\WebserviceListenerFactory::implementsMandatoryInterfaces
      */
     public function testRegister()
     {
-        $factory = new Extensions_Webservice_Listener_Factory();
+        $factory = new WebserviceListenerFactory();
         $factory->register('loader', $this->getLoaderFake());
 
         $register = $this->readAttribute($factory, 'register');
@@ -72,35 +72,35 @@ class Extensions_Webservice_Listener_FactoryTest extends Extensions_Webservice_T
 
     /**
      * @dataProvider registerExpectingFactoryException
-     * @expectedException \lapistano\wsunit\FactoryException
-     * @covers \lapistano\wsunit\Extensions_Webservice_Listener_Factory::register
-     * @covers \lapistano\wsunit\Extensions_Webservice_Listener_Factory::implementsMandatoryInterfaces
+     * @expectedException \lapistano\wsunit\WebserviceListenerFactoryException
+     * @covers \lapistano\wsunit\WebserviceListenerFactory::register
+     * @covers \lapistano\wsunit\WebserviceListenerFactory::implementsMandatoryInterfaces
      */
     public function testRegisterExpectingFactoryException($type, $classname)
     {
-        $factory = new Extensions_Webservice_Listener_Factory();
+        $factory = new WebserviceListenerFactory();
         $factory->register($type, $classname);
     }
 
     /**
      * @dataProvider getInstanceOfExpectingFactoryException
-     * @expectedException \lapistano\wsunit\FactoryException
-     * @covers \lapistano\wsunit\Extensions_Webservice_Listener_Factory::getInstanceOf
+     * @expectedException \lapistano\wsunit\WebserviceListenerFactoryException
+     * @covers \lapistano\wsunit\WebserviceListenerFactory::getInstanceOf
      */
     public function testGetInstanceOfExpectingFactoryException($type)
     {
-        $factory = new Extensions_Webservice_Listener_Factory();
+        $factory = new WebserviceListenerFactory();
         $factory->getInstanceOf($type);
     }
 
     /**
-     * @covers \lapistano\wsunit\Extensions_Webservice_Listener_Factory::getInstanceOf
+     * @covers \lapistano\wsunit\WebserviceListenerFactory::getInstanceOf
      */
     public function testGetInstanceOf()
     {
-        $factory = new Extensions_Webservice_Listener_Factory();
-        $factory->register('loader', '\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration');
-        $this->assertInstanceOf('\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Interface', $factory->getInstanceOf('loader'));
+        $factory = new WebserviceListenerFactory();
+        $factory->register('loader', '\lapistano\wsunit\Loader\LoaderConfiguration');
+        $this->assertInstanceOf('\lapistano\wsunit\Loader\LoaderInterface', $factory->getInstanceOf('loader'));
     }
 
 

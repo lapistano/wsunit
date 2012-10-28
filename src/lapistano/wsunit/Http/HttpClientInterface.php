@@ -1,8 +1,8 @@
 <?php
 /**
- * PHPUnit
+ * PHPUnit - Test listener extension
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2012 Bastian Feder <php@bastian-feder.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,70 +34,38 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    WsUnit
+ * @package    PHPUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2002-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://www.phpunit.de/
+ * @link       http://github.com/lapistano/wsunit
  * @since      File available since Release 3.6.0
  */
 
 namespace lapistano\wsunit\Http;
 
-use lapistano\wsunit\Extensions_Webservice_TestCase;
-
-use lapistano\ProxyObject\ProxyBuilder;
-
 /**
- *
+ * Interface description for a HTTP Client
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2011 Bastian Feder <php@bastian-feder.de>
+ * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://www.phpunit.de/
+ * @link       http://github.com/lapistano/wsunit
  * @since      File available since Release 3.6.0
  */
 
-class Extensions_Webservice_Listener_Http_ClientTest extends Extensions_Webservice_TestCase
+interface HttpClientInterface
 {
-
     /**
-     * @covers \lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Client::get
+     * Sends a request to the given url.
+     *
+     * @param string $url
+     * @param string $query
+     * @return string The http response with the response header included.
      */
-    public function testGet()
-    {
-        $fixtureFile = TEST_DIR . '/_files/HttpClient/response.txt';
-        $expected = array(
-            'body'   => 'Freilebende Gummibärchen gibt es nicht!',
-            'header' => array(),
-        );
+    public function get($url, array $query = array());
 
-        $response = $this->getMockBuilder('\lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Response')
-            ->setMethods(array('__toString', 'setBody', 'setHeader'))
-            ->getMock();
-
-        $pb = new ProxyBuilder('\lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Client');
-        $client = $pb
-            ->setProperties(array('response'))
-            ->getProxy();
-        $client->response = $response;
-
-        $this->assertInstanceOf('\lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Response', $client->get($fixtureFile));
-    }
-
-    /**
-     * @covers \lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Client::getResponseObject
-     */
-    public function testGetResponseObjectFromCache()
-    {
-        $pb = new ProxyBuilder('\lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Client');
-        $client = $pb
-            ->setProperties(array('response'))
-            ->getProxy();
-        $client->response = new \stdClass();
-        $this->assertInternalType('object', $client->getResponseObject());
-    }
 }

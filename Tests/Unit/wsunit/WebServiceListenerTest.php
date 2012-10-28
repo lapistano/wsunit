@@ -55,7 +55,7 @@ namespace lapistano\wsunit;
  * @since      File available since Release 3.6.0
  */
 
-class Extensions_Webservice_ListenerTest extends Extensions_Webservice_TestCase
+class Extensions_Webservice_ListenerTest extends Wsunit_TestCase
 {
     /**
      * Provides an instance of the WebServiceListener.

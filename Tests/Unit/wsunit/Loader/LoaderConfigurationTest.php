@@ -45,7 +45,7 @@
 
 namespace lapistano\wsunit\Loader;
 
-use lapistano\wsunit\Extensions_Webservice_TestCase;
+use lapistano\wsunit\Wsunit_TestCase;
 
 /**
  * Basic http client to request information from an url via GET method.
@@ -59,27 +59,51 @@ use lapistano\wsunit\Extensions_Webservice_TestCase;
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.6.0
  */
-class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions_Webservice_TestCase
+class LoaderConfigurationTest extends Wsunit_TestCase
 {
     /**
+     * Provides an example loader configuration.
+     *
+     * @return string
+     */
+    protected function getLoaderConfigurationXmlFixture()
+    {
+        return '
+            <listener>
+                <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
+                    <serializer>SerializerHttpResponse</serializer>
+                    <location href="http://example.org/data.xml"/>
+                    <location href="http://blog.bastian-feder.de/blog.rss">
+                        <query>
+                          <param name="mascott[]">tux</param>
+                          <param name="mascott[RedHat]">beastie</param>
+                          <param name="os">Linux</param>
+                        </query>
+                    </location>
+                </test>
+            </listener>
+        ';
+    }
+
+    /**
      * @expectedException \InvalidArgumentException
-     * @covers \lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration::load
+     * @covers \lapistano\wsunit\Loader\LoaderConfiguration::load
      */
     public function testLoadExpectingInvalidArgumentException()
     {
-        $loader = new Extensions_Webservice_Listener_Loader_Configuration();
+        $loader = new LoaderConfiguration();
         $loader->load('Tux');
     }
 
     /**
-     * @covers \lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration::load
-     * @covers \lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration::getDomFromFile
-     * @covers \lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration::transcode
+     * @covers \lapistano\wsunit\Loader\LoaderConfiguration::load
+     * @covers \lapistano\wsunit\Loader\LoaderConfiguration::getDomFromFile
+     * @covers \lapistano\wsunit\Loader\LoaderConfiguration::transcode
      */
     public function testLoad()
     {
         $expected = array(
-            'serializer' => '\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response',
+            'serializer' => '\lapistano\wsunit\Serializer\Http\SerializerHttpResponse',
             'Example_TestCase' => array(
                 'testGetData' => array(
                     'locations' => array(
@@ -98,9 +122,9 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                     ),
                 ),
             ),
-            'lapistano\wsunit\Extensions_Webservice_Listener_LoggerTest' => array(
+            'lapistano\wsunit\Logger\LoggerFilesystemTest' => array(
                 'testSanitizeString with data set "string without unallowed char"' => array(
-                    'serializer' => '\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response',
+                    'serializer' => '\lapistano\wsunit\Serializer\Http\SerializerHttpResponse',
                     'locations' => array(
                         'expected' => array(
                             'url' => 'http://blog.bastian-feder.de/blog.rss',
@@ -125,13 +149,13 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
             ),
         );
 
-        $loader = new Extensions_Webservice_Listener_Loader_Configuration();
+        $loader = new LoaderConfiguration();
         $this->assertEquals($expected, $loader->load('../../../../Tests/_files/configuration.xml'));
     }
 
     /**
      * @dataProvider extractSerializerClassnameDataprovider
-     * @covers\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration::extractSerializerClassname
+     * @covers\lapistano\wsunit\Loader\LoaderConfiguration::extractSerializerClassname
      */
     public function testExtractSerializerClassnameNoElementFound($path)
     {
@@ -156,7 +180,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                 </test>
             </listener>
         ';
-        $loader = $this->getProxyBuilder('\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration')
+        $loader = $this->getProxyBuilder('\lapistano\wsunit\Loader\LoaderConfiguration')
             ->setMethods(array('extractSerializerClassname'))
             ->getProxy();
 
@@ -169,15 +193,15 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
 
     /**
      * @dataProvider extractSerializerClassnameDataprovider
-     * @covers\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration::extractSerializerClassname
+     * @covers\lapistano\wsunit\Loader\LoaderConfiguration::extractSerializerClassname
      */
     public function testExtractSerializerClassname($path)
     {
         $configuration = '
             <listener>
-                <serializer>Extensions_Webservice_Serializer_Http_Response</serializer>
+                <serializer>SerializerHttpResponse</serializer>
                 <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
-                    <serializer>Extensions_Webservice_Serializer_Http_Response</serializer>
+                    <serializer>SerializerHttpResponse</serializer>
                     <location href="http://blog.bastian-feder.de/blog.rss">
                         <query>
                           <param name="mascott[]">tux</param>
@@ -188,7 +212,7 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
                 </test>
             </listener>
         ';
-        $loader = $this->getProxyBuilder('\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration')
+        $loader = $this->getProxyBuilder('\lapistano\wsunit\Loader\LoaderConfiguration')
             ->setMethods(array('extractSerializerClassname'))
             ->getProxy();
 
@@ -197,13 +221,13 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
         $xpath = new \DOMXpath($dom);
         $node = $xpath->query($path)->item(0);
         $this->assertEquals(
-            'Extensions_Webservice_Serializer_Http_Response',
+            'SerializerHttpResponse',
             $loader->extractSerializerClassname($node)
         );
     }
 
     /**
-     * @covers\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration::extractLocations
+     * @covers\lapistano\wsunit\Loader\LoaderConfiguration::extractLocations
      */
     public function testExtractLocations()
     {
@@ -224,32 +248,85 @@ class Extensions_Webservice_Listener_Loader_ConfigurationTest extends Extensions
             ),
         );
 
-        $configuration = '
-            <listener>
-                <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
-                    <serializer>Extensions_Webservice_Serializer_Http_Response</serializer>
-                    <location href="http://example.org/data.xml" />
-                    <location href="http://blog.bastian-feder.de/blog.rss">
-                        <query>
-                          <param name="mascott[]">tux</param>
-                          <param name="mascott[RedHat]">beastie</param>
-                          <param name="os">Linux</param>
-                        </query>
-                    </location>
-                </test>
-            </listener>
-        ';
-        $loader = $this->getProxyBuilder('\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration')
+        $loader = $this->getProxyBuilder('\lapistano\wsunit\Loader\LoaderConfiguration')
             ->setMethods(array('extractLocations'))
             ->getProxy();
 
         $dom = new \DOMDocument();
-        $dom->loadXml($configuration);
+        $dom->loadXml($this->getLoaderConfigurationXmlFixture());
+
         $xpath = new \DOMXpath($dom);
         $node = $xpath->query("//listener/test")->item(0);
+
         $this->assertEquals(
             $expected,
             $loader->extractLocations($node, $xpath)
+        );
+    }
+
+    /**
+     * @covers\lapistano\wsunit\Loader\LoaderConfiguration::extractMetaDataFromLocation
+     */
+    public function testExtractMetaDataFromLocation()
+    {
+        $expected = array(
+            'url' => 'http://blog.bastian-feder.de/blog.rss',
+            'params' => array(
+                'mascott' => array(
+                    0 => 'tux',
+                    'RedHat' => 'beastie'
+                ),
+                'os' => 'Linux'
+            ),
+        );
+
+        $loader = $this->getProxyBuilder('\lapistano\wsunit\Loader\LoaderConfiguration')
+            ->setMethods(array('extractMetaDataFromLocation'))
+            ->getProxy();
+
+        $dom = new \DOMDocument();
+        $dom->loadXml($this->getLoaderConfigurationXmlFixture());
+
+        $xpath = new \DOMXpath($dom);
+        $node = $xpath->query("//listener/test")->item(0);
+
+        $this->assertEquals(
+            $expected,
+            $loader->extractMetaDataFromLocation(
+                $xpath->query('location', $node)->item(1),
+                $xpath
+            )
+        );
+    }
+
+    /**
+     * @covers\lapistano\wsunit\Loader\LoaderConfiguration::extractParametersFromLocation
+     */
+    public function testExtractParametersFromLocation()
+    {
+        $expected = array(
+            'mascott' => array(
+                0 => 'tux',
+                'RedHat' => 'beastie'
+            ),
+            'os' => 'Linux'
+        );
+
+        $loader = $this->getProxyBuilder('\lapistano\wsunit\Loader\LoaderConfiguration')
+            ->setMethods(array('extractParametersFromLocation'))
+            ->getProxy();
+
+        $dom = new \DOMDocument();
+        $dom->loadXml($this->getLoaderConfigurationXmlFixture());
+
+        $xpath = new \DOMXpath($dom);
+        $location = $xpath->query("//listener/test/location")->item(1);
+
+        $this->assertEquals(
+            $expected,
+            $loader->extractParametersFromLocation(
+                $xpath->query('query/param', $location)
+            )
         );
     }
 

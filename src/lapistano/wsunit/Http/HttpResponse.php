@@ -43,50 +43,71 @@
  * @since      File available since Release 3.6.0
  */
 
-namespace lapistano\wsunit\Serializer;
+namespace lapistano\wsunit\Http;
 
 /**
- * Interface definition for a serializer.
+ * Basic http client to request information from an url via GET method.
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
  * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
  * @link       http://github.com/lapistano/wsunit
- * @since      Class available since Release 3.6.0
+ * @since      File available since Release 3.6.0
  */
-interface Extensions_Webservice_Serializer_Interface
+
+class HttpResponse
 {
     /**
-     * Stringifies the registered data
+     * Contains registered Http header information
+     * @var array
+     */
+    protected $header = array();
+
+    /**
+     * Contains registered Http body string.
+     * @var string
+     */
+    protected $body = '';
+
+    /**
+     * Registers the given string as the response body.
+     *
+     * @param string $content
+     */
+    public function setBody($content)
+    {
+        $this->body = $content;
+    }
+
+    /**
+     * Registers the given array as the response header.
+     *
+     * @param array $header
+     */
+    public function setHeader(array $header)
+    {
+        $this->header = $header;
+    }
+
+    /**
+     * Provides the response body.
      *
      * @return string
      */
-    public function serialize();
+    public function getBody()
+    {
+        return $this->body;
+    }
 
     /**
-     * Adds the given data to a registry.
+     * Provides the response header.
      *
-     * @param string $type
-     * @param mixed $data
+     * @return array
      */
-    public function register( $type, $data);
-
-    /**
-     * Registers the given type in a local registry
-     *
-     * @param  \lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type $type
-     * @throws \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Exception
-     */
-    public function addType(\lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type $type);
-
-    /**
-     * Registers a custom tag name to be used as the root element in the generated XML document.
-     *
-     * @param string $tagName
-     * @throws \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Exception
-     */
-    public function setDocumentRoot($tagName);
+    public function getHeader()
+    {
+        return $this->header;
+    }
 }

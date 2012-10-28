@@ -12,7 +12,7 @@
         "lapistano/proxy-object": "2.*"
     },
     "autoload": {
-        "psr-0": { "lapistano/wsunit": "src/" }
+        "psr-0": { "lapistano\\wsunit": "src/" }
     },
     "authors": [
         {

@@ -44,6 +44,7 @@
  */
 namespace lapistano\wsunit;
 
+
 /**
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
@@ -53,17 +54,17 @@ namespace lapistano\wsunit;
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
-class Extensions_Webservice_Listener_FactoryIntegrationTest extends Extensions_Webservice_TestCase
+class WebserviceListenerFactoryIntegrationTest extends Wsunit_TestCase
 {
     /**
-     * @covers \lapistano\wsunit\Extensions_Webservice_Listener_Factory::register
+     * @covers \lapistano\wsunit\WebserviceListenerFactory::register
      */
     public function testGetInstanceOf()
     {
-        $factory = new Extensions_Webservice_Listener_Factory();
+        $factory = new WebserviceListenerFactory();
         $factory->register('loader', $this->getLoaderFake());
         $this->assertInstanceOf(
-            '\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Interface',
+            '\lapistano\wsunit\Loader\LoaderInterface',
             $factory->getInstanceOf('loader')
         );
     }

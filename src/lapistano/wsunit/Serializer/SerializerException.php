@@ -43,32 +43,11 @@
  * @since      File available since Release 3.6.0
  */
 
-namespace lapistano\wsunit\Serializer\Http;
+namespace lapistano\wsunit\Serializer;
 
-use lapistano\wsunit\Serializer\Extensions_Webservice_Serializer;
-use lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type_Array;
-use lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type_Xml;
-
-/**
- * Serializer to stringify a Http response to a transferable, computer-readable format.
- *
- * @package    WsUnit
- * @subpackage Extensions_WebServiceListener
- * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2012 Bastian Feder <php@bastian-feder.de>
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
- * @link       http://github.com/lapistano/wsunit
- * @since      Class available since Release 3.6.0
- */
-
-class Extensions_Webservice_Serializer_Http_Response extends Extensions_Webservice_Serializer
+class SerializerException extends \Exception
 {
-    public function __construct()
-    {
-        $this->types['Array']          = new Extensions_Webservice_Serializer_Type_Array();
-        //$this->types['TextPlain']      = new Extensions_Webservice_Serializer_Type_Text_Plain();
-        $this->types['Xml']            = new Extensions_Webservice_Serializer_Type_Xml();
-        //$this->types['Texthtml']       = new Extensions_Webservice_Serializer_Type_Text_Html();
-    }
+    const DOUBLE_TYPE_REGISTRATION_ATTEMPT = 1;
+    const INVALID_TAGNAME = 2;
+    const INVALID_TYPE = 3;
 }

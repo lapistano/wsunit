@@ -1,8 +1,8 @@
 <?php
 /**
- * PHPUnit
+ * PHPUnit - Test listener extension
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2012 Bastian Feder <php@bastian-feder.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,71 +34,70 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    WsUnit
+ * @package    PHPUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2002-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://www.phpunit.de/
+ * @link       http://github.com/lapistano/wsunit
  * @since      File available since Release 3.6.0
  */
-namespace lapistano\wsunit;
+
+namespace lapistano\wsunit\Serializer\Type;
+
+use lapistano\wsunit\Serializer\SerializerException;
 
 /**
- *
+ * Serizlizer definition for a XML response.
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2011 Bastian Feder <php@bastian-feder.de>
+ * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://www.phpunit.de/
- * @since      File available since Release 3.6.0
+ * @version    Release: @package_version@
+ * @link       http://github.com/lapistano/wsunit
+ * @since      Class available since Release 3.6.0
  */
-class WebserviceListenerIntegrationTest extends Wsunit_TestCase
+
+class SerializerTypeXml extends SerializerTypeAbstract
 {
     /**
-     * Provides an instance of the WebServiceListener.
+     * Name of the current serialization type
+     * @var string
+     */
+    protected $name = 'Xml';
+
+
+    /**
+     * Does the actual serialization.
      *
-     * @return \lapistano\wsunit\WebServiceListener
+     * @param mixed $data
+     * @return string
      */
-    protected function getListener()
+    public function serialize($data)
     {
-        return  new WebServiceListener(
-            new WebserviceListenerFactory(),
-            $this->getLoaderFake(),
-            $this->getConfiguration()
-        );
+        // verify if $data is valid xml
+        $this->isValid($data);
+
+        /* remove <?xml ... ?> line before returning the body */
+        return preg_replace('#<\?xml [^>]+>#', '', $data);
     }
 
     /**
-     * @covers \lapistano\wsunit\WebServiceListener::startTestSuite
+     * Checks it the given string is a valid XMLM string.
+     *
+     * @param string $data
+     * @throws \InvalidArgumentException in case an invalid data string was passed.
      */
-    public function testStartTestSuite()
+    protected function isValid($data)
     {
-        $listener = $this->getListener();
-        $listener->startTestSuite($this->getTestSuiteStub());
-
-        $this->assertAttributeInstanceOf(
-            '\lapistano\wsunit\Http\HttpClientInterface',
-            'httpClient',
-            $listener
-        );
-    }
-
-    /**
-     * @covers \lapistano\wsunit\WebServiceListener::addError
-     */
-    public function testAddError()
-    {
-        $test = $this->getMockBuilder('\\PHPUnit_Framework_Test')
-            ->getMock();
-
-        $listener = $this->getListener();
-        $listener->addError($test, new \Exception('Test'), '1337633050');
-
-        $errors = $this->readAttribute($listener, 'errors');
-        $this->assertInstanceOf('\PHPUnit_Framework_TestFailure', $errors[0]);
-        $this->assertAttributeSame(true, 'lastTestFailed', $listener);
+        $doc = new \DOMDocument();
+        if (!$dom = $doc->loadXml($data, LIBXML_NOERROR)) {
+            throw new \InvalidArgumentException(
+                'Given data set is not a valid XML string!',
+                SerializerException::INVALID_TYPE
+            );
+        }
     }
 }
