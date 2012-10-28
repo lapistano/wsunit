@@ -1,8 +1,17 @@
+# Ignore project specifics
+lib/
 Tests/libs/
 Tests/_files/responses/
-lib/
+
+# Ingnore composer specifics
+vendor
 build/
+
+# Ingore IDE specifics
+.idea
 .settings/
 .project
 .buildpath
+
+# Ignore temp files
 *.swp

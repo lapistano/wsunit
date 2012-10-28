@@ -34,14 +34,14 @@
   <listeners>
     <listener class="\lapistano\wsunit\WebServiceListener">
       <arguments>
-        <object class="\lapistano\wsunit\Extensions_Webservice_Listener_Factory"/>
-        <object class="\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Configuration"/>
+        <object class="\lapistano\wsunit\WebserviceListenerFactory"/>
+        <object class="\lapistano\wsunit\Loader\LoaderConfiguration"/>
         <array>
           <element key="httpClient">
-            <string>\lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Client</string>
+            <string>\lapistano\wsunit\Http\HttpClient</string>
           </element>
           <element key="logger">
-            <string>\lapistano\wsunit\Extensions_Webservice_Listener_Logger</string>
+            <string>\lapistano\wsunit\Logger\LoggerFilesystem</string>
           </element>
           <element key="mappingFile">
             <string>../../../../Tests/_files/configuration.xml</string>

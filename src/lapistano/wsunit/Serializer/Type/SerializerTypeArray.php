@@ -43,12 +43,12 @@
  * @since      File available since Release 3.6.0
  */
 
-namespace lapistano\wsunit\Http;
+namespace lapistano\wsunit\Serializer\Type;
 
-use lapistano\wsunit\Http\Client\Extensions_Webservice_Listener_Http_Client_Interface;
+use lapistano\wsunit\Serializer\SerializerException;
 
 /**
- * Basic http client to request information from an url via GET method.
+ * Array serializer to convert an array into a XML string
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
@@ -60,54 +60,54 @@ use lapistano\wsunit\Http\Client\Extensions_Webservice_Listener_Http_Client_Inte
  * @since      Class available since Release 3.6.0
  */
 
-class Extensions_Webservice_Listener_Http_Client implements Extensions_Webservice_Listener_Http_Client_Interface
+class SerializerTypeArray extends SerializerTypeAbstract
 {
     /**
-     * Contains the object representation of a server response
-     * @var \lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Response
+     * Name of the current serialization type
+     * @var string
      */
-    protected $response = null;
+    protected $name = 'Array';
 
     /**
-     * Sends a request to the given url.
+     * Maximum depth of recursion while iterating throw the data set.
+     * @var integer
+     */
+    protected $maxDepth = 20;
+
+    /**
+     * Does the actual serialization.
      *
-     * @param string $url
-     * @param array $query
-     * @return string The http response with the response header included.
+     * @param mixed $data
+     * @return string
      */
-    public function get($url, array $query = array())
-    {
-        $opts = array(
-            'http' => array(
-                'method'        => "GET",
-                'max_redirects' => 5,
-                'timeout'       => 1.0,
-            )
-        );
-
-        if (!empty($query)) {
-            $url .= '?'.http_build_query($query, '', '&');
+    public function serialize($data, $key = '', $depth = 0) {
+        if ($this->maxDepth <= $depth) {
+            return '<error>Maximum amount recursions exceeded</error>';
         }
 
-        // Open the file using the HTTP headers set above
-        $response = $this->getResponseObject();
-        $response->setBody(file_get_contents($url, false, stream_context_create($opts)));
-
-        $responseHeader = isset($http_response_header)? $http_response_header : array();
-        $response->setHeader($responseHeader);
-
-        return $response;
-    }
-
-    /**
-     * Provides a cached instance of a Http response object.
-     * @return Extensions_Webservice_Listener_HttpResponse
-     */
-    protected function getResponseObject()
-    {
-        if (empty($this->response)) {
-            $this->response = new Extensions_Webservice_Listener_Http_Response();
+        if (!is_array($data)) {
+            throw new \InvalidArgumentException(
+                'Given data set is not an array!',
+                SerializerException::INVALID_TYPE
+            );
         }
-        return $this->response;
+
+        $xml = (!empty($key) && !is_numeric($key) )? '<array name="' . $key . '">' : '<array>';
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $xml .= $this->serialize($value, $key, $depth);
+                continue;
+            }
+            $xml .= sprintf(
+                '<item %s>%s</item>',
+                (!empty($key) && !is_numeric($key) ) ? 'name="' . $key . '"' : '',
+                $value
+            );
+            ++$depth;
+        }
+        $xml .= "</array>";
+        return $xml;
     }
+
+    protected function Dummy(){}
 }

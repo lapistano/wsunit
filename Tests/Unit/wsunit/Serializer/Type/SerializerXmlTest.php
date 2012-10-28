@@ -45,7 +45,7 @@
 
 namespace lapistano\wsunit\Serializer\Type;
 
-use lapistano\wsunit\Extensions_Webservice_TestCase;
+use lapistano\wsunit\Wsunit_TestCase;
 
 /**
  * @package    WsUnit
@@ -56,12 +56,12 @@ use lapistano\wsunit\Extensions_Webservice_TestCase;
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
-class Extensions_Webservice_Serializer_Type_XmlTest extends Extensions_Webservice_TestCase
+class SerializerTypeXmlTest extends Wsunit_TestCase
 {
 
     /**
-     * @covers \lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type_Xml::serialize
-     * @covers \lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type_Xml::isValid
+     * @covers \lapistano\wsunit\Serializer\Type\SerializerTypeXml::serialize
+     * @covers \lapistano\wsunit\Serializer\Type\SerializerTypeXml::isValid
      */
     public function testSerialize()
     {
@@ -88,12 +88,12 @@ class Extensions_Webservice_Serializer_Type_XmlTest extends Extensions_Webservic
               </channel>
             </rss>';
 
-        $serializer = new Extensions_Webservice_Serializer_Type_Xml();
+        $serializer = new SerializerTypeXml();
         $this->assertEquals($data, $serializer->serialize($xmlDef . $data));
     }
 
     /**
-     * @covers \lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type_Xml::isValid
+     * @covers \lapistano\wsunit\Serializer\Type\SerializerTypeXml::isValid
      */
     public function testSerializeExpectingInvalidArgumentException()
     {
@@ -102,12 +102,12 @@ class Extensions_Webservice_Serializer_Type_XmlTest extends Extensions_Webservic
               <channel>
             </rss>';
 
-        $serializer = new Extensions_Webservice_Serializer_Type_Xml();
+        $serializer = new SerializerTypeXml();
         try {
             $serializer->serialize($data);
         } catch (\InvalidArgumentException $e) {
             $this->assertEquals(
-                \lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Exception::InvalidType,
+                \lapistano\wsunit\Serializer\SerializerException::INVALID_TYPE,
                 $e->getCode()
             );
             return;
@@ -116,11 +116,11 @@ class Extensions_Webservice_Serializer_Type_XmlTest extends Extensions_Webservic
     }
 
     /**
-     * @covers \lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type_Xml::getName
+     * @covers \lapistano\wsunit\Serializer\Type\SerializerTypeXml::getName
      */
     public function testGetName()
     {
-        $serializer = new Extensions_Webservice_Serializer_Type_Xml();
+        $serializer = new SerializerTypeXml();
         $this->assertEquals('Xml', $serializer->getName());
     }
 }

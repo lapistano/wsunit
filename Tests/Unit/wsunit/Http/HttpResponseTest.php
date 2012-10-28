@@ -1,8 +1,8 @@
 <?php
 /**
- * PHPUnit - Test listener extension
+ * PHPUnit
  *
- * Copyright (c) 2012 Bastian Feder <php@bastian-feder.de>.
+ * Copyright (c) 2002-2011, Sebastian Bergmann <sb@sebastian-bergmann.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,80 +34,67 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    PHPUnit
+ * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2012 Bastian Feder <php@bastian-feder.de>
+ * @copyright  2002-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://github.com/lapistano/wsunit
+ * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
 
 namespace lapistano\wsunit\Http;
 
+use lapistano\wsunit\Wsunit_TestCase;
+
 /**
- * Basic http client to request information from an url via GET method.
+ *
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2012 Bastian Feder <php@bastian-feder.de>
+ * @copyright  2011 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://github.com/lapistano/wsunit
+ * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
 
-class Extensions_Webservice_Listener_Http_Response
+class HttpResponseTest extends Wsunit_TestCase
 {
     /**
-     * Contains registered Http header information
-     * @var array
+     * @covers \lapistano\wsunit\Http\HttpResponse::setHeader
      */
-    protected $header = array();
-
-    /**
-     * Contains registered Http body string.
-     * @var string
-     */
-    protected $body = '';
-
-    /**
-     * Registers the given string as the response body.
-     *
-     * @param string $content
-     */
-    public function setBody($content)
+    public function testSetHeader()
     {
-        $this->body = $content;
+        $header = array(
+            "HTTP/1.0 302 Found",
+            "Location: http://www.iana.org/domains/example/",
+            "Server: BigIP",
+            "Connection: close",
+            "Content-Length: 0",
+            "HTTP/1.1 200 OK",
+            "Date: Thu, 09 Feb 2012 22:28:40 GMT",
+            "Server: Apache/2.2.3 (CentOS)",
+            "Last-Modified: Wed, 09 Feb 2011 17:13:15 GMT",
+            "Vary: Accept-Encoding",
+            "Connection: close",
+            "Content-Type: text/html; charset=UTF-8",
+        );
+        $response = $this->getProxyBuilder('\lapistano\wsunit\Http\HttpResponse')
+            ->setProperties(array('header'))
+            ->getProxy();
+        $response->setHeader($header);
+        $this->assertInternalType('array', $response->header);
     }
 
     /**
-     * Registers the given array as the response header.
-     *
-     * @param array $header
+     * @covers \lapistano\wsunit\Http\HttpResponse::setBody
      */
-    public function setHeader(array $header)
+    public function testSetBody()
     {
-        $this->header = $header;
-    }
-
-    /**
-     * Provides the response body.
-     *
-     * @return string
-     */
-    public function getBody()
-    {
-        return $this->body;
-    }
-
-    /**
-     * Provides the response header.
-     *
-     * @return array
-     */
-    public function getHeader()
-    {
-        return $this->header;
+        $pb = $this->getProxyBuilder('\lapistano\wsunit\Http\HttpResponse');
+        $response = $pb->setProperties(array('body'))->getProxy();
+        $response->setBody('');
+        $this->assertInternalType('string', $response->body);
     }
 }

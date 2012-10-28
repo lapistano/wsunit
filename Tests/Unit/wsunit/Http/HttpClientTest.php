@@ -1,8 +1,8 @@
 <?php
 /**
- * PHPUnit - Test listener extension
+ * PHPUnit
  *
- * Copyright (c) 2012 Bastian Feder <php@bastian-feder.de>.
+ * Copyright (c) 2002-2011, Sebastian Bergmann <sb@sebastian-bergmann.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,82 +34,70 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    PHPUnit
+ * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2012 Bastian Feder <php@bastian-feder.de>
+ * @copyright  2002-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://github.com/lapistano/wsunit
+ * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
 
-namespace lapistano\wsunit\Serializer\Type;
+namespace lapistano\wsunit\Http;
 
-use lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Exception;
+use lapistano\wsunit\Wsunit_TestCase;
 
-use lapistano\wsunit\Serializer\Type\Extensions_Webservice_Serializer_Type;
+use lapistano\ProxyObject\ProxyBuilder;
 
 /**
- * Serizlizer definition for a XML response.
+ *
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2012 Bastian Feder <php@bastian-feder.de>
+ * @copyright  2011 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version    Release: @package_version@
- * @link       http://github.com/lapistano/wsunit
- * @since      Class available since Release 3.6.0
+ * @link       http://www.phpunit.de/
+ * @since      File available since Release 3.6.0
  */
 
-class Extensions_Webservice_Serializer_Type_Xml extends Extensions_Webservice_Serializer_Type
+class HttpClientTest extends Wsunit_TestCase
 {
-    /**
-     * Name of the current serialization type
-     * @var string
-     */
-    protected $name = 'Xml';
-
 
     /**
-     * Does the actual serialization.
-     *
-     * @param mixed $data
-     * @return string
+     * @covers \lapistano\wsunit\Http\HttpClient::get
      */
-    public function serialize($data)
+    public function testGet()
     {
-        // verify if $data is valid xml
-        $this->isValid($data);
+        $fixtureFile = TEST_DIR . '/_files/HttpClient/response.txt';
+        $expected = array(
+            'body'   => 'Freilebende Gummibärchen gibt es nicht!',
+            'header' => array(),
+        );
 
-        /* remove <?xml ... ?> line before returning the body */
-        return preg_replace('#<\?xml [^>]+>#', '', $data);
+        $response = $this->getMockBuilder('\lapistano\wsunit\Http\HttpResponse')
+            ->setMethods(array('__toString', 'setBody', 'setHeader'))
+            ->getMock();
+
+        $pb = new ProxyBuilder('\lapistano\wsunit\Http\HttpClient');
+        $client = $pb
+            ->setProperties(array('response'))
+            ->getProxy();
+        $client->response = $response;
+
+        $this->assertInstanceOf('\lapistano\wsunit\Http\HttpResponse', $client->get($fixtureFile));
     }
 
     /**
-     * Provides the name of the current serializer type.
-     *
-     * @return string
+     * @covers \lapistano\wsunit\Http\HttpClient::getResponseObject
      */
-    public function getName()
+    public function testGetResponseObjectFromCache()
     {
-        return $this->name;
-    }
-
-    /**
-     * Checks it the given string is a valid XMLM string.
-     *
-     * @param string $data
-     * @throws \InvalidArgumentException in case an invalid data string was passed.
-     */
-    protected function isValid($data)
-    {
-        $doc = new \DOMDocument();
-        if (!$dom = $doc->loadXml($data, LIBXML_NOERROR)) {
-            throw new \InvalidArgumentException(
-                'Given data set is not a valid XML string!',
-                Extensions_Webservice_Serializer_Exception::InvalidType
-            );
-        }
+        $pb = new ProxyBuilder('\lapistano\wsunit\Http\HttpClient');
+        $client = $pb
+            ->setProperties(array('response'))
+            ->getProxy();
+        $client->response = new \stdClass();
+        $this->assertInternalType('object', $client->getResponseObject());
     }
 }

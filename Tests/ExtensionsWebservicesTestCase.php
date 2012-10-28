@@ -47,7 +47,7 @@ namespace lapistano\wsunit;
 
 use lapistano\ProxyObject\ProxyBuilder;
 
-abstract class Extensions_Webservice_TestCase extends \PHPUnit_Framework_TestCase
+abstract class Wsunit_TestCase extends \PHPUnit_Framework_TestCase
 {
     /**
      * Provides an instance of the \lapistano\ProxyObject\ProxyBuilder.
@@ -79,71 +79,71 @@ abstract class Extensions_Webservice_TestCase extends \PHPUnit_Framework_TestCas
     protected function getConfiguration()
     {
         return array(
-            'httpClient' => '\lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Client',
-            'logger'     => '\lapistano\wsunit\Extensions_Webservice_Listener_Logger',
-            'serialiser' => '\lapistano\wsunit\Http\Extensions_Webservice_Serializer_Http_Response',
+            'httpClient' => '\lapistano\wsunit\Http\HttpClient',
+            'logger'     => '\lapistano\wsunit\Logger\LoggerFilesystem',
+            'serializer' => '\lapistano\wsunit\Serializer\Http\SerializerHttpResponse',
             'mappingFile' => '../../../Tests/_files/configuration.xml',
         );
     }
 
     /**
-     * Provides a stubbed instance of the Extensions_Webservice_Listener_Factory.
+     * Provides a stubbed instance of the WebserviceListenerFactory.
      *
      * @param array $methods
-     * @return \lapistano\wsunit\Extensions_Webservice_Listener_Factory
+     * @return \lapistano\wsunit\WebserviceListenerFactory
      */
     protected function getFactoryStub(array $methods = array())
     {
-        return $this->getMockBuilder('\lapistano\wsunit\Extensions_Webservice_Listener_Factory')
+        return $this->getMockBuilder('\lapistano\wsunit\WebserviceListenerFactory')
             ->setMethods($methods)
             ->getMock();
     }
 
     /**
-     * Provides a faked instance of the Extensions_Webservice_Listener_Loader_Interface.
+     * Provides a faked instance of the LoaderInterface.
      *
      * @param array $methods
-     * @return \lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Interface
+     * @return \lapistano\wsunit\Loader\LoaderInterface
      */
     protected function getLoaderFake(array $methods = array())
     {
         return $this->getFakeForAbstractClass(
-            '\lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Interface',
+            '\lapistano\wsunit\Loader\LoaderInterface',
             $methods
         );
     }
 
     /**
-     * Provides a fake of the Extensions_Webservice_Listener_Logger_Interface
+     * Provides a fake of the LoggerInterface
      *
-     * @return \lapistano\wsunit\Extensions_Webservice_Listener_Logger_Interface
+     * @return \lapistano\wsunit\LoggerInterface
      */
     public function getLoggerFake(array $methods = array())
     {
         return $this->getFakeForAbstractClass(
-            '\lapistano\wsunit\Extensions_Webservice_Listener_Logger_Interface',
+            '\lapistano\wsunit\LoggerInterface',
             $methods
         );
     }
 
     /**
-     * Provides a fake of the Extensions_Webservice_Listener_Http_Client_Interface
+     * Provides a fake of the HttpClientInterface
      *
-     * @return \lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Client_Interface
+     * @return \lapistano\wsunit\Http\HttpClientInterface
      */
     public function getHttpClientFake(array $methods = array())
     {
         return $this->getFakeForAbstractClass(
-            '\lapistano\wsunit\Http\Client\Extensions_Webservice_Listener_Http_Client_Interface',
+            '\lapistano\wsunit\Http\HttpClientInterface',
             $methods
         );
     }
 
     /**
-     * Provides a faked instance of the Extensions_Webservice_Listener_Loader_Interface.
+     * Provides a faked instance of the LoaderInterface.
      *
      * @param array $methods
-     * @return \lapistano\wsunit\Loader\Extensions_Webservice_Listener_Loader_Interface
+     * @return \lapistano\wsunit\Loader\LoaderInterface
      */
     protected function getFakeForAbstractClass($className, array $methods = array())
     {

@@ -43,9 +43,10 @@
  * @since      File available since Release 3.6.0
  */
 
-namespace lapistano\wsunit;
+namespace lapistano\wsunit\Logger;
 
 use lapistano\ProxyObject\ProxyBuilder;
+use lapistano\wsunit\Wsunit_TestCase;
 
 /**
  * @package    WsUnit
@@ -56,22 +57,22 @@ use lapistano\ProxyObject\ProxyBuilder;
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
-class Extensions_Webservice_Listener_LoggerTest extends Extensions_Webservice_TestCase
+class LoggerFilesystemTest extends Wsunit_TestCase
 {
     /**
-     * Provides an instance of the abstract Extensions_Webservice_Serializer class.
+     * Provides an instance of the abstract SerializerAbstract class.
      *
-     * @return \lapistano\wsunit\Extensions_Webservice_Serializer
+     * @return \lapistano\wsunit\SerializerAbstract
      */
     protected function getSerializerFixture()
     {
-        return $this->getMockBuilder('\lapistano\wsunit\Serializer\Extensions_Webservice_Serializer')
+        return $this->getMockBuilder('\lapistano\wsunit\Serializer\SerializerAbstract')
             ->getMockForAbstractClass();
     }
 
     /**
-     * @covers \lapistano\wsunit\Extensions_Webservice_Listener_Logger::registerTest
-     * @covers \lapistano\wsunit\Extensions_Webservice_Listener_Logger::__construct
+     * @covers \lapistano\wsunit\Logger\LoggerFilesystem::registerTest
+     * @covers \lapistano\wsunit\Logger\LoggerFilesystem::__construct
      */
     public function testRegisterTest()
     {
@@ -80,46 +81,49 @@ class Extensions_Webservice_Listener_LoggerTest extends Extensions_Webservice_Te
             ->setMethods(array('run'))
             ->getMockForAbstractClass();
 
-        $logger = new Extensions_Webservice_Listener_Logger($this->getSerializerFixture());
+        $logger = new LoggerFilesystem($this->getSerializerFixture());
         $logger->registerTest($test);
         $this->assertAttributeInstanceOf('\\PHPUnit_Framework_Test', 'test', $logger);
     }
 
     /**
      * @dataProvider sanitizeStringDataprovider
-     * @covers \lapistano\wsunit\Extensions_Webservice_Listener_Logger::sanitizeString
+     * @covers \lapistano\wsunit\Logger\LoggerFilesystem::sanitizeString
      */
     public function testSanitizeString($expected, $string)
     {
-        $logger = $this->getProxyBuilder('\lapistano\wsunit\Extensions_Webservice_Listener_Logger')
+        $logger = $this->getProxyBuilder('\\lapistano\\wsunit\\Logger\\LoggerFilesystem')
             ->disableOriginalConstructor()
             ->setMethods(array('sanitizeString'))
             ->getProxy();
         $this->assertEquals($expected, $logger->sanitizeString($string));
     }
+    public static function sanitizeStringDataprovider()
+    {
+        return array(
+            'string with unallowed char' => array(
+                'testTranslatTypeToPrefix with data set expected',
+                'testTranslatTypeToPrefix with data set "expected"',
+            ),
+            'string without unallowed char' => array(
+                'Tux',
+                'Tux',
+            ),
+        );
+    }
 
     /**
      * @dataProvider generateFilenameDataprovider
-     * @covers \lapistano\wsunit\Extensions_Webservice_Listener_Logger::generateFilename
+     * @covers \lapistano\wsunit\Logger\LoggerFilesystem::generateFilename
      */
     public function testGenerateFilename($expected, $string)
     {
-        $logger = $this->getProxyBuilder('\\lapistano\\wsunit\\Extensions_Webservice_Listener_Logger')
+        $logger = $this->getProxyBuilder('\\lapistano\\wsunit\\Logger\\LoggerFilesystem')
             ->disableOriginalConstructor()
             ->setMethods(array('generateFilename'))
             ->getProxy();
         $this->assertEquals($expected, $logger->generateFilename($string));
     }
-
-    /**
-     * @covers \lapistano\wsunit\Extensions_Webservice_Listener_Logger::Log
-     */
-    public function testLog()
-    {
-        $this->markTestSkipped('Due to called user land function!');
-    }
-
-
     public static function generateFilenameDataprovider()
     {
         return array(
@@ -134,17 +138,11 @@ class Extensions_Webservice_Listener_LoggerTest extends Extensions_Webservice_Te
         );
     }
 
-    public static function sanitizeStringDataprovider()
+    /**
+     * @covers \lapistano\wsunit\Logger\LoggerFilesystem::Log
+     */
+    public function testLog()
     {
-        return array(
-            'string with unallowed char' => array(
-                'testTranslatTypeToPrefix with data set expected',
-                'testTranslatTypeToPrefix with data set "expected"',
-            ),
-            'string without unallowed char' => array(
-                'Tux',
-                'Tux',
-            ),
-        );
+        $this->markTestSkipped('Due to called user land function!');
     }
 }

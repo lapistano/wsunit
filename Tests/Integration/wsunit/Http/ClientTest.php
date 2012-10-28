@@ -44,7 +44,7 @@
  */
 namespace lapistano\wsunit\Http;
 
-use lapistano\wsunit\Extensions_Webservice_TestCase;
+use lapistano\wsunit\Wsunit_TestCase;
 use lapistano\ProxyObject\ProxyBuilder;
 
 /**
@@ -59,20 +59,20 @@ use lapistano\ProxyObject\ProxyBuilder;
  * @since      File available since Release 3.6.0
  */
 
-class Extensions_Webservice_Listener_Http_ClientIntegrationTest extends Extensions_Webservice_TestCase
+class Extensions_Webservice_Listener_Http_ClientIntegrationTest extends Wsunit_TestCase
 {
 
     /**
-     * @covers \lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Client::getResponseObject
+     * @covers \lapistano\wsunit\Http\HttpClient::getResponseObject
      */
     public function testGetResponseObject()
     {
-        $pb = new ProxyBuilder('\\lapistano\\wsunit\\Http\\Extensions_Webservice_Listener_Http_Client');
+        $pb = new ProxyBuilder('\\lapistano\\wsunit\\Http\\HttpClient');
         $client = $pb
             ->setMethods(array('getResponseObject'))
             ->getProxy();
         $this->assertInstanceOf(
-            '\lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Response',
+            '\lapistano\wsunit\Http\HttpResponse',
             $client->getResponseObject()
         );
     }
