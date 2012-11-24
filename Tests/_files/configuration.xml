@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <listener>
-    <serializer>\lapistano\wsunit\Serializer\Http\SerializerHttpResponse</serializer>
+    <logger>
+        <class>\lapistano\wsunit\Logger\LoggerFilesystem</class>
+    </logger>
+    <serializer>\lapistano\wsunit\Serializer\Http\SerializerHttpResponseXml</serializer>
     <test case="Example_TestCase" name="testGetData">
         <location dataName="expected" href="http://example.org/data.json"/>
         <location href="http://example.org/data.xml"/>
@@ -8,7 +11,7 @@
     </test>
     <test case="lapistano\wsunit\Logger\LoggerFilesystemTest"
           name='testSanitizeString with data set "string without unallowed char"'>
-        <serializer>\lapistano\wsunit\Serializer\Http\SerializerHttpResponse</serializer>
+        <serializer>\lapistano\wsunit\Serializer\Http\SerializerHttpResponseXml</serializer>
         <location dataName="expected" href="http://blog.bastian-feder.de/blog.rss">
             <query>
                 <param name="mascott[]">tux</param>
@@ -20,7 +23,16 @@
     <test case="lapistano\wsunit\Logger\LoggerFilesystemTest" name="testLog">
         <location href="http://blog.bastian-feder.de/blog.rss"/>
     </test>
-    <test case="lapistano\Logger\LoggerFilesystemTest" name="testSerializeExpectingInvalidArgumentException">
+    <test case="lapistano\wsunit\Serializer\Type\SerializerTypeJsonTest"
+          name='testSerializeExpectingInvalidArgumentException with data set "malformed JSON"'>
+        <serializer>\lapistano\wsunit\Serializer\Http\SerializerHttpResponseJson</serializer>
+        <logger>
+            <class>\lapistano\wsunit\Logger\LoggerFilesystem</class>
+            <typeMapping>
+                <type name="array">header</type>
+                <type name="json">body</type>
+            </typeMapping>
+        </logger>
         <location href="http://api.geonames.org/citiesJSON">
             <query>
                 <param name="north">44.1</param>

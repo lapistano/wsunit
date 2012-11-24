@@ -46,6 +46,7 @@
 namespace lapistano\wsunit\Loader;
 
 use lapistano\wsunit\Wsunit_TestCase;
+use lapistano\wsunit\Logger\LoggerException;
 
 /**
  * Basic http client to request information from an url via GET method.
@@ -70,8 +71,11 @@ class LoaderConfigurationTest extends Wsunit_TestCase
     {
         return '
             <listener>
+                <logger>
+                    <class>\lapistano\wsunit\Logger\LoggerFilesystem</class>
+                </logger>
                 <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
-                    <serializer>SerializerHttpResponse</serializer>
+                    <serializer>SerializerHttpResponseXml</serializer>
                     <location href="http://example.org/data.xml"/>
                     <location href="http://blog.bastian-feder.de/blog.rss">
                         <query>
@@ -103,7 +107,11 @@ class LoaderConfigurationTest extends Wsunit_TestCase
     public function testLoad()
     {
         $expected = array(
-            'serializer' => '\lapistano\wsunit\Serializer\Http\SerializerHttpResponse',
+            'serializer' => '\lapistano\wsunit\Serializer\Http\SerializerHttpResponseXml',
+            'logger' => array(
+                'class' => '\lapistano\wsunit\Logger\LoggerFilesystem',
+                'typeMapping' => array()
+            ),
             'Example_TestCase' => array(
                 'testGetData' => array(
                     'locations' => array(
@@ -124,7 +132,7 @@ class LoaderConfigurationTest extends Wsunit_TestCase
             ),
             'lapistano\wsunit\Logger\LoggerFilesystemTest' => array(
                 'testSanitizeString with data set "string without unallowed char"' => array(
-                    'serializer' => '\lapistano\wsunit\Serializer\Http\SerializerHttpResponse',
+                    'serializer' => '\lapistano\wsunit\Serializer\Http\SerializerHttpResponseXml',
                     'locations' => array(
                         'expected' => array(
                             'url' => 'http://blog.bastian-feder.de/blog.rss',
@@ -132,7 +140,7 @@ class LoaderConfigurationTest extends Wsunit_TestCase
                                 'mascott' => array(
                                     'tux',
                                     'RedHat' => 'beastie',
-                                 ),
+                                ),
                                 'os' => 'Linux',
                             ),
                         ),
@@ -147,8 +155,16 @@ class LoaderConfigurationTest extends Wsunit_TestCase
                     ),
                 ),
             ),
-            'lapistano\Logger\LoggerFilesystemTest' => array(
-                'testSerializeExpectingInvalidArgumentException' => array(
+            'lapistano\wsunit\Serializer\Type\SerializerTypeJsonTest' => array(
+                'testSerializeExpectingInvalidArgumentException with data set "malformed JSON"' => array(
+                    'serializer' => '\lapistano\wsunit\Serializer\Http\SerializerHttpResponseJson',
+                    'logger' => array(
+                        'class' => '\lapistano\wsunit\Logger\LoggerFilesystem',
+                        'typeMapping' => array(
+                            'header' => 'Array',
+                            'body' => 'Json',
+                        )
+                    ),
                     'locations' => array(
                         array(
                             'url' => 'http://api.geonames.org/citiesJSON',
@@ -217,9 +233,9 @@ class LoaderConfigurationTest extends Wsunit_TestCase
     {
         $configuration = '
             <listener>
-                <serializer>SerializerHttpResponse</serializer>
+                <serializer>SerializerHttpResponseXml</serializer>
                 <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
-                    <serializer>SerializerHttpResponse</serializer>
+                    <serializer>SerializerHttpResponseXml</serializer>
                     <location href="http://blog.bastian-feder.de/blog.rss">
                         <query>
                           <param name="mascott[]">tux</param>
@@ -239,7 +255,7 @@ class LoaderConfigurationTest extends Wsunit_TestCase
         $xpath = new \DOMXpath($dom);
         $node = $xpath->query($path)->item(0);
         $this->assertEquals(
-            'SerializerHttpResponse',
+            'SerializerHttpResponseXml',
             $loader->extractSerializerClassname($node)
         );
     }
@@ -251,17 +267,17 @@ class LoaderConfigurationTest extends Wsunit_TestCase
     {
         $expected = array(
             array(
-                'url'   => 'http://example.org/data.xml',
+                'url' => 'http://example.org/data.xml',
                 'params' => array(),
             ),
             array(
-                'url'   => 'http://blog.bastian-feder.de/blog.rss',
+                'url' => 'http://blog.bastian-feder.de/blog.rss',
                 'params' => array(
                     'mascott' => array(
                         'tux',
                         'RedHat' => 'beastie',
                     ),
-                    'os'      => 'Linux',
+                    'os' => 'Linux',
                 ),
             ),
         );
@@ -280,6 +296,98 @@ class LoaderConfigurationTest extends Wsunit_TestCase
             $expected,
             $loader->extractLocations($node, $xpath)
         );
+    }
+
+    /**
+     * @dataProvider extractLoaderConfigurationDataprovider
+     * @covers\lapistano\wsunit\Loader\LoaderConfiguration::extractLoggerConfiguration
+     */
+    public function testExtractLoggerConfigurationNoneFound($path)
+    {
+        $configuration = '
+            <listener>
+                <serializer>SerializerHttpResponseXml</serializer>
+                <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
+                    <serializer>SerializerHttpResponseXml</serializer>
+                    <location href="http://blog.bastian-feder.de/blog.rss">
+                        <query>
+                          <param name="mascott[]">tux</param>
+                          <param name="mascott[RedHat]">beastie</param>
+                          <param name="os">Linux</param>
+                        </query>
+                    </location>
+                </test>
+            </listener>
+        ';
+
+        $expected = array();
+
+        $loader = $this->getProxyBuilder('\lapistano\wsunit\Loader\LoaderConfiguration')
+            ->setMethods(array('extractLoggerConfiguration'))
+            ->getProxy();
+
+        $dom = new \DOMDocument();
+        $dom->loadXml($configuration);
+
+        $xpath = new \DOMXpath($dom);
+        $node = $xpath->query($path)->item(0);
+
+        $this->assertEquals($expected, $loader->extractLoggerConfiguration($node, $xpath));
+    }
+
+    /**
+     * @dataProvider extractLoaderConfigurationDataprovider
+     * @covers\lapistano\wsunit\Loader\LoaderConfiguration::extractLoggerConfiguration
+     */
+    public function testExtractLoggerConfiguration($path)
+    {
+        $configuration = '
+            <listener>
+                <logger>
+                    <class>\lapistano\wsunit\Logger\LoggerFileSystem</class>
+                    <typeMapping>
+                        <type name="array">header</type>
+                        <type name="json">body</type>
+                    </typeMapping>
+                </logger>
+                <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
+                    <logger>
+                        <class>\lapistano\wsunit\Logger\LoggerFileSystem</class>
+                        <typeMapping>
+                            <type name="array">header</type>
+                            <type name="json">body</type>
+                        </typeMapping>
+                    </logger>
+                    <location href="http://blog.bastian-feder.de/blog.rss">
+                        <query>
+                          <param name="mascott[]">tux</param>
+                          <param name="mascott[RedHat]">beastie</param>
+                          <param name="os">Linux</param>
+                        </query>
+                    </location>
+                </test>
+            </listener>
+        ';
+
+        $expected = array(
+            'class' => '\lapistano\wsunit\Logger\LoggerFileSystem',
+            'typeMapping' => array(
+                'header' => 'Array',
+                'body' => 'Json',
+            )
+        );
+
+        $loader = $this->getProxyBuilder('\lapistano\wsunit\Loader\LoaderConfiguration')
+            ->setMethods(array('extractLoggerConfiguration'))
+            ->getProxy();
+
+        $dom = new \DOMDocument();
+        $dom->loadXml($configuration);
+
+        $xpath = new \DOMXpath($dom);
+        $node = $xpath->query($path)->item(0);
+
+        $this->assertEquals($expected, $loader->extractLoggerConfiguration($node, $xpath));
     }
 
     /**
@@ -348,10 +456,75 @@ class LoaderConfigurationTest extends Wsunit_TestCase
         );
     }
 
+    /**
+     * @covers\lapistano\wsunit\Loader\LoaderConfiguration::extractLoggerClass
+     */
+    public function testExtractLoggerClass()
+    {
+        $loader = $this->getProxyBuilder('\lapistano\wsunit\Loader\LoaderConfiguration')
+            ->setMethods(array('extractLoggerClass'))
+            ->getProxy();
+
+        $dom = new \DOMDocument();
+        $dom->loadXml($this->getLoaderConfigurationXmlFixture());
+
+        $xpath = new \DOMXpath($dom);
+        $node = $xpath->query("//listener/logger")->item(0);
+
+        $this->assertEquals('\lapistano\wsunit\Logger\LoggerFilesystem', $loader->extractLoggerClass($node, $xpath));
+    }
+
+    /**
+     * @covers\lapistano\wsunit\Loader\LoaderConfiguration::extractLoggerClass
+     */
+    public function testExtractLoggerClassExpectingLoggerException()
+    {
+        $configuration = '
+            <listener>
+                <serializer>SerializerHttpResponseXml</serializer>
+                <test name=\'testTranslateTypeToPrefix with data set "expected"\'>
+                    <serializer>SerializerHttpResponseXml</serializer>
+                    <location href="http://blog.bastian-feder.de/blog.rss">
+                        <query>
+                          <param name="mascott[]">tux</param>
+                          <param name="mascott[RedHat]">beastie</param>
+                          <param name="os">Linux</param>
+                        </query>
+                    </location>
+                </test>
+            </listener>
+        ';
+
+        $loader = $this->getProxyBuilder('\lapistano\wsunit\Loader\LoaderConfiguration')
+            ->setMethods(array('extractLoggerClass'))
+            ->getProxy();
+
+        $dom = new \DOMDocument();
+        $dom->loadXml($configuration);
+
+        $xpath = new \DOMXpath($dom);
+        $node = $xpath->query("//listener/logger")->item(0);
+
+        try {
+            $loader->extractLoggerClass($node, $xpath);
+            $this->fail('Expected exception not thrown.');
+
+        } catch (LoggerException $le) {
+            $this->assertEquals(LoggerException::MISSING_CLASS_DECLARATION, $le->getCode());
+        }
+    }
+
     /*************************************************************************/
     /* Dataprovider                                                          */
     /*************************************************************************/
 
+    public function extractLoaderConfigurationDataprovider()
+    {
+        return array(
+            'global logger' => array("//listener/logger"),
+            'local logger' => array("//listener/test/logger"),
+        );
+    }
 
     public static function extractSerializerClassnameDataprovider()
     {

@@ -74,11 +74,25 @@ class LoggerFilesystem implements LoggerInterface
     protected $serializer;
 
     /**
-     * @param lapistano\wsunit\Serializer\Extensions_Webservice_Serializer_Interface $serializer
+     * Contains mapping between the data type (e.g. xml) and the region.
+     * @var array
      */
-    public function __construct(SerializerInterface $serializer)
+    protected $configuration = array(
+        'header' => 'Array',
+        'body' => 'Xml',
+    );
+
+
+    /**
+     * @param \lapistano\wsunit\Serializer\SerializerInterface $serializer
+     */
+    public function __construct(SerializerInterface $serializer, array $configuration = array())
     {
         $this->serializer = $serializer;
+
+        if (!empty($configuration)) {
+            $this->configuration = $configuration;
+        }
     }
 
     /**
@@ -89,8 +103,8 @@ class LoggerFilesystem implements LoggerInterface
      */
     public function log($message, $level = '')
     {
-        $this->serializer->register('Array', $message->getHeader());
-        $this->serializer->register('Xml', $message->getBody());
+        $this->serializer->register($this->configuration['header'], $message->getHeader());
+        $this->serializer->register($this->configuration['body'], $message->getBody());
         $this->serializer->setDocumentRoot('response');
 
         // due to time issues just a bad hack .. to be refactored asap
@@ -102,7 +116,19 @@ class LoggerFilesystem implements LoggerInterface
             rename($filename, $file . microtime(true) . '.xml');
         }
 
-        file_put_contents($filename, $this->serializer->serialize());
+        try {
+            file_put_contents($filename, $this->serializer->serialize());
+
+        } catch (\InvalidArgumentException $e) {
+
+            $error = sprintf(
+                "%s\n\nResponse header:\n%s\n\nResponse body:\n%s\n\n",
+                $e->getMessage(),
+                print_r($message->getHeader(), true),
+                print_r($message->getBody(), true)
+            );
+            file_put_contents($filename, $error);
+        }
     }
 
     /**

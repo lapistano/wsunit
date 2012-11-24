@@ -45,6 +45,8 @@
 
 namespace lapistano\wsunit\Loader;
 
+use lapistano\wsunit\Logger\LoggerException;
+
 /**
  * Basic http client to request information from an url via GET method.
  *
@@ -102,9 +104,18 @@ class LoaderConfiguration implements LoaderInterface
     protected function transcode(\DOMDocument $data)
     {
         $transcoded = array();
+
         $xpath = new \DOMXpath($data);
-        $elements = $xpath->query("//listener/test");
+
         $transcoded['serializer'] = $this->extractSerializerClassname($xpath->query("//listener/serializer")->item(0));
+
+        $transcoded['logger'] = $this->extractLoggerConfiguration(
+            $xpath->query("//listener/logger")->item(0),
+            $xpath
+        );
+
+        // extractConfiguration()
+        $elements = $xpath->query("//listener/test");
 
         if (!is_null($elements)) {
             foreach ($elements as $test) {
@@ -116,6 +127,11 @@ class LoaderConfiguration implements LoaderInterface
                 $serializer = $this->extractSerializerClassname($xpath->query("serializer", $test)->item(0));
                 if (!empty($serializer)) {
                     $case['serializer'] = $serializer;
+                }
+
+                $logger = $this->extractLoggerConfiguration($xpath->query("logger", $test)->item(0), $xpath);
+                if (!empty($logger['class'])) {
+                    $case['logger'] = $logger;
                 }
 
                 // extract location urls to be requested for each run of the test
@@ -135,7 +151,7 @@ class LoaderConfiguration implements LoaderInterface
     /**
      * Extracts the name of the serializer from the given node.
      *
-     * @param \DOMNode $node
+     * @param \DOMNode|null $node
      *
      * @return string
      */
@@ -146,6 +162,72 @@ class LoaderConfiguration implements LoaderInterface
         }
 
         return '';
+    }
+
+    /**
+     * Extracts mapping information which information (e.g. response body) shall be converted in to what string type (e.g. xml)
+     *
+     * @param \DOMNode|null $node
+     * @param \DOMXPath     $xpath
+     *
+     * @return array
+     */
+    protected function extractLoggerConfiguration($node, \DOMXPath $xpath)
+    {
+        $mapping = array();
+
+        if (!is_null($node)) {
+
+            // read name from configuration
+            $mapping['class'] = $this->extractLoggerClass($node, $xpath);
+            $mapping['typeMapping'] = array();
+
+            // find type definitions
+            $mappings = $xpath->query('typeMapping/type', $node);
+
+
+            foreach ($mappings as $typeNode) {
+
+                if (!empty($typeNode->nodeValue)) {
+
+                    $mapping['typeMapping'][$typeNode->nodeValue] = ucfirst($typeNode->getAttribute('name'));
+                }
+            }
+        }
+
+        return $mapping;
+    }
+
+    /**
+     * Reads the namespace reference of a class from the configuration.
+     *
+     * @param           $node
+     * @param \DOMXPath $xpath
+     *
+     * @return string
+     *
+     * @throws LoggerException
+     */
+    protected function extractLoggerClass($node, \DOMXPath $xpath)
+    {
+        if (empty($node)) {
+            throw new LoggerException(
+                'Mandatory class declaration missing!',
+                LoggerException::MISSING_CLASS_DECLARATION
+            );
+        }
+
+        // read name from configuration
+        $class = $xpath->query('class', $node)->item(0)->nodeValue;
+
+        if (empty($class)) {
+            throw new LoggerException(
+                'Mandatory class declaration missing!',
+                LoggerException::MISSING_CLASS_DECLARATION
+            );
+        }
+
+        return $class;
     }
 
     /**

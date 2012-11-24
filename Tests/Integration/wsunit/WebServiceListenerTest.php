@@ -76,7 +76,26 @@ class WebserviceListenerIntegrationTest extends Wsunit_TestCase
      */
     public function testStartTestSuite()
     {
-        $listener = $this->getListener();
+
+        $configuration = array(
+            'logger' => array(
+                'class' => '\lapistano\wsunit\Logger\LoggerFilesystem',
+                'typeMapping' => array(),
+            ),
+            'serializer' => array(),
+        );
+
+        $loader = $this->getLoaderFake(array('load'));
+        $loader
+            ->expects($this->once())
+            ->method('load')
+            ->will($this->returnValue($configuration));
+
+        $listener = new WebServiceListener(
+            new WebserviceListenerFactory(),
+            $loader,
+            $this->getConfiguration()
+        );
         $listener->startTestSuite($this->getTestSuiteStub());
 
         $this->assertAttributeInstanceOf(

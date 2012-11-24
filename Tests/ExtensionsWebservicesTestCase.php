@@ -81,7 +81,7 @@ abstract class Wsunit_TestCase extends \PHPUnit_Framework_TestCase
         return array(
             'httpClient' => '\lapistano\wsunit\Http\HttpClient',
             'logger'     => '\lapistano\wsunit\Logger\LoggerFilesystem',
-            'serializer' => '\lapistano\wsunit\Serializer\Http\SerializerHttpResponse',
+            'serializer' => '\lapistano\wsunit\Serializer\Http\SerializerHttpResponseXml',
             'mappingFile' => '../../../Tests/_files/configuration.xml',
         );
     }

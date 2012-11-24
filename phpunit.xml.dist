@@ -43,9 +43,6 @@
           <element key="httpClient">
             <string>\lapistano\wsunit\Http\HttpClient</string>
           </element>
-          <element key="logger">
-            <string>\lapistano\wsunit\Logger\LoggerFilesystem</string>
-          </element>
           <element key="mappingFile">
             <string>../../../../Tests/_files/configuration.xml</string>
           </element>

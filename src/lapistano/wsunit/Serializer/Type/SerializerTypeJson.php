@@ -77,7 +77,7 @@ class SerializerTypeJson extends SerializerTypeAbstract
     public function serialize($data)
     {
         $this->isValid($data);
-        return $data;
+        return sprintf('<![CDATA[%s]]>', $data);
     }
 
     /**

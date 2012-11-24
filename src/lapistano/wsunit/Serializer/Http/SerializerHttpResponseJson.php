@@ -1,8 +1,8 @@
 <?php
 /**
- * PHPUnit
+ * PHPUnit - Test listener extension
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2012 Bastian Feder <php@bastian-feder.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,45 +34,39 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    WsUnit
+ * @package    PHPUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2002-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://www.phpunit.de/
+ * @link       http://github.com/lapistano/wsunit
  * @since      File available since Release 3.6.0
  */
+
 namespace lapistano\wsunit\Serializer\Http;
 
-use lapistano\wsunit\Wsunit_TestCase;
+use lapistano\wsunit\Serializer\SerializerAbstract;
+use lapistano\wsunit\Serializer\Type\SerializerTypeArray;
+use lapistano\wsunit\Serializer\Type\SerializerTypeJson;
 
 /**
+ * Serializer to stringify a Http response to a transferable, computer-readable format.
+ *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2011 Bastian Feder <php@bastian-feder.de>
+ * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://www.phpunit.de/
- * @since      File available since Release 3.6.0
+ * @version    Release: @package_version@
+ * @link       http://github.com/lapistano/wsunit
+ * @since      Class available since Release 3.6.0
  */
-class Extensions_Webservice_Serializer_Http_ResponseIntegrationTest extends Wsunit_TestCase
+
+class SerializerHttpResponseJson extends SerializerAbstract
 {
-    /**
-     * @covers \lapistano\wsunit\Serializer\Http\SerializerHttpResponseXml::__construct
-     */
-    public function testConstruct()
+    public function __construct()
     {
-        $serializer = new SerializerHttpResponseXml();
-
-        $types = $this->readAttribute($serializer, 'types');
-
-        $this->assertInstanceOf(
-            '\lapistano\wsunit\Serializer\Type\SerializerTypeArray',
-            $types['Array']
-        );
-        $this->assertInstanceOf(
-            '\lapistano\wsunit\Serializer\Type\SerializerTypeXml',
-            $types['Xml']
-        );
+        $this->types['Array'] = new SerializerTypeArray();
+        $this->types['Json'] = new SerializerTypeJson();
     }
 }

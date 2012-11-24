@@ -188,6 +188,7 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
 
         $name = $test->getName();
         $class = get_class($test);
+        $logger = $this->logger;
 
         if (!isset($this->mapping[$class][$name])) {
             //Proposal: log that there is no url set for this test
@@ -202,6 +203,17 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
             $this->factory->register('serializer', $configuration['serializer']);
 
             $serializer = $this->factory->getInstanceOf('serializer', true);
+
+            // initialize a new logger only if there is a serializer defined.
+            if (!empty($serializer) && !empty($configuration['logger']['class'])) {
+                $this->factory->register('logger', $configuration['logger']['class']);
+                $logger = $this->factory->getInstanceOf(
+                    'logger',
+                    true,
+                    $serializer,
+                    $configuration['logger']['typeMapping']
+                );
+            }
 
         } else {
 
@@ -227,8 +239,8 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
         }
 
         // persist response
-        $this->logger->registerTest($test);
-        $this->logger->log($response);
+        $logger->registerTest($test);
+        $logger->log($response);
     }
 
     /**
@@ -254,12 +266,12 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
      */
     public function startTestSuite(\PHPUnit_Framework_TestSuite $suite)
     {
-        $this->factory->register('logger', $this->configuration['logger']);
         $this->factory->register('httpClient', $this->configuration['httpClient']);
-
         $this->httpClient = $this->factory->getInstanceOf('httpClient');
 
         $this->loadMapping();
+
+        $this->factory->register('logger', $this->mapping['logger']['class']);
 
         // get serializer from configuration
         if (!empty($this->mapping['serializer'])) {
@@ -267,9 +279,14 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
             $serializer = $this->factory->getInstanceOf('serializer');
         }
 
-        // initialize a loader only if there is a serializer defined.
+        // initialize a new logger only if there is a serializer defined.
         if (!empty($serializer)) {
-            $this->logger = $this->factory->getInstanceOf('logger', true, $serializer);
+            $this->logger = $this->factory->getInstanceOf(
+                'logger',
+                true,
+                $serializer,
+                $this->mapping['logger']['typeMapping']
+            );
         }
     }
 
