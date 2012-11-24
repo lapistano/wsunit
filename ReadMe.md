@@ -38,7 +38,7 @@ In case you do not know what this means the [composer project website](http://ge
 
 Github
 ------
-Thus I recommend the composer way to make proxy-object a dependency to your project. 
+Thus I recommend the composer way to make proxy-object a dependency to your project.
 The sources are also available via github. Just clone it as you might be familiar with.
 
 ```bash
@@ -69,9 +69,6 @@ configuration file.
           <element key="httpClient">
             <string>lapistano\wsunit\Http\HttpClient</string>
           </element>
-          <element key="logger">
-            <string>lapitano\wsunit\Logger\LoggerFilesystem</string>
-          </element>
           <element key="configuration">
             <string>/path/to/configuration.xml</string>
           </element>
@@ -93,23 +90,33 @@ configuration file.
 
 Test listener configuration
 ----------------------------
-Beside making PHPUnit aware of the test listener and to actually make each test aware of the loaction the response
+Beside making PHPUnit aware of the test listener and to actually make each test aware of the location the response
 shall be fetched from, a 2nd configuration file is needed. The following example show such a configuration.
 
 **NOTE:**
 The name and the location of the configuration file is set in the `element[key='configuration']` element of the test
 listener registration in PHPUnit.
 
+**NOTE**
+The 'logger'-tag is mandatory!
+
 
 **WARNING:**
 Beware that if you decide to use namespaces they also have to be used in the phpunit configuration file to identify the used classes.
-In case you did something wrong here PHPUnit will just ignore your listener without any warning or error being thrown. Don't ask me why I know this.
-This behavior is fixed in PHPUnit 3.7.
+In case you did something wrong here PHPUnit will just ignore your listener without any warning or error being thrown.
+Don't ask me why I know this. This behavior is fixed in PHPUnit 3.7.
 
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <listener>
+    <logger>
+        <class>\lapistano\wsunit\Logger\LoggerFilesystem</class>
+        <typeMapping>
+            <type name="array">header</type>
+            <type name="xml">body</type>
+        </typeMapping>
+    </logger>
     <serializer>\lapistano\wsunit\Serializer\Http\Extensions_Webservice_Serializer_Http_Response</serializer>
     <test case="Example_TestCase" name="testGetData">
         <location href="http://example.org/data.txt" />
@@ -145,6 +152,12 @@ override a globally set serializer.
 - **location**
 Defined within the test section it defines the location and it's optional query string. Once these information are
 set the configured location will be tackled for it's response.
+
+- **logger**
+The only _mandatory tag_ in this set. It either has to be defined as direct sibling to the 'listener'-tag or within a
+test section. A definition in the 'test'-tag overrides the "global" definition for this specific test. The
+'typeMapping'-tag is optional. A default (like the values in the example) will be taken, if not defined.
+
 
 Dependencies
 ============
