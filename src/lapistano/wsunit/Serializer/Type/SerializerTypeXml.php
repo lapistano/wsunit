@@ -85,7 +85,7 @@ class SerializerTypeXml extends SerializerTypeAbstract
     }
 
     /**
-     * Checks it the given string is a valid XMLM string.
+     * Checks it the given string is a valid XML string.
      *
      * @param string $data
      * @throws \InvalidArgumentException in case an invalid data string was passed.
