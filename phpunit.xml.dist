@@ -4,6 +4,9 @@
          strict="true"
          verbose="true"
          bootstrap="bootstrap.php"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
 >
 
   <testsuites>
