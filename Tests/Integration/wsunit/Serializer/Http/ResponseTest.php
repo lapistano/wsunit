@@ -74,5 +74,9 @@ class Extensions_Webservice_Serializer_Http_ResponseIntegrationTest extends Wsun
             '\lapistano\wsunit\Serializer\Type\SerializerTypeXml',
             $types['Xml']
         );
+        $this->assertInstanceOf(
+            '\lapistano\wsunit\Serializer\Type\SerializerTypeJson',
+            $types['Json']
+        );
     }
 }

@@ -48,6 +48,7 @@ namespace lapistano\wsunit\Serializer\Http;
 use lapistano\wsunit\Serializer\SerializerAbstract;
 use lapistano\wsunit\Serializer\Type\SerializerTypeArray;
 use lapistano\wsunit\Serializer\Type\SerializerTypeXml;
+use lapistano\wsunit\Serializer\Type\SerializerTypeJson;
 
 /**
  * Serializer to stringify a Http response to a transferable, computer-readable format.
@@ -66,9 +67,11 @@ class SerializerHttpResponse extends SerializerAbstract
 {
     public function __construct()
     {
-        $this->types['Array']          = new SerializerTypeArray();
+        $this->types['Array'] = new SerializerTypeArray();
+        $this->types['Xml'] = new SerializerTypeXml();
+        $this->types['Json'] = new SerializerTypeJson();
+
         //$this->types['TextPlain']      = new SerializerTypeTextPlain();
-        $this->types['Xml']            = new SerializerTypeXml();
         //$this->types['Texthtml']       = new SerializerTypeTextHtml();
     }
 }
