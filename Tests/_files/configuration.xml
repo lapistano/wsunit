@@ -2,22 +2,34 @@
 <listener>
     <serializer>\lapistano\wsunit\Serializer\Http\SerializerHttpResponse</serializer>
     <test case="Example_TestCase" name="testGetData">
-        <location dataName="expected" href="http://example.org/data.json" />
-        <location href="http://example.org/data.xml" />
-        <location href="http://example.org/data.txt" />
+        <location dataName="expected" href="http://example.org/data.json"/>
+        <location href="http://example.org/data.xml"/>
+        <location href="http://example.org/data.txt"/>
     </test>
     <test case="lapistano\wsunit\Logger\LoggerFilesystemTest"
           name='testSanitizeString with data set "string without unallowed char"'>
         <serializer>\lapistano\wsunit\Serializer\Http\SerializerHttpResponse</serializer>
         <location dataName="expected" href="http://blog.bastian-feder.de/blog.rss">
             <query>
-              <param name="mascott[]">tux</param>
-              <param name="mascott[RedHat]">beastie</param>
-              <param name="os">Linux</param>
+                <param name="mascott[]">tux</param>
+                <param name="mascott[RedHat]">beastie</param>
+                <param name="os">Linux</param>
             </query>
         </location>
     </test>
     <test case="lapistano\wsunit\Logger\LoggerFilesystemTest" name="testLog">
-        <location href="http://blog.bastian-feder.de/blog.rss" />
+        <location href="http://blog.bastian-feder.de/blog.rss"/>
+    </test>
+    <test case="lapistano\Logger\LoggerFilesystemTest" name="testSerializeExpectingInvalidArgumentException">
+        <location href="http://api.geonames.org/citiesJSON">
+            <query>
+                <param name="north">44.1</param>
+                <param name="south">-9.9</param>
+                <param name="east">-22.4</param>
+                <param name="west">55.2</param>
+                <param name="lang">de</param>
+                <param name="username">demo</param>
+            </query>
+        </location>
     </test>
 </listener>

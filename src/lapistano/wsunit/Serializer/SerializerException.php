@@ -48,6 +48,9 @@ namespace lapistano\wsunit\Serializer;
 class SerializerException extends \Exception
 {
     const DOUBLE_TYPE_REGISTRATION_ATTEMPT = 1;
+
     const INVALID_TAGNAME = 2;
     const INVALID_TYPE = 3;
+
+    const FAILED_DECODING_ATTEMPT = 4;
 }
