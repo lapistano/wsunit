@@ -61,43 +61,69 @@ use lapistano\ProxyObject\ProxyBuilder;
  * @since      File available since Release 3.6.0
  */
 
-class HttpClientTest extends Wsunit_TestCase
+class HttpSoapClientIntegrationTest extends Wsunit_TestCase
 {
-
     /**
-     * @covers \lapistano\wsunit\Http\HttpClient::get
+     * @dataProvider getSoapClientDataprovider
+     * @covers \lapistano\wsunit\Http\HttpSoapClient::getSoapClient
      */
-    public function testGet()
+    public function testGetSoapClient($wsdl, $options)
     {
-        $fixtureFile = TEST_DIR . '/_files/HttpClient/response.txt';
-        $expected = array(
-            'body'   => 'Freilebende Gummibärchen gibt es nicht!',
-            'header' => array(),
+        $client = $this->getProxyBuilder('\\lapistano\\wsunit\\Http\\HttpSoapClient')
+            ->setMethods(array('getSoapClient'))
+        ->getProxy();
+
+        $this->assertInstanceOf('\\SOAPClient', $client->getSoapClient($wsdl, $options));
+    }
+    public static function getSoapClientDataprovider()
+    {
+        return array(
+            'WSDL mode' => array(
+                'http://webserviceserver.appspot.com/EntityAPIService.wsdl',
+                array()
+            ),
+            'non wsdl mode' => array(
+                null,
+                array(
+                    'location' => 'http://webserviceserver.appspot.com',
+                    'uri' => 'http://example.org'
+                )
+            ),
         );
-
-        $response = $this->getMockBuilder('\lapistano\wsunit\Http\HttpResponse')
-            ->setMethods(array('__toString', 'setBody', 'setHeader'))
-            ->getMock();
-
-        $pb = new ProxyBuilder('\lapistano\wsunit\Http\HttpClient');
-        $client = $pb
-            ->setProperties(array('response'))
-            ->getProxy();
-        $client->response = $response;
-
-        $this->assertInstanceOf('\lapistano\wsunit\Http\HttpResponse', $client->get($fixtureFile));
     }
 
     /**
-     * @covers \lapistano\wsunit\Http\HttpClientAbstract::getResponseObject
+     * @expectedException \SoapFault
+     * @dataProvider getSoapClientExceptionDataprovider
+     * @covers \lapistano\wsunit\Http\HttpSoapClient::getSoapClient
      */
-    public function testGetResponseObjectFromCache()
+    public function testGetSoapClientExpectingSoapFaultException($wsdl, $options)
     {
-        $pb = new ProxyBuilder('\lapistano\wsunit\Http\HttpClient');
-        $client = $pb
-            ->setProperties(array('response'))
-            ->getProxy();
-        $client->response = new \stdClass();
-        $this->assertInternalType('object', $client->getResponseObject());
+        $client = $this->getProxyBuilder('\\lapistano\\wsunit\\Http\\HttpSoapClient')
+            ->setMethods(array('getSoapClient'))
+        ->getProxy();
+
+        $client->getSoapClient($wsdl, $options);
+    }
+    public function getSoapClientExceptionDataprovider()
+    {
+        return array(
+            'invalid uri in wsdl mode' => array(
+                'http://www.example.net/foo?WSDL',
+                array()
+            ),
+            'missing mandatory "location" in non wsdl model' => array(
+                null,
+                array(
+                    'uri' => 'http://example.org'
+                )
+            ),
+            'missing mandatory "uri" in non wsdl model' => array(
+                null,
+                array(
+                    'location' => 'http://example.org'
+                )
+            ),
+        );
     }
 }

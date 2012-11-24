@@ -57,37 +57,63 @@ namespace lapistano\wsunit\Http;
  * @link       http://github.com/lapistano/wsunit
  * @since      Class available since Release 3.6.0
  */
-class HttpClient extends HttpClientAbstract
+
+class HttpSoapClient extends HttpClientAbstract
 {
+    /**
+     * @var \SoapClient
+     */
+    protected $soapClient;
+
+    /**
+     * @var string
+     */
+    protected $soapClientWsdl;
+
+    /**
+     * @var array
+     */
+    protected $soapClientOptions = array();
+
+
     /**
      * Sends a request to the given url.
      *
-     * @param string $url
-     * @param array $query
+     * @param string $url   Location to be called
+     * @param array  $query
      *
      * @return string The http response with the response header included.
      */
     public function get($url, array $query = array())
     {
-        $opts = array(
-            'http' => array(
-                'method'        => "GET",
-                'max_redirects' => 5,
-                'timeout'       => 1.0,
-            )
-        );
 
-        if (!empty($query)) {
-            $url .= '?'.http_build_query($query, '', '&');
+        $soapClient = $this->getSoapClient($url, $query);
+
+    }
+
+
+    /**
+     * Provides an instance of the SOAPClient build into PHP.
+     *
+     * @param string $wsdl    URI of the WSDL file or NULL if working in non-WSDL mode.
+     * @param array  $options Optional if in WSDL mode, else keys 'location' & 'uri' are mandatory.
+     *
+     * @return \SoapClient
+     *
+     * @link http://ch2.php.net/manual/en/soapclient.soapclient.php
+     */
+    protected function getSoapClient($wsdl, array $options = array(), $force = false)
+    {
+        if ($force || $wsdl !== $this->soapClientWsdl || $options !== $this->soapClientOptions) {
+            $force = true;
         }
 
-        // Open the file using the HTTP headers set above
-        $response = $this->getResponseObject();
-        $response->setBody(file_get_contents($url, false, stream_context_create($opts)));
+        if ($force || empty($this->soapClient)) {
+            $this->soapClient = new \SoapClient($wsdl, $options);
+            $this->soapClientWsdl = $wsdl;
+            $this->soapClientOptions = $options;
+        }
 
-        $responseHeader = isset($http_response_header)? $http_response_header : array();
-        $response->setHeader($responseHeader);
-
-        return $response;
+        return $this->soapClient;
     }
 }

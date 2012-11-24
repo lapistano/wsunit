@@ -62,8 +62,9 @@ interface HttpClientInterface
     /**
      * Sends a request to the given url.
      *
-     * @param string $url
-     * @param string $query
+     * @param string $url  Location to be called
+     * @param array $query List of parameters send as query string.
+     *
      * @return string The http response with the response header included.
      */
     public function get($url, array $query = array());

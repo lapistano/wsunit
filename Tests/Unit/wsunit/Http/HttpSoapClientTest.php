@@ -61,43 +61,65 @@ use lapistano\ProxyObject\ProxyBuilder;
  * @since      File available since Release 3.6.0
  */
 
-class HttpClientTest extends Wsunit_TestCase
+class HttpSoapClientTest extends Wsunit_TestCase
 {
-
     /**
-     * @covers \lapistano\wsunit\Http\HttpClient::get
+     * @covers \lapistano\wsunit\Http\HttpSoapClient::get
      */
     public function testGet()
     {
-        $fixtureFile = TEST_DIR . '/_files/HttpClient/response.txt';
-        $expected = array(
-            'body'   => 'Freilebende Gummibärchen gibt es nicht!',
-            'header' => array(),
+        $soapClient = $this->getMockFromWsdl(
+            'GoogleSearch.wsdl',
+            'GoogleSearch'
         );
 
-        $response = $this->getMockBuilder('\lapistano\wsunit\Http\HttpResponse')
-            ->setMethods(array('__toString', 'setBody', 'setHeader'))
-            ->getMock();
 
-        $pb = new ProxyBuilder('\lapistano\wsunit\Http\HttpClient');
-        $client = $pb
-            ->setProperties(array('response'))
-            ->getProxy();
-        $client->response = $response;
-
-        $this->assertInstanceOf('\lapistano\wsunit\Http\HttpResponse', $client->get($fixtureFile));
     }
 
     /**
-     * @covers \lapistano\wsunit\Http\HttpClientAbstract::getResponseObject
+     * @covers \lapistano\wsunit\Http\HttpSoapClient::getSoapClient
      */
-    public function testGetResponseObjectFromCache()
+    public function testGetSoapClientFromCache()
     {
-        $pb = new ProxyBuilder('\lapistano\wsunit\Http\HttpClient');
-        $client = $pb
-            ->setProperties(array('response'))
+        // choosing non WSDL mode to prevent the test from failing because the computer is not online.
+        $wsdl = null;
+        $options = array(
+            'location' => 'http://webserviceserver.appspot.com',
+            'uri' => 'http://example.org'
+        );
+
+        $expected = new \stdClass();
+
+        $client = $this->getProxyBuilder('\\lapistano\\wsunit\\Http\\HttpSoapClient')
+            ->setMethods(array('getSoapClient'))
+            ->setProperties(array('soapClient', 'soapClientWsdl', 'soapClientOptions'))
             ->getProxy();
-        $client->response = new \stdClass();
-        $this->assertInternalType('object', $client->getResponseObject());
+
+        $client->soapClient = new \stdClass;
+        $client->soapClientOptions = $options;
+        $client->soapClientWsdl = $wsdl;
+
+
+        $this->assertEquals($expected, $client->getSoapClient($wsdl, $options));
+    }
+    /**
+     * @covers \lapistano\wsunit\Http\HttpSoapClient::getSoapClient
+     */
+    public function testGetSoapClient()
+    {
+        // choosing non WSDL mode to prevent the test from failing because the computer is not online.
+        $wsdl = null;
+        $options = array(
+            'location' => 'http://webserviceserver.appspot.com',
+            'uri' => 'http://example.org'
+        );
+
+        $expected = new \stdClass();
+
+        $client = $this->getProxyBuilder('\\lapistano\\wsunit\\Http\\HttpSoapClient')
+            ->setMethods(array('getSoapClient'))
+            ->getProxy();
+
+        $this->assertInstanceOf('\SoapClient', $client->getSoapClient($wsdl, $options));
     }
 }

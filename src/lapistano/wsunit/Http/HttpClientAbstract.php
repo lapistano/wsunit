@@ -1,8 +1,8 @@
 <?php
 /**
- * PHPUnit
+ * PHPUnit - Test listener extension
  *
- * Copyright (c) 2002-2011, Sebastian Bergmann <sb@sebastian-bergmann.de>.
+ * Copyright (c) 2012 Bastian Feder <php@bastian-feder.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,46 +34,57 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    WsUnit
+ * @package    PHPUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2002-2011 Sebastian Bergmann <sb@sebastian-bergmann.de>
+ * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://www.phpunit.de/
+ * @link       http://github.com/lapistano/wsunit
  * @since      File available since Release 3.6.0
  */
+
 namespace lapistano\wsunit\Http;
 
-use lapistano\wsunit\Wsunit_TestCase;
-use lapistano\ProxyObject\ProxyBuilder;
-
 /**
- *
+ * Abstract class for a basic http client.
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2011 Bastian Feder <php@bastian-feder.de>
+ * @copyright  2012 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link       http://www.phpunit.de/
- * @since      File available since Release 3.6.0
+ * @version    Release: @package_version@
+ * @link       http://github.com/lapistano/wsunit
+ * @since      Class available since Release 3.6.0
  */
-
-class Extensions_Webservice_Listener_Http_ClientIntegrationTest extends Wsunit_TestCase
+abstract class HttpClientAbstract implements HttpClientInterface
 {
+    /**
+     * Contains the object representation of a server response
+     * @var \lapistano\wsunit\Http\Extensions_Webservice_Listener_Http_Response
+     */
+    protected $response = null;
+
 
     /**
-     * @covers \lapistano\wsunit\Http\HttpClient::getResponseObject
+     * Sends a request to the given url.
+     *
+     * @param string $url
+     * @param array $query
+     *
+     * @return string The http response with the response header included.
      */
-    public function testGetResponseObject()
+    abstract public function get($url, array $query = array());
+
+    /**
+     * Provides a cached instance of a Http response object.
+     * @return Extensions_Webservice_Listener_HttpResponse
+     */
+    protected function getResponseObject()
     {
-        $pb = new ProxyBuilder('\\lapistano\\wsunit\\Http\\HttpClient');
-        $client = $pb
-            ->setMethods(array('getResponseObject'))
-            ->getProxy();
-        $this->assertInstanceOf(
-            '\lapistano\wsunit\Http\HttpResponse',
-            $client->getResponseObject()
-        );
+        if (empty($this->response)) {
+            $this->response = new HttpResponse();
+        }
+        return $this->response;
     }
 }
