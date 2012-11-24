@@ -63,17 +63,20 @@ class SerializerTypeJsonTest extends Wsunit_TestCase
      * @covers \lapistano\wsunit\Serializer\Type\SerializerTypeJson::serialize
      * @covers \lapistano\wsunit\Serializer\Type\SerializerTypeJson::isValid
      */
-    public function dtestSerialize()
+    public function testSerialize()
     {
+        $jsonString = '{"Organization": "PHP Documentation Team"}';
+        $serializer = new SerializerTypeJson();
 
+        $this->assertSame($jsonString, $serializer->serialize($jsonString));
     }
 
     /**
+     * @dataProvider serializeExpectingInvalidArgumentDataprovider
      * @covers \lapistano\wsunit\Serializer\Type\SerializerTypeJson::isValid
      */
-    public function testSerializeExpectingInvalidArgumentException()
+    public function testSerializeExpectingInvalidArgumentException($data)
     {
-        $data = '{not a valid JSON string}';
         $serializer = new SerializerTypeJson();
 
         try {
@@ -90,6 +93,13 @@ class SerializerTypeJsonTest extends Wsunit_TestCase
         }
 
         $this->fail('Expected exception (\InvalidArgumentException) not thrown!');
+    }
+    public static function serializeExpectingInvalidArgumentDataprovider()
+    {
+        return array(
+            'malformed JSON' => array('{not a valid JSON string}'),
+            'malformed UTF-8 characters' => array('{"text": "\xB1\x31"}'),
+        );
     }
 
     /**
