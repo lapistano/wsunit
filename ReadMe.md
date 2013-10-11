@@ -1,4 +1,13 @@
-=============================
+
+> ===============================================================================
+>
+> **!! DISCONTINUED !!**
+> 
+> » Please use the successing project [PHP-VCR](http://github.com/adri/php-vcr) «
+>
+>================================================================================
+
+
 PHPUnit WebServices Extension
 =============================
 The possibility to register test listeners to PHPUnit makes it extremly easy to execute actions on a certain state of
