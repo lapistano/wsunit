@@ -78,13 +78,14 @@ abstract class HttpClientAbstract implements HttpClientInterface
 
     /**
      * Provides a cached instance of a Http response object.
-     * @return Extensions_Webservice_Listener_HttpResponse
+     * @return \Extensions_Webservice_Listener_HttpResponse
      */
     protected function getResponseObject()
     {
         if (empty($this->response)) {
             $this->response = new HttpResponse();
         }
+
         return $this->response;
     }
 }
