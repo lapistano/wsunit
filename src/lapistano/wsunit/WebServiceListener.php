@@ -211,8 +211,8 @@ class WebServiceListener implements \PHPUnit_Framework_TestListener
                 new \PHPUnit_Framework_OutputError(
                     sprintf(
                         'No serializer found for test: %s. ' .
-                            'Either define a global serializer or add one to the specific section ' .
-                            'in your configuration file.',
+                        'Either define a global serializer or add one to the specific section ' .
+                        'in your configuration file.',
                         $test->getName()
                     )
                 ),
