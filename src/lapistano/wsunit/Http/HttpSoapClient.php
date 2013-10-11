@@ -45,8 +45,9 @@
 
 namespace lapistano\wsunit\Http;
 
+
 /**
- * Basic http client to request information from an url via GET method.
+ * Interceptor for to be able to record the Http Response (body and header) from a SOAP Call.
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
@@ -57,8 +58,7 @@ namespace lapistano\wsunit\Http;
  * @link       http://github.com/lapistano/wsunit
  * @since      Class available since Release 3.6.0
  */
-
-class HttpSoapClient extends HttpClientAbstract
+class HttpSoapClient extends \SoapClient implements HttpClientInterface
 {
     /**
      * @var \SoapClient
@@ -77,43 +77,41 @@ class HttpSoapClient extends HttpClientAbstract
 
 
     /**
-     * Sends a request to the given url.
+     * @param string|null $wsdl
+     * @param array $options
      *
-     * @param string $url   Location to be called
-     * @param array  $query
-     *
-     * @return string The http response with the response header included.
+     * @link http://www.php.net/manual/en/soap.configuration.php#110408
+     * @throw \SoapFault
      */
-    public function get($url, array $query = array())
+    public function __construct($wsdl, array $options = array())
     {
+        if (isset($options['disableWSDLCache']) && true === (bool)$options['disableWSDLCache']) {
 
-        $soapClient = $this->getSoapClient($url, $query);
+            // disable soap.wsdl_cache_enabled to ensure changes on the WSDL does take effect immediately
+            ini_set('soap.wsdl_cache_enabled', 0);
+            ini_set('soap.wsdl_cache_ttl', 0);
+        }
 
+        parent::_construct($wsdl, $options = array());
     }
 
-
     /**
-     * Provides an instance of the SOAPClient build into PHP.
+     * Alias for the SOAPClient::__soapCall() method
      *
-     * @param string $wsdl    URI of the WSDL file or NULL if working in non-WSDL mode.
-     * @param array  $options Optional if in WSDL mode, else keys 'location' & 'uri' are mandatory.
-     *
-     * @return \SoapClient
-     *
-     * @link http://ch2.php.net/manual/en/soapclient.soapclient.php
+     * @param string $wsdl
+     * @param array  $options
      */
-    protected function getSoapClient($wsdl, array $options = array(), $force = false)
+    public function get($wsdl, array $options = array())
     {
-        if ($force || $wsdl !== $this->soapClientWsdl || $options !== $this->soapClientOptions) {
-            $force = true;
-        }
+        $functionName = $options['functionName'];
+        $arguments = $options['arguments'];
+        $inputHeaders = $options['inputHeaders'];
 
-        if ($force || empty($this->soapClient)) {
-            $this->soapClient = new \SoapClient($wsdl, $options);
-            $this->soapClientWsdl = $wsdl;
-            $this->soapClientOptions = $options;
-        }
-
-        return $this->soapClient;
+        return $this->__soapCall(
+            $functionName,
+            $arguments,
+            $options,
+            $inputHeaders
+        );
     }
 }

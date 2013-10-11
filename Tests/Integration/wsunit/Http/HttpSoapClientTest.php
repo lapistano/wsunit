@@ -46,16 +46,15 @@
 namespace lapistano\wsunit\Http;
 
 use lapistano\wsunit\Wsunit_TestCase;
-
 use lapistano\ProxyObject\ProxyBuilder;
 
 /**
- *
+ * Interceptor to the SoapClient to catch responses as a fixture.
  *
  * @package    WsUnit
  * @subpackage Extensions_WebServiceListener
  * @author     Bastian Feder <php@bastian-feder.de>
- * @copyright  2011 Bastian Feder <php@bastian-feder.de>
+ * @copyright  © 2011-2013 Bastian Feder <php@bastian-feder.de>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
@@ -63,67 +62,17 @@ use lapistano\ProxyObject\ProxyBuilder;
 
 class HttpSoapClientIntegrationTest extends Wsunit_TestCase
 {
-    /**
-     * @dataProvider getSoapClientDataprovider
-     * @covers \lapistano\wsunit\Http\HttpSoapClient::getSoapClient
-     */
-    public function testGetSoapClient($wsdl, $options)
+    public function testDoSoap()
     {
-        $client = $this->getProxyBuilder('\\lapistano\\wsunit\\Http\\HttpSoapClient')
-            ->setMethods(array('getSoapClient'))
-        ->getProxy();
+        $client = new HttpSoapClient('http://webserviceserver.appspot.com/EntityAPIService.wsdl');
 
-        $this->assertInstanceOf('\\SOAPClient', $client->getSoapClient($wsdl, $options));
-    }
-    public static function getSoapClientDataprovider()
-    {
-        return array(
-            'WSDL mode' => array(
-                'http://webserviceserver.appspot.com/EntityAPIService.wsdl',
-                array()
-            ),
-            'non wsdl mode' => array(
-                null,
-                array(
-                    'location' => 'http://webserviceserver.appspot.com',
-                    'uri' => 'http://example.org'
-                )
-            ),
+        $return = $client->get(
+            'http://webserviceserver.appspot.com/EntityAPIService.wsdl',
+            array(
+                'functionName' => 'getAllProducts'
+            )
         );
-    }
 
-    /**
-     * @expectedException \SoapFault
-     * @dataProvider getSoapClientExceptionDataprovider
-     * @covers \lapistano\wsunit\Http\HttpSoapClient::getSoapClient
-     */
-    public function testGetSoapClientExpectingSoapFaultException($wsdl, $options)
-    {
-        $client = $this->getProxyBuilder('\\lapistano\\wsunit\\Http\\HttpSoapClient')
-            ->setMethods(array('getSoapClient'))
-        ->getProxy();
-
-        $client->getSoapClient($wsdl, $options);
-    }
-    public function getSoapClientExceptionDataprovider()
-    {
-        return array(
-            'invalid uri in wsdl mode' => array(
-                'http://www.example.net/foo?WSDL',
-                array()
-            ),
-            'missing mandatory "location" in non wsdl model' => array(
-                null,
-                array(
-                    'uri' => 'http://example.org'
-                )
-            ),
-            'missing mandatory "uri" in non wsdl model' => array(
-                null,
-                array(
-                    'location' => 'http://example.org'
-                )
-            ),
-        );
+        print_r(json_decode($return->return));
     }
 }
